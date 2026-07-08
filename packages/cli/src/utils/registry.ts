@@ -28,6 +28,25 @@ export async function fetchRegistryItem(
   return (await res.json()) as RegistryItem
 }
 
+export async function fetchIndex(
+  registry: string
+): Promise<Array<{ name: string; description?: string }>> {
+  const base = registry.replace(/\/$/, "")
+  const url = `${base}/r/index.json`
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`Failed to fetch ${url} (HTTP ${res.status}).`)
+  return (await res.json()) as Array<{ name: string; description?: string }>
+}
+
+export async function fetchTheme(registry: string): Promise<string> {
+  const base = registry.replace(/\/$/, "")
+  const url = `${base}/r/theme.json`
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`Failed to fetch ${url} (HTTP ${res.status}).`)
+  const data = (await res.json()) as { css: string }
+  return data.css
+}
+
 export async function resolveTree(
   registry: string,
   names: string[]

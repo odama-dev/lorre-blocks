@@ -57,6 +57,17 @@ async function build() {
     "utf8"
   )
   console.log(`✓ index -> r/index.json (${index.length} item(s))`)
+
+  const themeCss = await fs.readFile(
+    path.join(SRC_DIR, "styles", "theme.css"),
+    "utf8"
+  )
+  await fs.writeFile(
+    path.join(OUTPUT_DIR, "theme.json"),
+    JSON.stringify({ css: themeCss }, null, 2) + "\n",
+    "utf8"
+  )
+  console.log("✓ theme -> r/theme.json")
 }
 
 build().catch((err) => {

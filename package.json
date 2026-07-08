@@ -6,8 +6,12 @@
   "scripts": {
     "build:registry": "pnpm --filter @lorre-blocks/registry build",
     "build:cli": "pnpm --filter lorre-blocks build",
+    "build:www": "pnpm --filter www build",
     "dev:www": "pnpm --filter www dev",
-    "build": "pnpm build:registry && pnpm build:cli"
+    "build": "pnpm build:registry && pnpm build:cli",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm --filter lorre-blocks test",
+    "release": "pnpm build:cli && changeset publish"
   },
   "engines": {
     "node": ">=18"

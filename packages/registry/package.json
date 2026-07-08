@@ -5,12 +5,14 @@
   "type": "module",
   "description": "Source of truth for lorre-blocks components + registry build script",
   "scripts": {
-    "build": "tsx scripts/build-registry.ts"
+    "build": "tsx scripts/build-registry.ts",
+    "typecheck": "tsc --noEmit"
   },
   "exports": {
     "./ui/button": "./src/ui/button.tsx",
     "./ui/input": "./src/ui/input.tsx",
-    "./lib/utils": "./src/lib/utils.ts"
+    "./lib/utils": "./src/lib/utils.ts",
+    "./styles/theme.css": "./src/styles/theme.css"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.1",

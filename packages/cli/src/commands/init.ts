@@ -10,12 +10,34 @@ import {
   configExists,
   writeConfig,
 } from "../utils/config"
+import {
+  detectPackageManager,
+  installDependencies,
+} from "../utils/package-manager"
+import { resolveBaseDir, rewriteImports, targetDirForType } from "../utils/paths"
+import { fetchRegistryItem, fetchTheme } from "../utils/registry"
+import { injectThemeBlock } from "../utils/css"
 
 export interface InitOptions {
   cwd: string
   registry?: string
   yes?: boolean
 }
+
+const BASE_DEPENDENCIES = [
+  "clsx",
+  "tailwind-merge",
+  "class-variance-authority",
+  "tw-animate-css",
+]
+
+const GLOBAL_CSS_CANDIDATES = [
+  "src/app/globals.css",
+  "app/globals.css",
+  "src/index.css",
+  "src/styles/globals.css",
+  "styles/globals.css",
+]
 
 export async function runInit(options: InitOptions): Promise<void> {
   const { cwd } = options
@@ -39,12 +61,7 @@ export async function runInit(options: InitOptions): Promise<void> {
 
   const registry =
     options.registry ??
-    (options.yes
-      ? DEFAULT_REGISTRY
-      : await promptText(
-          "Registry URL",
-          DEFAULT_REGISTRY
-        ))
+    (options.yes ? DEFAULT_REGISTRY : await promptText("Registry URL", DEFAULT_REGISTRY))
 
   const config: Config = {
     $schema: "https://lorre-blocks.dev/schema.json",
@@ -54,12 +71,69 @@ export async function runInit(options: InitOptions): Promise<void> {
   }
 
   await writeConfig(cwd, config)
+  p.log.success("Wrote components.json")
+
+  const pm = await detectPackageManager(cwd)
+  const depSpinner = p.spinner()
+  depSpinner.start(`Installing base dependencies with ${pm}`)
+  try {
+    await installDependencies(cwd, pm, BASE_DEPENDENCIES)
+    depSpinner.stop(`Installed: ${BASE_DEPENDENCIES.join(", ")}`)
+  } catch (err) {
+    depSpinner.stop("Dependency install failed.")
+    p.cancel((err as Error).message)
+    process.exit(1)
+  }
+
+  const baseDir = await resolveBaseDir(cwd)
+
+  try {
+    const utils = await fetchRegistryItem(registry, "utils")
+    for (const file of utils.files) {
+      const dir = targetDirForType(file.type, config.aliases, baseDir)
+      await fs.mkdir(dir, { recursive: true })
+      const dest = path.join(dir, path.basename(file.path))
+      await fs.writeFile(dest, rewriteImports(file.content, config), "utf8")
+      p.log.success(`Wrote ${path.relative(cwd, dest)}`)
+    }
+  } catch (err) {
+    p.log.warn(`Could not write utils: ${(err as Error).message}`)
+  }
+
+  try {
+    const themeCss = await fetchTheme(registry)
+    const cssPath = await resolveGlobalCss(cwd)
+    const existing = await readIfExists(cssPath)
+    const next = injectThemeBlock(existing ?? "", themeCss)
+    await fs.mkdir(path.dirname(cssPath), { recursive: true })
+    await fs.writeFile(cssPath, next, "utf8")
+    p.log.success(
+      `${existing === null ? "Created" : "Updated"} ${path.relative(cwd, cssPath)} with the theme`
+    )
+  } catch (err) {
+    p.log.warn(`Could not set up the theme: ${(err as Error).message}`)
+  }
 
   p.outro(
-    `${color.green("✔")} Wrote components.json. Now run ${color.cyan(
-      "lorre-blocks add button"
-    )}.`
+    `${color.green("✔")} Ready. Now run ${color.cyan("lorre-blocks add button")}.`
   )
+}
+
+async function resolveGlobalCss(cwd: string): Promise<string> {
+  for (const candidate of GLOBAL_CSS_CANDIDATES) {
+    if (await fileExists(path.join(cwd, candidate))) {
+      return path.join(cwd, candidate)
+    }
+  }
+  return path.join(cwd, GLOBAL_CSS_CANDIDATES[0])
+}
+
+async function readIfExists(file: string): Promise<string | null> {
+  try {
+    return await fs.readFile(file, "utf8")
+  } catch {
+    return null
+  }
 }
 
 async function promptText(message: string, initial: string): Promise<string> {
