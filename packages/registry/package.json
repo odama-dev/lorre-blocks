@@ -1,0 +1,28 @@
+{
+  "name": "@lorre-blocks/registry",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Source of truth for lorre-blocks components + registry build script",
+  "scripts": {
+    "build": "tsx scripts/build-registry.ts"
+  },
+  "exports": {
+    "./ui/button": "./src/ui/button.tsx",
+    "./ui/input": "./src/ui/input.tsx",
+    "./lib/utils": "./src/lib/utils.ts"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.1.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "@types/react": "^19.0.0",
+    "react": "^19.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

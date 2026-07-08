@@ -1,0 +1,19 @@
+{
+  "name": "lorre-blocks-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "shadcn-style component registry + CLI (lorre-blocks)",
+  "scripts": {
+    "build:registry": "pnpm --filter @lorre-blocks/registry build",
+    "build:cli": "pnpm --filter lorre-blocks build",
+    "dev:www": "pnpm --filter www dev",
+    "build": "pnpm build:registry && pnpm build:cli"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@11.10.0",
+  "devDependencies": {
+    "@changesets/cli": "^2.31.0"
+  }
+}
