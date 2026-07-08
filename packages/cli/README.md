@@ -1,6 +1,6 @@
 # lorre-blocks
 
-CLI for [lorre-blocks](https://github.com/zukazine/lorre-blocks) — a shadcn-style
+CLI for [lorre-blocks](https://github.com/odama-dev/lorre-blocks) — a shadcn-style
 component library. Instead of installing a package and importing from `node_modules`,
 this CLI **copies component source directly into your project**, so you own and can
 edit every line.

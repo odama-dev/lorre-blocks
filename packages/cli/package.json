@@ -1,6 +1,6 @@
 {
   "name": "lorre-blocks",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Add lorre-blocks components to your project by copying their source in.",
   "type": "module",
   "bin": {
@@ -23,10 +23,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zukazine/lorre-blocks.git",
+    "url": "git+https://github.com/odama-dev/lorre-blocks.git",
     "directory": "packages/cli"
   },
-  "homepage": "https://github.com/zukazine/lorre-blocks#readme",
+  "homepage": "https://github.com/odama-dev/lorre-blocks#readme",
   "publishConfig": {
     "access": "public"
   },

@@ -3,7 +3,7 @@ import path from "node:path"
 
 export const CONFIG_FILE = "components.json"
 
-export const DEFAULT_REGISTRY = "http://localhost:3000"
+export const DEFAULT_REGISTRY = "https://lorre-blocks.vercel.app"
 
 export interface Aliases {
   components: string
