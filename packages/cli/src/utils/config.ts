@@ -17,8 +17,12 @@ export interface Config {
   $schema?: string
   registry: string
   tsx: boolean
+  /** Active Lorre theme name (e.g. "basic"). Set by init / theme apply. */
+  theme?: string
   aliases: Aliases
 }
+
+export const DEFAULT_THEME = "basic"
 
 export const DEFAULT_ALIASES: Aliases = {
   components: "@/components",

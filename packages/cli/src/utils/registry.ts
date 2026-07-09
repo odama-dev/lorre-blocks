@@ -47,6 +47,49 @@ export async function fetchTheme(registry: string): Promise<string> {
   return data.css
 }
 
+export interface ThemeInfo {
+  name: string
+  description?: string
+  extends?: string
+}
+
+export async function fetchThemesIndex(registry: string): Promise<ThemeInfo[]> {
+  const base = registry.replace(/\/$/, "")
+  const url = `${base}/r/themes/index.json`
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`Failed to fetch ${url} (HTTP ${res.status}).`)
+  return (await res.json()) as ThemeInfo[]
+}
+
+/**
+ * Fetch one theme's CSS by name. Falls back to the legacy /r/theme.json
+ * endpoint when the registry predates named themes and "basic" is requested.
+ */
+export async function fetchThemeCss(
+  registry: string,
+  name: string
+): Promise<string> {
+  const base = registry.replace(/\/$/, "")
+  const url = `${base}/r/themes/${name}.json`
+  const res = await fetch(url)
+
+  if (res.status === 404) {
+    if (name === "basic") return fetchTheme(registry)
+    let available = ""
+    try {
+      const themes = await fetchThemesIndex(registry)
+      available = ` Available: ${themes.map((t) => t.name).join(", ")}.`
+    } catch {
+      // registry has no themes index either; leave the message plain
+    }
+    throw new Error(`Theme "${name}" was not found in the registry.${available}`)
+  }
+  if (!res.ok) throw new Error(`Failed to fetch ${url} (HTTP ${res.status}).`)
+
+  const data = (await res.json()) as { css: string }
+  return data.css
+}
+
 export async function resolveTree(
   registry: string,
   names: string[]

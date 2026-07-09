@@ -23,19 +23,24 @@ the registry itself when a genuine gap exists.
 - [x] Backfill button/input/utils metadata; CLI types updated (no publish needed)
 - [x] `lorre.md`, `docs/PLAN.md`, `docs/PROGRESS.md`
 
-## Phase 1 — Design tokens layer + theme system
+## Phase 1 — Design tokens layer + theme system ✅ (2026-07-09)
 
-- Token architecture in `packages/registry/src/tokens/`:
-  - **color** — Radix-style 1–12 scales + semantic aliases (`accent`, `neutral`, `danger`, `success`, `warning`)
-  - **typography** — font stacks, type scale, line-height, letter-spacing
-  - **spacing/layout** — spacing scale, containers, breakpoints, grid presets
-  - **radius / shadow** — surface tokens
-  - **motion** — durations, easings (shared with the `motion` category)
-- One source, two outputs per token set: Tailwind v4 `@theme` CSS **and** W3C DTCG JSON (`/r/tokens/<name>.json`)
-- Theme system: theme = token value set; themes can extend other themes.
-  Ship `basic`, `dreamy`, `utilitarian` (`/r/themes/<name>.json`)
-- CLI: `lorre init --theme <name>`, `lorre theme apply <name>` (needs CLI publish)
-- **Acceptance:** switching a consumer project's theme is one CLI command, zero component edits.
+- [x] Token architecture in `packages/registry/src/tokens/`: seeds → generated 12-step OKLCH
+      scales for `neutral`, `accent`, `danger`, `success`, `warning`; semantic aliases;
+      typography, radius, shadow, motion token groups
+- [x] One source, two outputs: Tailwind v4 `@theme` CSS (`themeToCss`) **and** W3C DTCG JSON
+      (`themeToDtcg`) → `/r/themes/<name>.json` + `/r/tokens/<name>.json`
+- [x] Theme system with `extends`: `basic` (root), `dreamy`, `utilitarian`;
+      `/r/themes/index.json`; `/r/theme.json` kept as a legacy alias for `basic`
+- [x] `src/styles/theme.css` is now generated (basic theme); build output stays deterministic
+- [x] CLI `init --theme <name>` (+ interactive picker), `theme list`, `theme apply <name>`;
+      active theme recorded in `components.json`. Changeset queued → CLI 0.3.0
+- [x] **Acceptance verified:** `theme apply dreamy` in a Tailwind v4 app swaps the theme block
+      in `globals.css`, rebuilds to the dreamy accent, and leaves `button.tsx`/`utils.ts`
+      byte-identical — one command, zero component edits.
+
+Deferred to a later pass: spacing/container/breakpoint and letter-spacing/line-height are
+emitted as shared DTCG layout tokens but are not yet theme-overridable.
 
 ## Phase 2 — Component porting (continuous)
 
@@ -77,7 +82,7 @@ semantic tokens and must render correctly under all 3 themes before it merges.
 | # | Phase | Estimate |
 |---|---|---|
 | 1 | Phase 0 + `lorre.md` | ✅ done 2026-07-09 |
-| 2 | Phase 1 (tokens + 3 themes) | 2–3 days |
+| 2 | Phase 1 (tokens + 3 themes) | ✅ done 2026-07-09 |
 | 3 | Phase 4.1 (CLI `--json`, `search`, `info`) | 1–2 days |
 | 4 | Phase 2 (porting, continuous) | ~1 component/hour once patterns exist |
 | 5 | Phase 3.1–3.2 (docs + tokens pages + llms.txt) | 3–4 days |

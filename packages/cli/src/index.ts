@@ -4,26 +4,51 @@ import { runInit } from "./commands/init"
 import { runAdd } from "./commands/add"
 import { runList } from "./commands/list"
 import { runDiff } from "./commands/diff"
+import { runThemeApply, runThemeList } from "./commands/theme"
 
 const program = new Command()
 
 program
   .name("lorre-blocks")
   .description("Add lorre-blocks components to your project by copying their source in.")
-  .version("0.2.0")
+  .version("0.3.0")
 
 program
   .command("init")
   .description("Create a components.json config in your project.")
   .option("-c, --cwd <path>", "working directory", process.cwd())
   .option("-r, --registry <url>", "registry base URL")
+  .option("-t, --theme <name>", "theme to install (e.g. basic, dreamy, utilitarian)")
   .option("-y, --yes", "skip prompts and accept defaults", false)
   .action(async (opts) => {
     await runInit({
       cwd: opts.cwd,
       registry: opts.registry,
+      theme: opts.theme,
       yes: opts.yes,
     })
+  })
+
+const theme = program
+  .command("theme")
+  .description("Manage the Lorre theme applied to your project.")
+
+theme
+  .command("list")
+  .description("List the themes available in the registry.")
+  .option("-c, --cwd <path>", "working directory", process.cwd())
+  .option("-r, --registry <url>", "registry base URL")
+  .action(async (opts) => {
+    await runThemeList({ cwd: opts.cwd, registry: opts.registry })
+  })
+
+theme
+  .command("apply")
+  .description("Apply a theme: replaces the lorre-blocks theme block in your global CSS.")
+  .argument("<name>", "theme name, e.g. dreamy")
+  .option("-c, --cwd <path>", "working directory", process.cwd())
+  .action(async (name: string, opts) => {
+    await runThemeApply({ cwd: opts.cwd, name })
   })
 
 program

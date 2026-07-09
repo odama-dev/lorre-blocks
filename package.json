@@ -10,7 +10,7 @@
     "dev:www": "pnpm --filter www dev",
     "build": "pnpm build:registry && pnpm build:cli",
     "typecheck": "pnpm -r --if-present typecheck",
-    "test": "pnpm --filter lorre-blocks test",
+    "test": "pnpm -r --if-present test",
     "release": "pnpm build:cli && changeset publish"
   },
   "engines": {

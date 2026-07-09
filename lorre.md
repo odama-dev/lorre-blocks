@@ -13,8 +13,10 @@ full range of work: professional dashboards, enterprise websites, and Awwwards-l
 sites — which is why every item in the registry is classified (see below) instead of living
 in one flat list.
 
-- **Registry host:** https://lorre-blocks.vercel.app (`/r/index.json`, `/r/manifest.json`, `/r/<name>.json`, `/r/theme.json`)
-- **CLI:** `lorre-blocks` on npm (`init`, `add`, `list`, `diff`)
+- **Registry host:** https://lorre-blocks.vercel.app — `/r/index.json`, `/r/manifest.json`,
+  `/r/<name>.json`, `/r/themes/index.json`, `/r/themes/<theme>.json` (CSS),
+  `/r/tokens/<theme>.json` (W3C DTCG), `/r/theme.json` (legacy alias for `basic`)
+- **CLI:** `lorre-blocks` on npm (`init [--theme]`, `add`, `list`, `diff`, `theme list`, `theme apply`)
 - **Monorepo:** `packages/registry` (source of truth) · `packages/cli` · `apps/www` (docs + registry host)
 
 ## Classification system (registry schema v2)
@@ -36,18 +38,47 @@ and `checksum` (sha256, generated at build time — never hand-written).
 ## Design rules
 
 1. **Semantic tokens only.** Components never hardcode colors, radii, shadows, font sizes.
-   They reference the Tailwind v4 theme variables from `packages/registry/src/styles/theme.css`
-   (Phase 1 will expand these into full Radix-style scales). This is what makes themes swappable.
+   They reference semantic Tailwind v4 variables (`bg-primary`, `text-muted-foreground`,
+   `border-border`, `ring-ring`…), which resolve to 12-step OKLCH scales. This is what makes
+   themes swappable. Raw scale steps (`bg-accent-9`, `text-neutral-11`) are available when a
+   semantic alias genuinely doesn't fit.
 2. **Theme = token values, never component code.** A theme (`basic`, `dreamy`, `utilitarian`)
    is a set of token value overrides. If you need to fork a component to make a theme work,
-   the component's tokens are wrong — fix the tokens.
+   the component's tokens are wrong — fix the tokens. Switching a project's theme is one
+   command (`lorre-blocks theme apply <name>`) and touches zero component files.
 3. **Token format:** CSS (Tailwind v4 `@theme`) for consumption, W3C DTCG JSON for tooling
-   and agents. Both are emitted from one source (Phase 1).
+   and agents. Both are generated from one source: the theme definitions in
+   `packages/registry/src/tokens/themes/`. Never hand-edit `src/styles/theme.css` or anything
+   under `apps/www/public/r/` — both are build output.
 4. **Ported code keeps its accent, not its tokens.** When porting from shadcn/Magic UI/Radix,
    rewire all styling onto Lorre tokens. The port is done when the component renders correctly
    under all three themes.
 5. **Align UI is reference-only.** Its license is not open — never copy its code. Rewrite
    from scratch, mark `source: "lorre"`.
+
+## Token architecture (schema v2, Phase 1)
+
+A theme is **data**: five color seeds plus token values. Everything downstream is generated.
+
+```
+src/tokens/themes/<name>.ts   ThemeDefinition (seeds + overrides, may `extends` another theme)
+        │  resolveTheme()      merge the extends chain over DEFAULT_SEMANTICS
+        ▼
+   ResolvedTheme
+        ├── themeToCss()   →  Tailwind v4 CSS  →  src/styles/theme.css (basic) + /r/themes/<name>.json
+        └── themeToDtcg()  →  W3C DTCG JSON    →  /r/tokens/<name>.json
+```
+
+- **Scales.** Each of the five axes (`neutral`, `accent`, `danger`, `success`, `warning`) is
+  generated into a Radix-style 12-step OKLCH scale from one seed (`hue`, `chroma`, `lightness`,
+  optional `dark` overrides). Steps 9–10 are the solid brand steps; 11–12 are text.
+- **Semantics.** `DEFAULT_SEMANTICS` (in `src/tokens/index.ts`) maps names like `primary` →
+  `accent-9`, `muted-foreground` → `neutral-11`, `primary-foreground` → `on-accent`
+  (contrast computed from the seed). Themes override individual entries via `semantics`.
+- **CSS shape.** Raw values live on `:root` / `.dark`; `@theme inline` maps them into Tailwind
+  namespaces. Dark mode only re-declares the scales, so semantics need no duplication.
+- **Consumer side.** `init` injects the theme between `/* lorre-blocks theme start|end */`
+  markers in the project's global CSS; `theme apply` replaces that block in place.
 
 ## Adding a registry item
 
@@ -77,6 +108,9 @@ and `checksum` (sha256, generated at build time — never hand-written).
 
 ## Current registry contents
 
-Tokens/themes: Tailwind v4 base theme (`theme.css`) — Radix-style scales land in Phase 1.
-Components: `button`, `input` (+ `utils` lib). Porting queue and roadmap live in `docs/PLAN.md`;
-progress log in `docs/PROGRESS.md`.
+**Themes:** `basic` (root), `dreamy` and `utilitarian` (both extend `basic`). Each ships a
+12-step OKLCH scale per color axis, in light and dark, as Tailwind CSS and DTCG JSON.
+
+**Components:** `button`, `input` (+ `utils` lib) — all `source: "shadcn"`, MIT.
+
+Porting queue and roadmap live in `docs/PLAN.md`; progress log in `docs/PROGRESS.md`.

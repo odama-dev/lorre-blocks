@@ -7,6 +7,7 @@ import {
   Config,
   DEFAULT_ALIASES,
   DEFAULT_REGISTRY,
+  DEFAULT_THEME,
   configExists,
   writeConfig,
 } from "../utils/config"
@@ -15,12 +16,18 @@ import {
   installDependencies,
 } from "../utils/package-manager"
 import { resolveBaseDir, rewriteImports, targetDirForType } from "../utils/paths"
-import { fetchRegistryItem, fetchTheme } from "../utils/registry"
+import {
+  fetchRegistryItem,
+  fetchThemeCss,
+  fetchThemesIndex,
+} from "../utils/registry"
 import { injectThemeBlock } from "../utils/css"
+import { readIfExists, resolveGlobalCss } from "../utils/global-css"
 
 export interface InitOptions {
   cwd: string
   registry?: string
+  theme?: string
   yes?: boolean
 }
 
@@ -29,14 +36,6 @@ const BASE_DEPENDENCIES = [
   "tailwind-merge",
   "class-variance-authority",
   "tw-animate-css",
-]
-
-const GLOBAL_CSS_CANDIDATES = [
-  "src/app/globals.css",
-  "app/globals.css",
-  "src/index.css",
-  "src/styles/globals.css",
-  "styles/globals.css",
 ]
 
 export async function runInit(options: InitOptions): Promise<void> {
@@ -63,10 +62,13 @@ export async function runInit(options: InitOptions): Promise<void> {
     options.registry ??
     (options.yes ? DEFAULT_REGISTRY : await promptText("Registry URL", DEFAULT_REGISTRY))
 
+  const theme = options.theme ?? (options.yes ? DEFAULT_THEME : await promptTheme(registry))
+
   const config: Config = {
     $schema: "https://lorre-blocks.dev/schema.json",
     registry,
     tsx,
+    theme,
     aliases: { ...DEFAULT_ALIASES },
   }
 
@@ -101,14 +103,14 @@ export async function runInit(options: InitOptions): Promise<void> {
   }
 
   try {
-    const themeCss = await fetchTheme(registry)
+    const themeCss = await fetchThemeCss(registry, theme)
     const cssPath = await resolveGlobalCss(cwd)
     const existing = await readIfExists(cssPath)
     const next = injectThemeBlock(existing ?? "", themeCss)
     await fs.mkdir(path.dirname(cssPath), { recursive: true })
     await fs.writeFile(cssPath, next, "utf8")
     p.log.success(
-      `${existing === null ? "Created" : "Updated"} ${path.relative(cwd, cssPath)} with the theme`
+      `${existing === null ? "Created" : "Updated"} ${path.relative(cwd, cssPath)} with theme "${theme}"`
     )
   } catch (err) {
     p.log.warn(`Could not set up the theme: ${(err as Error).message}`)
@@ -119,21 +121,31 @@ export async function runInit(options: InitOptions): Promise<void> {
   )
 }
 
-async function resolveGlobalCss(cwd: string): Promise<string> {
-  for (const candidate of GLOBAL_CSS_CANDIDATES) {
-    if (await fileExists(path.join(cwd, candidate))) {
-      return path.join(cwd, candidate)
-    }
-  }
-  return path.join(cwd, GLOBAL_CSS_CANDIDATES[0])
-}
-
-async function readIfExists(file: string): Promise<string | null> {
+async function promptTheme(registry: string): Promise<string> {
+  let options: Array<{ value: string; label: string; hint?: string }>
   try {
-    return await fs.readFile(file, "utf8")
+    const themes = await fetchThemesIndex(registry)
+    options = themes.map((t) => ({
+      value: t.name,
+      label: t.name,
+      hint: t.description,
+    }))
   } catch {
-    return null
+    // Registry predates named themes — only the default exists.
+    return DEFAULT_THEME
   }
+  if (options.length === 0) return DEFAULT_THEME
+
+  const choice = await p.select({
+    message: "Which theme do you want to start with?",
+    options,
+    initialValue: DEFAULT_THEME,
+  })
+  if (p.isCancel(choice)) {
+    p.cancel("Init cancelled.")
+    process.exit(0)
+  }
+  return choice as string
 }
 
 async function promptText(message: string, initial: string): Promise<string> {
