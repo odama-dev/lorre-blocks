@@ -46,7 +46,11 @@ export function targetDirForType(
       return aliasToDir(aliases.ui, baseDir)
     case "registry:hook":
       return aliasToDir(aliases.hooks, baseDir)
-    case "registry:lib":
+    case "registry:block":
+      return path.join(aliasToDir(aliases.components, baseDir), "blocks")
+    case "registry:motion":
+      return path.join(aliasToDir(aliases.components, baseDir), "motion")
+    default:
       return aliasToDir(aliases.lib, baseDir)
   }
 }
