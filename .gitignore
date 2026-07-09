@@ -24,5 +24,8 @@ Thumbs.db
 .vscode/
 .idea/
 
+# vercel
+.vercel/
+
 # misc
 *.tsbuildinfo
