@@ -20,15 +20,17 @@ npx lorre-blocks add input
 
 ## Commands
 
+Every command accepts `-c, --cwd <path>` and `--json` (see [Agent usage](#agent-usage)).
+
 ### `init`
-Creates a `components.json` in your project describing the registry URL and your
-import aliases.
+Creates a `components.json`, installs the base dependencies, writes `lib/utils.ts`,
+and injects the theme's CSS variables into your global stylesheet.
 
 | Option | Description |
 | --- | --- |
 | `-r, --registry <url>` | Registry base URL to pull components from |
+| `-t, --theme <name>` | Theme to install (`basic`, `dreamy`, `utilitarian`) |
 | `-y, --yes` | Accept defaults, skip prompts |
-| `-c, --cwd <path>` | Run in a different directory |
 
 ### `add [components...]`
 Fetches each component from the registry, installs its npm dependencies with your
@@ -39,7 +41,59 @@ aliases to match your `components.json`, and writes the files into your project.
 | --- | --- |
 | `-o, --overwrite` | Overwrite existing files without asking |
 | `-y, --yes` | Skip confirmation prompts |
-| `-c, --cwd <path>` | Run in a different directory |
+
+### `list`
+Lists every component in the registry.
+
+### `search [query...]`
+Ranks registry items by name, tags, category and description.
+
+| Option | Description |
+| --- | --- |
+| `--category <name>` | `component`, `block`, `token`, `motion`, … |
+| `--source <name>` | `shadcn`, `magicui`, `radix`, `lorre` |
+| `--theme <name>` | Only items compatible with this theme |
+| `--type <name>` | `registry:ui`, `registry:block`, … |
+| `--limit <n>` | Cap the number of results |
+
+An empty query with filters acts as a faceted listing.
+
+### `info <name>`
+Shows an item's metadata, its transitive install order, npm dependencies, and the
+exact paths its files would be written to in *your* project.
+
+| Option | Description |
+| --- | --- |
+| `--files` | Include full file contents in the JSON payload |
+
+### `theme list` · `theme apply <name>`
+Lists available themes (marking the active one), or swaps the theme block in your
+global CSS. Applying a theme touches **no component files** — components reference
+semantic tokens, so they pick the new theme up automatically.
+
+### `diff [components...]`
+Shows how your local copies differ from the registry. Omit the names to diff
+everything present.
+
+## Agent usage
+
+Pass `--json` to any command. It prints exactly one JSON document on stdout and
+never prompts:
+
+```bash
+lorre-blocks search "text field" --category component --json
+lorre-blocks info input --json
+lorre-blocks init --theme dreamy --json
+lorre-blocks add input --json
+```
+
+- Success: `{ "ok": true, ... }` (plus `warnings: [...]` when something non-fatal happened)
+- Failure: `{ "ok": false, "error": "..." }` and exit code `1`
+
+Spinners, prose, and the package manager's own output are suppressed, so stdout is
+always parseable. `--json` implies non-interactive: `init` takes defaults rather than
+prompting, and `add` skips existing files instead of asking (pass `--overwrite` to
+replace them).
 
 ## How it works
 

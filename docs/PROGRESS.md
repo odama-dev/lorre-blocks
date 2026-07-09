@@ -5,6 +5,40 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-09 — Phase 4.1 shipped: agent-readable CLI (`--json`, `search`, `info`)
+
+Branch `feat/cli-agent-baseline` → PR (this also gives the owner a merge to trigger the
+overdue www deploy).
+
+**Shipped:**
+- `src/utils/output.ts` — the whole CLI now writes through one output layer. In JSON mode
+  every human message is suppressed, warnings are collected into the payload, spinners become
+  no-ops, and the command emits exactly one document: `{ok:true,...}` or `{ok:false,error}`
+  with exit 1.
+- `--json` on **every** command, and it implies non-interactive: `init` takes defaults instead
+  of prompting; `add` skips existing files instead of asking (`--overwrite` to replace).
+- `search [query...]` — ranked over name/tags/category/description (name hits outrank tag hits
+  outrank description hits), with `--category --source --theme --type --limit` facets. An empty
+  query + filters is a faceted listing. Items without `themes` are treated as theme-agnostic.
+- `info <name>` — metadata, transitive `installOrder`, unioned `npmDependencies`, and the
+  **resolved target path** each file would be written to in the consumer project (`--files`
+  adds contents). This is what lets an agent predict a write before doing it.
+- `fetchIndex` now returns full v2 metadata; added `fetchManifest`.
+
+**Bug found and fixed by the work:** `installDependencies` used `stdio: "inherit"`, so npm's
+"up to date, audited 52 packages" leaked onto stdout and corrupted the JSON document. It now
+captures output when silent, and surfaces the last 5 lines only if the install *fails*.
+Regression-covered in `output.test.ts` + `package-manager` silent path.
+
+**Verified:** typecheck ✓ · cli tests 36/36 (was 21) ✓ · against a live registry: `list`,
+`search`, `info`, `theme list`, `init`, `add`, `diff`, `theme apply` all emit parseable JSON
+with zero ANSI leakage; error paths emit `{ok:false}` + exit 1; human mode unchanged.
+Agent chain `search "text field" → info input → add` works end to end.
+
+**Next:** Phase 2 — component porting, now agent-assistable via `search`/`info`.
+
+---
+
 ## 2026-07-09 — Phase 1 shipped: token architecture, 3 themes, theme CLI
 
 **Shipped:**

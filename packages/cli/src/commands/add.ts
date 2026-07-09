@@ -8,6 +8,7 @@ import { resolveTree } from "../utils/registry"
 import {
   detectPackageManager,
   installDependencies,
+  type PackageManager,
 } from "../utils/package-manager"
 import {
   resolveBaseDir,
@@ -15,6 +16,7 @@ import {
   targetDirForType,
 } from "../utils/paths"
 import type { RegistryItem } from "../registry/schema"
+import * as out from "../utils/output"
 
 export interface AddOptions {
   cwd: string
@@ -26,84 +28,94 @@ export interface AddOptions {
 export async function runAdd(options: AddOptions): Promise<void> {
   const { cwd, components } = options
 
-  p.intro(color.bgCyan(color.black(" lorre-blocks add ")))
+  out.intro(color.bgCyan(color.black(" lorre-blocks add ")))
 
   const config = await readConfig(cwd)
   if (!config) {
-    p.cancel(
-      `No components.json found. Run ${color.cyan("lorre-blocks init")} first.`
-    )
-    process.exit(1)
+    out.fail("No components.json found. Run `lorre-blocks init` first.")
   }
 
   if (components.length === 0) {
-    p.cancel("Specify at least one component, e.g. `lorre-blocks add button`.")
-    process.exit(1)
+    out.fail("Specify at least one component, e.g. `lorre-blocks add button`.")
   }
 
-  const spinner = p.spinner()
+  const spinner = out.spinner()
   spinner.start("Resolving components from the registry")
   let tree: RegistryItem[]
   try {
     tree = await resolveTree(config.registry, components)
   } catch (err) {
     spinner.stop("Failed to resolve components.")
-    p.cancel((err as Error).message)
-    process.exit(1)
+    out.fail((err as Error).message)
   }
   spinner.stop(
     `Resolved ${tree.length} item(s): ${tree.map((t) => t.name).join(", ")}`
   )
 
   const npmDeps = [...new Set(tree.flatMap((t) => t.dependencies ?? []))]
+  let packageManager: PackageManager | undefined
   if (npmDeps.length > 0) {
-    const pm = await detectPackageManager(cwd)
-    const depSpinner = p.spinner()
-    depSpinner.start(`Installing ${npmDeps.length} dependency(ies) with ${pm}`)
+    packageManager = await detectPackageManager(cwd)
+    const depSpinner = out.spinner()
+    depSpinner.start(`Installing ${npmDeps.length} dependency(ies) with ${packageManager}`)
     try {
-      await installDependencies(cwd, pm, npmDeps)
+      await installDependencies(cwd, packageManager, npmDeps, { silent: out.isJsonMode() })
       depSpinner.stop(`Installed: ${npmDeps.join(", ")}`)
     } catch (err) {
       depSpinner.stop("Dependency install failed.")
-      p.cancel((err as Error).message)
-      process.exit(1)
+      out.fail((err as Error).message)
     }
   }
 
   const baseDir = await resolveBaseDir(cwd)
   const written: string[] = []
+  const skipped: string[] = []
 
   for (const item of tree) {
     for (const file of item.files) {
       const dir = targetDirForType(file.type, config.aliases, baseDir)
-      const fileName = path.basename(file.path)
-      const dest = path.join(dir, fileName)
+      const dest = path.join(dir, path.basename(file.path))
+      const rel = path.relative(cwd, dest)
 
       if (await fileExists(dest)) {
+        // JSON mode never prompts: --overwrite decides, otherwise we skip.
         const shouldOverwrite =
           options.overwrite ||
           options.yes ||
-          (await p.confirm({
-            message: `${path.relative(cwd, dest)} exists. Overwrite?`,
-            initialValue: false,
-          }))
+          (out.isJsonMode()
+            ? false
+            : await p.confirm({
+                message: `${rel} exists. Overwrite?`,
+                initialValue: false,
+              }))
         if (p.isCancel(shouldOverwrite) || !shouldOverwrite) {
-          p.log.warn(`Skipped ${path.relative(cwd, dest)}`)
+          out.warn(`Skipped ${rel} (already exists; pass --overwrite to replace)`)
+          skipped.push(rel)
           continue
         }
       }
 
       await fs.mkdir(dir, { recursive: true })
-      const content = rewriteImports(file.content, config)
-      await fs.writeFile(dest, content, "utf8")
-      written.push(path.relative(cwd, dest))
+      await fs.writeFile(dest, rewriteImports(file.content, config), "utf8")
+      written.push(rel)
     }
   }
 
-  if (written.length > 0) {
-    p.log.success(`Added:\n${written.map((f) => `  ${color.green(f)}`).join("\n")}`)
+  if (out.isJsonMode()) {
+    out.emit({
+      resolved: tree.map((t) => t.name),
+      written,
+      skipped,
+      npmDependencies: npmDeps,
+      packageManager: packageManager ?? null,
+    })
+    return
   }
-  p.outro(`${color.green("✔")} Done.`)
+
+  if (written.length > 0) {
+    out.success(`Added:\n${written.map((f) => `  ${color.green(f)}`).join("\n")}`)
+  }
+  out.outro(`${color.green("✔")} Done.`)
 }
 
 async function fileExists(f: string): Promise<boolean> {
