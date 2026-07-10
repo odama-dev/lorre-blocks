@@ -1,6 +1,6 @@
 {
   "name": "lorre-blocks",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Add lorre-blocks components to your project by copying their source in.",
   "type": "module",
   "bin": {
