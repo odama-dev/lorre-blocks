@@ -33,6 +33,13 @@ light **and** dark (6 screenshot matrices), overlays (dialog/popover/dropdown/se
 open correctly, and theme swaps touch zero component files. `add` with 14 components
 installs deps in a single npm pass.
 
+**Release pipeline note:** the Release workflow fails on master pushes with a queued
+changeset because the repo blocks Actions from creating PRs. Worked around by manually
+creating the Version Packages PR (#2) from the action-maintained `changeset-release/master`
+branch — the action *updates* an existing PR fine, so subsequent runs pass. Permanent fix
+(owner): Settings → Actions → General → enable "Allow GitHub Actions to create and approve
+pull requests". **Merge order: #1 (www deploy) before #2 (publishes CLI 0.3.0).**
+
 **Next:** Phase 2 batch 2 (card, badge, avatar, table, form-adjacent primitives), then
 docs app (Phase 3.1).
 
