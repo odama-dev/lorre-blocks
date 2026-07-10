@@ -5,6 +5,41 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-10 — Batch 3 ships: forms, dates, command palette. Phase 2 core set complete (37 items)
+
+PRs #1 (CLI 4.1) and #2 (Version Packages) were owner-merged this morning — **CLI 0.3.0 is
+live on npm** and the www deploy landed (`/r/themes/index.json` → 200 in production).
+Batch 3 went straight to master.
+
+**Shipped (11 items, registry 26 → 37):**
+- **Simple primitives:** toggle, collapsible, progress, slider, breadcrumb, pagination
+  (composes `buttonVariants` via a `button` registryDependency, like alert-dialog).
+- **command** (cmdk; `CommandDialog` composes dialog — adds an sr-only `DialogTitle` for a11y).
+- **form** (react-hook-form v7: FormField/Item/Label/Control/Description/Message with wired
+  aria + error states; resolver left to the consumer).
+- **calendar** (react-day-picker **v9** classNames API — not the v8 shadcn classic; root gets
+  `w-fit` so standalone calendars don't stretch, found by visual acceptance).
+- **First two `source: "lorre"` items:** **combobox** (popover + command + button, options as
+  `{value,label}[]`, controlled or uncontrolled) and **date-picker** (popover + calendar +
+  button, locale-formatted trigger, `calendarProps` passthrough). Original APIs → lorre source,
+  per the Phase 0 rules.
+
+**Verified:** typecheck ✓ · tests 56/56 ✓ · deterministic rebuild ✓ · visual acceptance in a
+fresh Vite + Tailwind v4 app via CLI `init` + `add` (12 requested → 17 resolved in one npm
+pass; cross-component deps pulled button/dialog/popover/label automatically) under
+basic/dreamy/utilitarian, light + dark; interactions exercised per theme: combobox filters
+and selects, date-picker picks a date into the trigger, form shows the validation error,
+screenshots fail the run on any console error.
+
+**Gotcha (Windows):** the CLI's npm-install step hangs when the CLI itself runs as a nested
+background process (npm sat at 0.15s CPU for 12 min); foreground runs are fine. Worth an
+eye if `add`/`init` are ever driven from another tool on Windows.
+
+**Next:** Phase 3.1 docs app (feature branch → PR), or continue batch 4 (input-otp, textarea,
+toggle-group, scroll-area, drawer, menubar).
+
+---
+
 ## 2026-07-10 — Phase 2 batch 2: 11 more items (surfaces, data, overlays, toast)
 
 Straight to master. Registry now **26 items**.
