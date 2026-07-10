@@ -10,8 +10,14 @@
       }
     ],
     "paths": {
+      "@/components/ui/*": [
+        "../../packages/registry/src/ui/*"
+      ],
       "@/*": [
         "../../packages/registry/src/*"
+      ],
+      "@www/*": [
+        "./*"
       ]
     },
     "jsx": "preserve"

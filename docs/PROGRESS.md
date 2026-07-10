@@ -5,6 +5,37 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-10 — Phase 3.1: docs app + landing page (branch `feat/docs-app`, PR pending)
+
+Owner enabled "Allow GitHub Actions to create and approve pull requests" — the Release
+workflow can now open Version Packages PRs itself.
+
+**Shipped (all `apps/www`, fully static — 43 pages):**
+- **Landing:** hero + quickstart snippet + live component sampler + feature grid. The header
+  has a **runtime theme switcher** that applies a theme exactly like the CLI does — fetches
+  `/r/themes/<name>.json` and swaps the token block via an injected `<style>`; persisted in
+  localStorage (CSS cached to avoid FOUC) — plus a dark-mode toggle.
+- **Docs:** sidebar generated from registry metadata (`source: "lorre"` items get a badge),
+  guide pages (`/docs`, `/docs/theming`, `/docs/cli`), and `/docs/components/[name]` for all
+  36 UI items: description + source/license badges, `add` snippet with copy button,
+  **Preview/Code tabs** (hand-written live demo per component; shiki-highlighted source read
+  from the workspace at build time), dependency links, tags. **⌘K search** over guides +
+  components using the registry command component.
+- Registry package gained `./registry` + `./schema` exports so www imports metadata directly;
+  www tsconfig maps `@/components/ui/*` like the registry's own tsconfig (cross-component
+  imports compile via transpilePackages).
+
+**Verified:** `next build` clean (43 static pages, no SSR — safe for the fs-read of component
+source, it only happens at build). Playwright pass against `next start`: landing light/dark,
+dreamy applied via header picker **and persisting across reload**, docs intro, date-picker
+page preview + code tabs, ⌘K search typed "combo" → lands on `/docs/components/combobox`;
+zero console errors.
+
+**Next:** owner merges the PR (also publishes batch 1–3 registry JSON to production), then
+Phase 3.2 (`llms.txt` + raw-markdown twins) or Phase 2 batch 4.
+
+---
+
 ## 2026-07-10 — Batch 3 ships: forms, dates, command palette. Phase 2 core set complete (37 items)
 
 PRs #1 (CLI 4.1) and #2 (Version Packages) were owner-merged this morning — **CLI 0.3.0 is
