@@ -76,7 +76,9 @@ src/tokens/themes/<name>.ts   ThemeDefinition (seeds + overrides, may `extends` 
   `accent-9`, `muted-foreground` → `neutral-11`, `primary-foreground` → `on-accent`
   (contrast computed from the seed). Themes override individual entries via `semantics`.
 - **CSS shape.** Raw values live on `:root` / `.dark`; `@theme inline` maps them into Tailwind
-  namespaces. Dark mode only re-declares the scales, so semantics need no duplication.
+  namespaces. `.dark` re-declares the scales **and every semantic** — a custom property
+  resolves its `var()` refs on the element that declares it, so semantics computed on `:root`
+  would otherwise inherit their light values into `.dark` subtrees.
 - **Consumer side.** `init` injects the theme between `/* lorre-blocks theme start|end */`
   markers in the project's global CSS; `theme apply` replaces that block in place.
 
