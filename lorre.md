@@ -78,7 +78,9 @@ src/tokens/themes/<name>.ts   ThemeDefinition (seeds + overrides, may `extends` 
   `accent-9`, `muted-foreground` → `neutral-11`, `primary-foreground` → `on-accent`
   (contrast computed from the seed). Themes override individual entries via `semantics`.
 - **CSS shape.** Raw values live on `:root` / `.dark`; `@theme inline` maps them into Tailwind
-  namespaces. Dark mode only re-declares the scales, so semantics need no duplication.
+  namespaces. `.dark` re-declares the scales **and every semantic** — a custom property
+  resolves its `var()` refs on the element that declares it, so semantics computed on `:root`
+  would otherwise inherit their light values into `.dark` subtrees.
 - **Consumer side.** `init` injects the theme between `/* lorre-blocks theme start|end */`
   markers in the project's global CSS; `theme apply` replaces that block in place.
 
@@ -115,6 +117,8 @@ src/tokens/themes/<name>.ts   ThemeDefinition (seeds + overrides, may `extends` 
 **Themes:** `basic` (root), `dreamy` and `utilitarian` (both extend `basic`). Each ships a
 12-step OKLCH scale per color axis, in light and dark, as Tailwind CSS and DTCG JSON.
 
-**Components:** `button`, `input` (+ `utils` lib) — all `source: "shadcn"`, MIT.
+**Components** (all `source: "shadcn"`, MIT, + `utils` lib): `button`, `input`, `label`,
+`separator`, `checkbox`, `switch`, `radio-group`, `tabs`, `tooltip`, `accordion`, `dialog`,
+`popover`, `dropdown-menu`, `select`.
 
 Porting queue and roadmap live in `docs/PLAN.md`; progress log in `docs/PROGRESS.md`.
