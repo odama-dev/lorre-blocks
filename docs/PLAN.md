@@ -53,6 +53,10 @@ Rules: shadcn/Radix/Magic UI are MIT → port with `license: "MIT"` + correct `s
 **Align UI → rewrite from scratch**, `source: "lorre"`. Every port is rewired onto Lorre
 semantic tokens and must render correctly under all 3 themes before it merges.
 
+Progress: **batch 1 done 2026-07-10** — label, separator, checkbox, switch, radio-group,
+tabs, tooltip, accordion, dialog, popover, dropdown-menu, select (12 items; registry
+total 15). Remaining from (1): toast, hover-card, alert-dialog, sheet, context-menu…
+
 ## Phase 3 — Docs app (`apps/www`)
 
 - 3.1 Docs layout: hierarchical sidebar (Getting Started → Tokens → Components → Blocks → Motion),

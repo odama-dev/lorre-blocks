@@ -123,12 +123,24 @@ describe("css output", () => {
     }
   })
 
-  it("re-declares mode-dependent semantics in .dark for monochrome accents", () => {
+  it("re-declares every semantic in .dark (var() resolves where declared, not where used)", () => {
+    const darkBlock = css.slice(css.indexOf(".dark {"), css.indexOf("@theme inline"))
+    // Without these, --background computed on :root inherits the light value
+    // into .dark subtrees and dark mode silently renders light.
+    for (const name of ["background", "foreground", "primary", "border", "muted"]) {
+      expect(darkBlock).toContain(`--${name}: var(`)
+    }
+  })
+
+  it("resolves mode-dependent literals against the dark scales", () => {
     const util = themeToCss(getResolvedTheme("utilitarian"))
     const darkBlock = util.slice(util.indexOf(".dark {"), util.indexOf("@theme inline"))
     // utilitarian flips its accent solid from dark to light in dark mode,
-    // so primary-foreground must be re-declared.
-    expect(darkBlock).toContain("--primary-foreground:")
+    // so primary-foreground's computed literal differs from the light one.
+    const lightBlock = util.slice(0, util.indexOf(".dark {"))
+    const pick = (block: string) => block.match(/--primary-foreground: ([^;]+);/)?.[1]
+    expect(pick(darkBlock)).toBeDefined()
+    expect(pick(darkBlock)).not.toBe(pick(lightBlock))
   })
 
   it("is deterministic", () => {

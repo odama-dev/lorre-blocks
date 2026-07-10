@@ -166,6 +166,30 @@
   --warning-10: oklch(0.83 0.16 75);
   --warning-11: oklch(0.78 0.1152 75);
   --warning-12: oklch(0.945 0.048 75);
+
+  --background: var(--neutral-1);
+  --foreground: var(--neutral-12);
+  --card: var(--neutral-1);
+  --card-foreground: var(--neutral-12);
+  --popover: var(--neutral-1);
+  --popover-foreground: var(--neutral-12);
+  --primary: var(--accent-9);
+  --primary-foreground: oklch(0.985 0.005 262);
+  --secondary: var(--neutral-3);
+  --secondary-foreground: var(--neutral-12);
+  --muted: var(--neutral-3);
+  --muted-foreground: var(--neutral-11);
+  --accent: var(--neutral-4);
+  --accent-foreground: var(--neutral-12);
+  --destructive: var(--danger-9);
+  --destructive-foreground: oklch(0.985 0.005 27);
+  --success: var(--success-9);
+  --success-foreground: oklch(0.985 0.005 158);
+  --warning: var(--warning-9);
+  --warning-foreground: oklch(0.235 0.012 75);
+  --border: var(--neutral-6);
+  --input: var(--neutral-7);
+  --ring: var(--accent-8);
 }
 
 @theme inline {
@@ -270,6 +294,26 @@
 
   --ease-smooth: cubic-bezier(0.32, 0.72, 0, 1);
   --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+
+  --animate-fade-in: lorre-fade-in var(--motion-duration-fast) var(--ease-smooth);
+  --animate-panel-in: lorre-panel-in var(--motion-duration-fast) var(--ease-smooth);
+  --animate-accordion-down: lorre-accordion-down var(--motion-duration-normal) var(--ease-smooth);
+  --animate-accordion-up: lorre-accordion-up var(--motion-duration-normal) var(--ease-smooth);
+
+  @keyframes lorre-fade-in {
+    from { opacity: 0; }
+  }
+  @keyframes lorre-panel-in {
+    from { opacity: 0; transform: translateY(2px) scale(0.98); }
+  }
+  @keyframes lorre-accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+  @keyframes lorre-accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
 }
 
 @layer base {

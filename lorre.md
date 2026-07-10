@@ -111,6 +111,8 @@ src/tokens/themes/<name>.ts   ThemeDefinition (seeds + overrides, may `extends` 
 **Themes:** `basic` (root), `dreamy` and `utilitarian` (both extend `basic`). Each ships a
 12-step OKLCH scale per color axis, in light and dark, as Tailwind CSS and DTCG JSON.
 
-**Components:** `button`, `input` (+ `utils` lib) — all `source: "shadcn"`, MIT.
+**Components** (all `source: "shadcn"`, MIT, + `utils` lib): `button`, `input`, `label`,
+`separator`, `checkbox`, `switch`, `radio-group`, `tabs`, `tooltip`, `accordion`, `dialog`,
+`popover`, `dropdown-menu`, `select`.
 
 Porting queue and roadmap live in `docs/PLAN.md`; progress log in `docs/PROGRESS.md`.

@@ -5,6 +5,39 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-10 — Phase 2 batch 1: 12 primitives ported + dark-mode token bug fixed
+
+Committed straight to master (packages/* workflow). PR #1 (Phase 4.1 agent-readable CLI,
+branch `feat/cli-agent-baseline`) opened today and still waiting on the owner to merge —
+that merge also triggers the overdue www deploy.
+
+**Shipped:**
+- **12 new components** (all `source: "shadcn"`, MIT, rewired onto Lorre semantic tokens):
+  label, separator, checkbox, switch, radio-group, tabs, tooltip, accordion, dialog,
+  popover, dropdown-menu, select. Registry now has 15 items.
+- **Animation tokens** in `themeToCss`: `--animate-fade-in/panel-in/accordion-down/up` +
+  `lorre-*` keyframes, durations wired to `--motion-duration-*` so `utilitarian` animates
+  faster with zero component changes. Overlay components use them.
+- `packages/registry` exports collapsed to `./ui/*`; Radix + lucide-react deps added.
+
+**Bug found by visual acceptance (real, shipped in Phase 1): dark mode never applied.**
+A custom property resolves its `var()` refs on the element that *declares* it, so
+`--background: var(--neutral-1)` computed on `:root` inherited the light value into `.dark`
+subtrees — re-declaring only the scales in `.dark` did nothing. Fix: `.dark` now re-declares
+**every** semantic. Regression test added (`re-declares every semantic in .dark`).
+
+**Verified:** typecheck ✓ · tests 41/41 ✓ · registry build deterministic ✓ · **visual
+acceptance in a real Vite + Tailwind v4 app** (CLI `theme apply` + `add` end-to-end against
+a locally served registry): all 14 components render under basic/dreamy/utilitarian in
+light **and** dark (6 screenshot matrices), overlays (dialog/popover/dropdown/select/tooltip)
+open correctly, and theme swaps touch zero component files. `add` with 14 components
+installs deps in a single npm pass.
+
+**Next:** Phase 2 batch 2 (card, badge, avatar, table, form-adjacent primitives), then
+docs app (Phase 3.1).
+
+---
+
 ## 2026-07-09 — Phase 1 shipped: token architecture, 3 themes, theme CLI
 
 **Shipped:**

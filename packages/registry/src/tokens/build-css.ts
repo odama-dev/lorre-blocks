@@ -108,17 +108,16 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push("}", "")
 
   // ---- .dark ----
+  // Every semantic is re-declared here, not just the ones whose literal
+  // differs: a custom property resolves its var() references on the element
+  // that declares it, so `--background: var(--neutral-1)` computed on :root
+  // inherits the *light* value. Re-declaring under .dark recomputes it
+  // against the dark scales.
   out.push(".dark {")
   out.push(...scaleLines(theme, "dark"))
-  const darkSemantics: string[] = []
+  out.push("")
   for (const name of SEMANTIC_ORDER) {
-    const light = resolveSemantic(theme, theme.semantics[name], "light")
-    const dark = resolveSemantic(theme, theme.semantics[name], "dark")
-    if (light !== dark) darkSemantics.push(`  --${name}: ${dark};`)
-  }
-  if (darkSemantics.length > 0) {
-    out.push("")
-    out.push(...darkSemantics)
+    out.push(`  --${name}: ${resolveSemantic(theme, theme.semantics[name], "dark")};`)
   }
   out.push("}", "")
 
@@ -149,6 +148,37 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push("")
   out.push(`  --ease-smooth: ${bezierToCss(theme.motion.easeSmooth)};`)
   out.push(`  --ease-snappy: ${bezierToCss(theme.motion.easeSnappy)};`)
+  out.push("")
+  // Animation tokens for overlay/disclosure components. Durations reference the
+  // theme's motion tokens, so e.g. `utilitarian` animates faster with zero
+  // component changes. Keyframes are prefixed to avoid consumer collisions.
+  out.push(
+    "  --animate-fade-in: lorre-fade-in var(--motion-duration-fast) var(--ease-smooth);"
+  )
+  out.push(
+    "  --animate-panel-in: lorre-panel-in var(--motion-duration-fast) var(--ease-smooth);"
+  )
+  out.push(
+    "  --animate-accordion-down: lorre-accordion-down var(--motion-duration-normal) var(--ease-smooth);"
+  )
+  out.push(
+    "  --animate-accordion-up: lorre-accordion-up var(--motion-duration-normal) var(--ease-smooth);"
+  )
+  out.push("")
+  out.push("  @keyframes lorre-fade-in {")
+  out.push("    from { opacity: 0; }")
+  out.push("  }")
+  out.push("  @keyframes lorre-panel-in {")
+  out.push("    from { opacity: 0; transform: translateY(2px) scale(0.98); }")
+  out.push("  }")
+  out.push("  @keyframes lorre-accordion-down {")
+  out.push("    from { height: 0; }")
+  out.push("    to { height: var(--radix-accordion-content-height); }")
+  out.push("  }")
+  out.push("  @keyframes lorre-accordion-up {")
+  out.push("    from { height: var(--radix-accordion-content-height); }")
+  out.push("    to { height: 0; }")
+  out.push("  }")
   out.push("}", "")
 
   out.push("@layer base {")
