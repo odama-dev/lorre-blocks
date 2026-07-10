@@ -1,4 +1,4 @@
-import type { RegistryItem } from "../registry/schema"
+import type { RegistryIndexItem, RegistryItem } from "../registry/schema"
 
 export async function fetchRegistryItem(
   registry: string,
@@ -30,12 +30,30 @@ export async function fetchRegistryItem(
 
 export async function fetchIndex(
   registry: string
-): Promise<Array<{ name: string; description?: string }>> {
+): Promise<RegistryIndexItem[]> {
   const base = registry.replace(/\/$/, "")
   const url = `${base}/r/index.json`
   const res = await fetch(url)
   if (!res.ok) throw new Error(`Failed to fetch ${url} (HTTP ${res.status}).`)
-  return (await res.json()) as Array<{ name: string; description?: string }>
+  return (await res.json()) as RegistryIndexItem[]
+}
+
+export interface RegistryManifest {
+  schemaVersion: number
+  itemCount: number
+  sources: string[]
+  categories: string[]
+  themes: string[]
+}
+
+/** Registry-level metadata. Absent on registries older than schema v2. */
+export async function fetchManifest(
+  registry: string
+): Promise<RegistryManifest | null> {
+  const base = registry.replace(/\/$/, "")
+  const res = await fetch(`${base}/r/manifest.json`)
+  if (!res.ok) return null
+  return (await res.json()) as RegistryManifest
 }
 
 export async function fetchTheme(registry: string): Promise<string> {

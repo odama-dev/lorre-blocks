@@ -1,27 +1,35 @@
 import { promises as fs } from "node:fs"
 import path from "node:path"
-import * as p from "@clack/prompts"
 import color from "picocolors"
 import { createTwoFilesPatch } from "diff"
 
 import { readConfig } from "../utils/config"
 import { fetchRegistryItem, fetchIndex } from "../utils/registry"
 import { resolveBaseDir, rewriteImports, targetDirForType } from "../utils/paths"
+import * as out from "../utils/output"
 
 export interface DiffOptions {
   cwd: string
   components: string[]
 }
 
+type FileStatus = "up-to-date" | "modified" | "not-added"
+
+interface DiffEntry {
+  name: string
+  file: string
+  status: FileStatus
+  patch?: string
+}
+
 export async function runDiff(options: DiffOptions): Promise<void> {
   const { cwd } = options
 
-  p.intro(color.bgCyan(color.black(" lorre-blocks diff ")))
+  out.intro(color.bgCyan(color.black(" lorre-blocks diff ")))
 
   const config = await readConfig(cwd)
   if (!config) {
-    p.cancel("No components.json found. Run `lorre-blocks init` first.")
-    process.exit(1)
+    out.fail("No components.json found. Run `lorre-blocks init` first.")
   }
 
   const baseDir = await resolveBaseDir(cwd)
@@ -34,30 +42,42 @@ export async function runDiff(options: DiffOptions): Promise<void> {
     const known = new Set(index.map((i) => i.name))
     names = present.filter((n) => known.has(n))
     if (names.length === 0) {
-      p.cancel("No known components found in your project to diff.")
-      process.exit(0)
+      if (out.isJsonMode()) {
+        out.emit({ changed: 0, entries: [] })
+        return
+      }
+      out.fail("No known components found in your project to diff.")
     }
   }
 
-  let changed = 0
+  const entries: DiffEntry[] = []
+
   for (const name of names) {
-    const item = await fetchRegistryItem(config.registry, name)
+    let item
+    try {
+      item = await fetchRegistryItem(config.registry, name)
+    } catch (err) {
+      out.fail((err as Error).message)
+    }
+
     for (const file of item.files) {
       const dir = targetDirForType(file.type, config.aliases, baseDir)
       const dest = path.join(dir, path.basename(file.path))
+      const rel = path.relative(cwd, dest)
       const local = await readIfExists(dest)
       const registryContent = rewriteImports(file.content, config)
 
       if (local === null) {
-        p.log.warn(`${name}: ${path.relative(cwd, dest)} not added yet`)
+        entries.push({ name, file: rel, status: "not-added" })
+        out.warn(`${name}: ${rel} not added yet`)
         continue
       }
       if (local === registryContent) {
-        p.log.success(`${name}: up to date`)
+        entries.push({ name, file: rel, status: "up-to-date" })
+        out.success(`${name}: up to date`)
         continue
       }
 
-      changed++
       const patch = createTwoFilesPatch(
         "your version",
         "registry",
@@ -66,11 +86,19 @@ export async function runDiff(options: DiffOptions): Promise<void> {
         "",
         ""
       )
-      p.log.message(`${color.bold(name)} — ${path.relative(cwd, dest)}\n${colorizePatch(patch)}`)
+      entries.push({ name, file: rel, status: "modified", patch })
+      out.message(`${color.bold(name)} — ${rel}\n${colorizePatch(patch)}`)
     }
   }
 
-  p.outro(
+  const changed = entries.filter((e) => e.status === "modified").length
+
+  if (out.isJsonMode()) {
+    out.emit({ changed, entries })
+    return
+  }
+
+  out.outro(
     changed === 0
       ? `${color.green("✔")} Everything matches the registry.`
       : `${changed} file(s) differ from the registry.`

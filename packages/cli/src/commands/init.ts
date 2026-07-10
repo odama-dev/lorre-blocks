@@ -23,6 +23,7 @@ import {
 } from "../utils/registry"
 import { injectThemeBlock } from "../utils/css"
 import { readIfExists, resolveGlobalCss } from "../utils/global-css"
+import * as out from "../utils/output"
 
 export interface InitOptions {
   cwd: string
@@ -40,19 +41,20 @@ const BASE_DEPENDENCIES = [
 
 export async function runInit(options: InitOptions): Promise<void> {
   const { cwd } = options
+  // JSON mode is non-interactive by definition: never block an agent on stdin.
+  const nonInteractive = options.yes || out.isJsonMode()
 
-  p.intro(color.bgCyan(color.black(" lorre-blocks init ")))
+  out.intro(color.bgCyan(color.black(" lorre-blocks init ")))
 
   if (await configExists(cwd)) {
-    const overwrite = options.yes
+    const overwrite = nonInteractive
       ? true
       : await p.confirm({
           message: "components.json already exists. Overwrite it?",
           initialValue: false,
         })
     if (p.isCancel(overwrite) || !overwrite) {
-      p.cancel("Init aborted; existing components.json kept.")
-      return
+      out.fail("Init aborted; existing components.json kept.")
     }
   }
 
@@ -60,9 +62,11 @@ export async function runInit(options: InitOptions): Promise<void> {
 
   const registry =
     options.registry ??
-    (options.yes ? DEFAULT_REGISTRY : await promptText("Registry URL", DEFAULT_REGISTRY))
+    (nonInteractive ? DEFAULT_REGISTRY : await promptText("Registry URL", DEFAULT_REGISTRY))
 
-  const theme = options.theme ?? (options.yes ? DEFAULT_THEME : await promptTheme(registry))
+  const theme =
+    options.theme ??
+    (nonInteractive ? DEFAULT_THEME : await promptTheme(registry))
 
   const config: Config = {
     $schema: "https://lorre-blocks.dev/schema.json",
@@ -73,21 +77,21 @@ export async function runInit(options: InitOptions): Promise<void> {
   }
 
   await writeConfig(cwd, config)
-  p.log.success("Wrote components.json")
+  out.success("Wrote components.json")
 
   const pm = await detectPackageManager(cwd)
-  const depSpinner = p.spinner()
+  const depSpinner = out.spinner()
   depSpinner.start(`Installing base dependencies with ${pm}`)
   try {
-    await installDependencies(cwd, pm, BASE_DEPENDENCIES)
+    await installDependencies(cwd, pm, BASE_DEPENDENCIES, { silent: out.isJsonMode() })
     depSpinner.stop(`Installed: ${BASE_DEPENDENCIES.join(", ")}`)
   } catch (err) {
     depSpinner.stop("Dependency install failed.")
-    p.cancel((err as Error).message)
-    process.exit(1)
+    out.fail((err as Error).message)
   }
 
   const baseDir = await resolveBaseDir(cwd)
+  const written: string[] = []
 
   try {
     const utils = await fetchRegistryItem(registry, "utils")
@@ -96,27 +100,41 @@ export async function runInit(options: InitOptions): Promise<void> {
       await fs.mkdir(dir, { recursive: true })
       const dest = path.join(dir, path.basename(file.path))
       await fs.writeFile(dest, rewriteImports(file.content, config), "utf8")
-      p.log.success(`Wrote ${path.relative(cwd, dest)}`)
+      written.push(path.relative(cwd, dest))
+      out.success(`Wrote ${path.relative(cwd, dest)}`)
     }
   } catch (err) {
-    p.log.warn(`Could not write utils: ${(err as Error).message}`)
+    out.warn(`Could not write utils: ${(err as Error).message}`)
   }
 
+  let cssPath: string | null = null
   try {
     const themeCss = await fetchThemeCss(registry, theme)
-    const cssPath = await resolveGlobalCss(cwd)
-    const existing = await readIfExists(cssPath)
+    const resolved = await resolveGlobalCss(cwd)
+    const existing = await readIfExists(resolved)
     const next = injectThemeBlock(existing ?? "", themeCss)
-    await fs.mkdir(path.dirname(cssPath), { recursive: true })
-    await fs.writeFile(cssPath, next, "utf8")
-    p.log.success(
-      `${existing === null ? "Created" : "Updated"} ${path.relative(cwd, cssPath)} with theme "${theme}"`
+    await fs.mkdir(path.dirname(resolved), { recursive: true })
+    await fs.writeFile(resolved, next, "utf8")
+    cssPath = path.relative(cwd, resolved)
+    out.success(
+      `${existing === null ? "Created" : "Updated"} ${cssPath} with theme "${theme}"`
     )
   } catch (err) {
-    p.log.warn(`Could not set up the theme: ${(err as Error).message}`)
+    out.warn(`Could not set up the theme: ${(err as Error).message}`)
   }
 
-  p.outro(
+  if (out.isJsonMode()) {
+    out.emit({
+      config,
+      written,
+      cssPath,
+      packageManager: pm,
+      dependencies: BASE_DEPENDENCIES,
+    })
+    return
+  }
+
+  out.outro(
     `${color.green("✔")} Ready. Now run ${color.cyan("lorre-blocks add button")}.`
   )
 }

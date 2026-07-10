@@ -16,7 +16,9 @@ in one flat list.
 - **Registry host:** https://lorre-blocks.vercel.app — `/r/index.json`, `/r/manifest.json`,
   `/r/<name>.json`, `/r/themes/index.json`, `/r/themes/<theme>.json` (CSS),
   `/r/tokens/<theme>.json` (W3C DTCG), `/r/theme.json` (legacy alias for `basic`)
-- **CLI:** `lorre-blocks` on npm (`init [--theme]`, `add`, `list`, `diff`, `theme list`, `theme apply`)
+- **CLI:** `lorre-blocks` on npm — `init [--theme]`, `add`, `list`, `search`, `info`, `diff`,
+  `theme list`, `theme apply`. Every command takes `--json` (one JSON doc on stdout,
+  never prompts) — this is the contract agents build on.
 - **Monorepo:** `packages/registry` (source of truth) · `packages/cli` · `apps/www` (docs + registry host)
 
 ## Classification system (registry schema v2)
@@ -96,6 +98,8 @@ src/tokens/themes/<name>.ts   ThemeDefinition (seeds + overrides, may `extends` 
 ### Decision tree: sculpt vs. create (for agents resolving a PRD gap)
 
 1. Does an item with matching `category` + `tags` exist? → use it.
+   Check with `lorre-blocks search "<need>" --category component --json`, then
+   `lorre-blocks info <name> --json` to see its files, deps and install order.
 2. Can an existing basic component be adapted with token overrides / variants ("sculpted")? → sculpt it; do **not** create a new item.
 3. Nothing fits? → create a new item following the steps above, ship it as a patch release, then consume it.
 

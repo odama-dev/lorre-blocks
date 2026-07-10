@@ -30,10 +30,20 @@ function installArgs(pm: PackageManager, deps: string[]): string[] {
   }
 }
 
+export interface InstallOptions {
+  /**
+   * Capture the package manager's output instead of letting it reach our stdout.
+   * Required in JSON mode: npm writes progress to stdout and would corrupt the
+   * single JSON document the command emits.
+   */
+  silent?: boolean
+}
+
 export async function installDependencies(
   cwd: string,
   pm: PackageManager,
-  deps: string[]
+  deps: string[],
+  options: InstallOptions = {}
 ): Promise<void> {
   if (deps.length === 0) return
 
@@ -41,13 +51,25 @@ export async function installDependencies(
   await new Promise<void>((resolve, reject) => {
     const child = spawn(pm, args, {
       cwd,
-      stdio: "inherit",
+      stdio: options.silent ? ["ignore", "pipe", "pipe"] : "inherit",
       shell: process.platform === "win32",
     })
+
+    let captured = ""
+    if (options.silent) {
+      child.stdout?.on("data", (c) => (captured += c))
+      child.stderr?.on("data", (c) => (captured += c))
+    }
+
     child.on("error", reject)
     child.on("close", (code) => {
-      if (code === 0) resolve()
-      else reject(new Error(`${pm} ${args.join(" ")} exited with code ${code}`))
+      if (code === 0) return resolve()
+      const tail = captured.trim().split("\n").slice(-5).join("\n")
+      reject(
+        new Error(
+          `${pm} ${args.join(" ")} exited with code ${code}${tail ? `\n${tail}` : ""}`
+        )
+      )
     })
   })
 }

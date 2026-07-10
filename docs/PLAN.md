@@ -69,8 +69,10 @@ form, date picker, calendar, pagination, breadcrumb, progress, slider, toggle, c
 
 ## Phase 4 — Agent-friendly CLI
 
-- 4.1 Machine-readable baseline: `--json` on all commands, fully non-interactive `init`,
-  `lorre search <query> --json`, `lorre info <name> --json`
+- 4.1 ✅ (2026-07-09) Machine-readable baseline: `--json` on every command (one JSON doc on
+  stdout; `{ok:false,error}` + exit 1 on failure; package-manager output captured so stdout
+  stays parseable), `--json` implies non-interactive, `search <query>` with category/source/
+  theme/type/limit facets, `info <name>` with install order + resolved target paths
 - 4.2 Build-from-spec: `lorre plan --spec prd.md --json` (theme choice + add-list + token
   overrides + gap list) and `lorre apply plan.json`. Gap handling follows the sculpt-vs-create
   decision tree in `lorre.md`; new items ship as patch releases via existing CI.
@@ -89,7 +91,7 @@ form, date picker, calendar, pagination, breadcrumb, progress, slider, toggle, c
 |---|---|---|
 | 1 | Phase 0 + `lorre.md` | ✅ done 2026-07-09 |
 | 2 | Phase 1 (tokens + 3 themes) | ✅ done 2026-07-09 |
-| 3 | Phase 4.1 (CLI `--json`, `search`, `info`) | 1–2 days |
+| 3 | Phase 4.1 (CLI `--json`, `search`, `info`) | ✅ done 2026-07-09 |
 | 4 | Phase 2 (porting, continuous) | ~1 component/hour once patterns exist |
 | 5 | Phase 3.1–3.2 (docs + tokens pages + llms.txt) | 3–4 days |
 | 6 | Phase 4.2 (`plan`/`apply`) | 2–3 days |

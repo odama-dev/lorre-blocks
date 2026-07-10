@@ -1,12 +1,12 @@
 import { promises as fs } from "node:fs"
 import path from "node:path"
-import * as p from "@clack/prompts"
 import color from "picocolors"
 
 import { readConfig, writeConfig } from "../utils/config"
 import { injectThemeBlock } from "../utils/css"
 import { readIfExists, resolveGlobalCss } from "../utils/global-css"
 import { fetchThemeCss, fetchThemesIndex } from "../utils/registry"
+import * as out from "../utils/output"
 
 export interface ThemeListOptions {
   cwd: string
@@ -17,13 +17,29 @@ export async function runThemeList(options: ThemeListOptions): Promise<void> {
   const config = await readConfig(options.cwd)
   const registry = options.registry ?? config?.registry
   if (!registry) {
-    console.error(
-      "No registry configured. Run `lorre-blocks init` first or pass --registry."
-    )
-    process.exit(1)
+    out.fail("No registry configured. Run `lorre-blocks init` first or pass --registry.")
   }
 
-  const themes = await fetchThemesIndex(registry)
+  let themes
+  try {
+    themes = await fetchThemesIndex(registry)
+  } catch (err) {
+    out.fail((err as Error).message)
+  }
+
+  if (out.isJsonMode()) {
+    out.emit({
+      registry,
+      active: config?.theme ?? null,
+      count: themes.length,
+      themes: themes.map((t) => ({
+        ...t,
+        active: config?.theme === t.name,
+      })),
+    })
+    return
+  }
+
   for (const theme of themes) {
     const active = config?.theme === theme.name ? color.green(" (active)") : ""
     const base = theme.extends ? color.dim(` extends ${theme.extends}`) : ""
@@ -40,20 +56,18 @@ export interface ThemeApplyOptions {
 export async function runThemeApply(options: ThemeApplyOptions): Promise<void> {
   const { cwd, name } = options
 
-  p.intro(color.bgCyan(color.black(" lorre-blocks theme ")))
+  out.intro(color.bgCyan(color.black(" lorre-blocks theme ")))
 
   const config = await readConfig(cwd)
   if (!config) {
-    p.cancel("No components.json found. Run `lorre-blocks init` first.")
-    process.exit(1)
+    out.fail("No components.json found. Run `lorre-blocks init` first.")
   }
 
   let css: string
   try {
     css = await fetchThemeCss(config.registry, name)
   } catch (err) {
-    p.cancel((err as Error).message)
-    process.exit(1)
+    out.fail((err as Error).message)
   }
 
   const cssPath = await resolveGlobalCss(cwd)
@@ -61,12 +75,16 @@ export async function runThemeApply(options: ThemeApplyOptions): Promise<void> {
   const next = injectThemeBlock(existing ?? "", css)
   await fs.mkdir(path.dirname(cssPath), { recursive: true })
   await fs.writeFile(cssPath, next, "utf8")
-  p.log.success(
-    `${existing === null ? "Created" : "Updated"} ${path.relative(cwd, cssPath)} with theme "${name}"`
-  )
+  const relCss = path.relative(cwd, cssPath)
+  out.success(`${existing === null ? "Created" : "Updated"} ${relCss} with theme "${name}"`)
 
   await writeConfig(cwd, { ...config, theme: name })
-  p.log.success(`Set "theme": "${name}" in components.json`)
+  out.success(`Set "theme": "${name}" in components.json`)
 
-  p.outro(`${color.green("✔")} Theme applied. Components pick it up automatically.`)
+  if (out.isJsonMode()) {
+    out.emit({ theme: name, cssPath: relCss, created: existing === null })
+    return
+  }
+
+  out.outro(`${color.green("✔")} Theme applied. Components pick it up automatically.`)
 }
