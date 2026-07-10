@@ -164,6 +164,11 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push(
     "  --animate-accordion-up: lorre-accordion-up var(--motion-duration-normal) var(--ease-smooth);"
   )
+  for (const side of ["top", "bottom", "left", "right"]) {
+    out.push(
+      `  --animate-slide-in-${side}: lorre-slide-in-${side} var(--motion-duration-slow) var(--ease-smooth);`
+    )
+  }
   out.push("")
   out.push("  @keyframes lorre-fade-in {")
   out.push("    from { opacity: 0; }")
@@ -179,6 +184,17 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push("    from { height: var(--radix-accordion-content-height); }")
   out.push("    to { height: 0; }")
   out.push("  }")
+  const slideFrom: Record<string, string> = {
+    top: "translateY(-100%)",
+    bottom: "translateY(100%)",
+    left: "translateX(-100%)",
+    right: "translateX(100%)",
+  }
+  for (const [side, transform] of Object.entries(slideFrom)) {
+    out.push(`  @keyframes lorre-slide-in-${side} {`)
+    out.push(`    from { transform: ${transform}; }`)
+    out.push("  }")
+  }
   out.push("}", "")
 
   out.push("@layer base {")

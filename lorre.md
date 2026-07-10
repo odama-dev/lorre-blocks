@@ -115,6 +115,7 @@ src/tokens/themes/<name>.ts   ThemeDefinition (seeds + overrides, may `extends` 
 
 **Components** (all `source: "shadcn"`, MIT, + `utils` lib): `button`, `input`, `label`,
 `separator`, `checkbox`, `switch`, `radio-group`, `tabs`, `tooltip`, `accordion`, `dialog`,
-`popover`, `dropdown-menu`, `select`.
+`popover`, `dropdown-menu`, `select`, `card`, `badge`, `avatar`, `alert`, `skeleton`,
+`table`, `alert-dialog`, `sheet`, `hover-card`, `context-menu`, `sonner`.
 
 Porting queue and roadmap live in `docs/PLAN.md`; progress log in `docs/PROGRESS.md`.
