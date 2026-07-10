@@ -54,8 +54,10 @@ Rules: shadcn/Radix/Magic UI are MIT → port with `license: "MIT"` + correct `s
 semantic tokens and must render correctly under all 3 themes before it merges.
 
 Progress: **batch 1 done 2026-07-10** — label, separator, checkbox, switch, radio-group,
-tabs, tooltip, accordion, dialog, popover, dropdown-menu, select (12 items; registry
-total 15). Remaining from (1): toast, hover-card, alert-dialog, sheet, context-menu…
+tabs, tooltip, accordion, dialog, popover, dropdown-menu, select (12 items).
+**Batch 2 done 2026-07-10** — card, badge, avatar, alert, skeleton, table, alert-dialog,
+sheet, hover-card, context-menu, sonner (registry total 26). Remaining: combobox, command,
+form, date picker, calendar, pagination, breadcrumb, progress, slider, toggle, collapsible.
 
 ## Phase 3 — Docs app (`apps/www`)
 

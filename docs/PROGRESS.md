@@ -5,6 +5,32 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-10 — Phase 2 batch 2: 11 more items (surfaces, data, overlays, toast)
+
+Straight to master. Registry now **26 items**.
+
+**Shipped:**
+- **Surfaces & status:** card, badge (default/secondary/destructive/success/warning/outline),
+  avatar, alert (tinted `danger-2/6/11`-style scale steps per variant), skeleton, table.
+- **Overlays:** alert-dialog (composes `buttonVariants` via a `button` registryDependency —
+  first cross-component dep; CLI's `rewriteImports` already handled `@/components/ui/*`,
+  registry tsconfig got a `@/components/ui/* → src/ui/*` path mapping so in-repo typecheck
+  resolves it), sheet (4 sides), hover-card, context-menu.
+- **sonner** toast host styled via CSS vars (`--normal-bg: var(--popover)` etc.) — no
+  next-themes dependency; `theme` prop left to the consumer.
+- **Slide animation tokens:** `--animate-slide-in-top/bottom/left/right` + `lorre-slide-in-*`
+  keyframes on `--motion-duration-slow`, so sheets animate per theme.
+
+**Verified:** typecheck ✓ · tests 41/41 ✓ · deterministic rebuild ✓ · visual acceptance in
+the same Vite + Tailwind v4 app via CLI `add` (11 components, one npm pass) + `theme apply`:
+batch 2 renders under basic/dreamy/utilitarian, light + dark; alert-dialog/sheet/hover-card/
+context-menu/toast all open and are token-correct (screenshots per theme).
+
+**Next:** Phase 3.1 docs app (feature branch → PR), or Phase 2 batch 3 (combobox, command,
+form, date picker — heavier deps).
+
+---
+
 ## 2026-07-10 — Phase 2 batch 1: 12 primitives ported + dark-mode token bug fixed
 
 Committed straight to master (packages/* workflow). PR #1 (Phase 4.1 agent-readable CLI,
@@ -32,6 +58,13 @@ a locally served registry): all 14 components render under basic/dreamy/utilitar
 light **and** dark (6 screenshot matrices), overlays (dialog/popover/dropdown/select/tooltip)
 open correctly, and theme swaps touch zero component files. `add` with 14 components
 installs deps in a single npm pass.
+
+**Release pipeline note:** the Release workflow fails on master pushes with a queued
+changeset because the repo blocks Actions from creating PRs. Worked around by manually
+creating the Version Packages PR (#2) from the action-maintained `changeset-release/master`
+branch — the action *updates* an existing PR fine, so subsequent runs pass. Permanent fix
+(owner): Settings → Actions → General → enable "Allow GitHub Actions to create and approve
+pull requests". **Merge order: #1 (www deploy) before #2 (publishes CLI 0.3.0).**
 
 **Next:** Phase 2 batch 2 (card, badge, avatar, table, form-adjacent primitives), then
 docs app (Phase 3.1).

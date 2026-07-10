@@ -299,6 +299,10 @@
   --animate-panel-in: lorre-panel-in var(--motion-duration-fast) var(--ease-smooth);
   --animate-accordion-down: lorre-accordion-down var(--motion-duration-normal) var(--ease-smooth);
   --animate-accordion-up: lorre-accordion-up var(--motion-duration-normal) var(--ease-smooth);
+  --animate-slide-in-top: lorre-slide-in-top var(--motion-duration-slow) var(--ease-smooth);
+  --animate-slide-in-bottom: lorre-slide-in-bottom var(--motion-duration-slow) var(--ease-smooth);
+  --animate-slide-in-left: lorre-slide-in-left var(--motion-duration-slow) var(--ease-smooth);
+  --animate-slide-in-right: lorre-slide-in-right var(--motion-duration-slow) var(--ease-smooth);
 
   @keyframes lorre-fade-in {
     from { opacity: 0; }
@@ -313,6 +317,18 @@
   @keyframes lorre-accordion-up {
     from { height: var(--radix-accordion-content-height); }
     to { height: 0; }
+  }
+  @keyframes lorre-slide-in-top {
+    from { transform: translateY(-100%); }
+  }
+  @keyframes lorre-slide-in-bottom {
+    from { transform: translateY(100%); }
+  }
+  @keyframes lorre-slide-in-left {
+    from { transform: translateX(-100%); }
+  }
+  @keyframes lorre-slide-in-right {
+    from { transform: translateX(100%); }
   }
 }
 
