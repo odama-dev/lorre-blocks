@@ -85,7 +85,10 @@ prefers-reduced-motion and ride the theme motion tokens; installed to
   markdown twin per docs page (`/docs/components/<name>.md`, `/docs/{index,theming,cli}.md`) —
   all generated at prebuild by `apps/www/scripts/build-llms.ts` into `public/` (gitignored,
   deterministic). Next upgraded 15→16 in the same branch (backlog item 4).
-- 3.3 Landing page polish (last): Radix-style single-section with theme-switching carousel
+- 3.3 ✅ (2026-07-12) Landing page polish: theme-switching carousel (pills above the live
+  showcase, auto-cycling until interaction, synced with the header picker via a shared
+  `lib/theme.ts`), marquee strip of registry item names, CountUp stats band, FadeIn feature
+  cards — the landing now dogfoods the batch 7 motion items.
 - Workflow: every www change ships via feature branch → PR → owner merge (Vercel Hobby constraint)
 
 ## Phase 4 — Agent-friendly CLI

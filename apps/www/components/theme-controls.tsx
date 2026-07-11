@@ -11,39 +11,23 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@lorre-blocks/registry/ui/dropdown-menu"
-
-const THEMES = ["basic", "dreamy", "utilitarian"] as const
-
-/**
- * The theme override works exactly like the CLI's `theme apply`, but at runtime:
- * fetch the theme's generated CSS from /r/themes/<name>.json and let it win over
- * the baked-in basic theme via a <style> appended to <head>.
- */
-async function applyTheme(name: string) {
-  const existing = document.getElementById("lorre-theme-override")
-  if (name === "basic") {
-    existing?.remove()
-    localStorage.setItem("lorre-theme", "basic")
-    localStorage.removeItem("lorre-theme-css")
-    return
-  }
-  const res = await fetch(`/r/themes/${name}.json`)
-  const { css } = (await res.json()) as { css: string }
-  const style = existing ?? document.createElement("style")
-  style.id = "lorre-theme-override"
-  style.textContent = css
-  if (!existing) document.head.appendChild(style)
-  localStorage.setItem("lorre-theme", name)
-  localStorage.setItem("lorre-theme-css", css)
-}
+import {
+  THEMES,
+  applyTheme,
+  currentTheme,
+  onThemeChange,
+  type ThemeName,
+} from "@www/lib/theme"
 
 export function ThemeControls() {
   const [theme, setTheme] = React.useState<string>("basic")
   const [dark, setDark] = React.useState(false)
 
   React.useEffect(() => {
-    setTheme(localStorage.getItem("lorre-theme") ?? "basic")
+    setTheme(currentTheme())
     setDark(document.documentElement.classList.contains("dark"))
+    // Stay in sync when something else (the landing carousel) swaps the theme.
+    return onThemeChange(setTheme)
   }, [])
 
   const toggleDark = () => {
@@ -66,8 +50,7 @@ export function ThemeControls() {
           <DropdownMenuRadioGroup
             value={theme}
             onValueChange={(value) => {
-              setTheme(value)
-              void applyTheme(value)
+              void applyTheme(value as ThemeName)
             }}
           >
             {THEMES.map((name) => (

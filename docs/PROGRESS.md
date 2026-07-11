@@ -5,6 +5,35 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-12 — Phase 3.3: landing polish (theme carousel + motion dogfood)
+
+**PR #11 owner-merged 16:54Z; batch 7 confirmed live in production** (manifest 55, motion
+docs pages + `/r/<motion>.json` + md twins all 200).
+
+**Shipped (branch `feat/landing-polish` → PR):** the Radix-style landing section locked in
+Phase 3. New shared `apps/www/lib/theme.ts` (applyTheme + `lorre-theme-change` window event;
+theme-controls refactored onto it) so the new **ThemeCarousel** — pills above the live
+showcase — and the header picker stay in sync in both directions. The carousel auto-cycles
+basic → dreamy → utilitarian every 4s for fresh visitors only (stored non-basic theme or
+prefers-reduced-motion disables it; hover pauses; any manual pick stops it for good) with an
+`aria-live` blurb describing each theme. The landing now **dogfoods batch 7**: a Marquee
+strip of all non-lib registry item names (edge-masked), a CountUp stats band (55 / 3 / 1 —
+derived from the registry import, so counts never go stale), FadeIn-staggered feature cards.
+Hero badge now reads components · blocks · motion · themes.
+
+**Verified:** www build ✓ (60 pages) · Playwright vs `next start`: fresh visitor auto-cycles
+to dreamy at ~4.5s (override style + `--primary` violet asserted, header label follows);
+manual pick stops the cycle (still utilitarian 4.5s later); header picker → carousel pill
+syncs back; marquee animates with real item names; stats land on exactly 55/3/1; all 4
+fade-ins visible; returning visitor with stored dreamy gets no auto-cycle; reduced-motion
+context: no auto-cycle after 4.5s and marquee `animation-name: none`; dark mode screenshot
+reviewed — zero console/page errors.
+
+**Next:** PR → owner merge. Then Phase 5 (lorre.lock, CI hardening) or more motion items;
+Phase 4.3 MCP server remains the stretch goal.
+
+---
+
 ## 2026-07-11 (6) — Batch 7: first motion items (marquee, count-up, fade-in) — registry 55
 
 **Shipped (registry 52 → 55): the first `registry:motion` items**, all `source: "lorre"`,
