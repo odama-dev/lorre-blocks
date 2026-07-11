@@ -1,8 +1,9 @@
 /**
  * Generates agent-readable docs at prebuild time (Phase 3.2):
  *   public/llms.txt                    — llmstxt.org index: what this site is + links
- *   public/llms-full.txt               — everything inline: guides + every component doc
+ *   public/llms-full.txt               — everything inline: guides + every component/block doc
  *   public/docs/components/<name>.md   — raw-markdown twin of each component page
+ *   public/docs/blocks/<name>.md       — raw-markdown twin of each block page
  *   public/docs/index.md, theming.md, cli.md — twins of the static docs pages
  *
  * Output is deterministic (registry order is sorted; no timestamps) so rebuilds
@@ -25,6 +26,10 @@ const SITE = "https://lorre-blocks.vercel.app"
 
 const uiItems = registry
   .filter((item) => item.type === "registry:ui")
+  .sort((a, b) => a.name.localeCompare(b.name))
+
+const blockItems = registry
+  .filter((item) => item.type === "registry:block")
   .sort((a, b) => a.name.localeCompare(b.name))
 
 async function readSource(item: RegistryItem): Promise<string> {
@@ -143,6 +148,9 @@ async function build() {
   const componentsDir = path.join(PUBLIC_DIR, "docs", "components")
   await fs.mkdir(componentsDir, { recursive: true })
 
+  const blocksDir = path.join(PUBLIC_DIR, "docs", "blocks")
+  await fs.mkdir(blocksDir, { recursive: true })
+
   const sources = new Map<string, string>()
   for (const item of uiItems) {
     const source = await readSource(item)
@@ -154,6 +162,17 @@ async function build() {
     )
   }
   console.log(`✓ ${uiItems.length} component twins -> public/docs/components/<name>.md`)
+
+  for (const item of blockItems) {
+    const source = await readSource(item)
+    sources.set(item.name, source)
+    await fs.writeFile(
+      path.join(blocksDir, `${item.name}.md`),
+      componentMd(item, source),
+      "utf8"
+    )
+  }
+  console.log(`✓ ${blockItems.length} block twins -> public/docs/blocks/<name>.md`)
 
   await fs.writeFile(path.join(PUBLIC_DIR, "docs", "index.md"), INDEX_MD, "utf8")
   await fs.writeFile(path.join(PUBLIC_DIR, "docs", "theming.md"), THEMING_MD, "utf8")
@@ -172,6 +191,13 @@ async function build() {
     `- [Introduction](${SITE}/docs/index.md): what Lorre Blocks is, quick start, registry endpoints`,
     `- [Theming](${SITE}/docs/theming.md): the 3 themes, theme CLI commands, DTCG token endpoints`,
     `- [CLI reference](${SITE}/docs/cli.md): every command incl. --json agent mode`,
+    "",
+    "## Blocks",
+    "",
+    ...blockItems.map(
+      (item) =>
+        `- [${item.name}](${SITE}/docs/blocks/${item.name}.md): ${item.description}`
+    ),
     "",
     "## Components",
     "",
@@ -202,6 +228,7 @@ async function build() {
     CLI_MD,
     "---",
     "",
+    ...blockItems.flatMap((item) => [componentMd(item, sources.get(item.name)!), "---", ""]),
     ...uiItems.flatMap((item) => [componentMd(item, sources.get(item.name)!), "---", ""]),
   ].join("\n")
   await fs.writeFile(path.join(PUBLIC_DIR, "llms-full.txt"), full, "utf8")
