@@ -50,7 +50,7 @@ const registryItemSchema = z
       .regex(/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/, "name must be kebab-case"),
     type: itemTypeSchema,
     description: z.string().min(20, "description must be meaningful (>= 20 chars) — agents rely on it"),
-    source: z.enum(["shadcn", "magicui", "radix", "lorre"]),
+    source: z.enum(["shadcn", "magicui", "radix", "reactbits", "lorre"]),
     category: z.enum([
       "token",
       "component",
