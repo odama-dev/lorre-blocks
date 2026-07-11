@@ -121,8 +121,16 @@ prefers-reduced-motion and ride the theme motion tokens; installed to
   `pnpm audit --audit-level high`, and **render smoke tests for every demo** (www vitest +
   jsdom: 54 items render + a coverage test that fails when a registry ui/block/motion item
   lacks a demo). `pnpm test` now spans cli + registry + www (186 tests).
-- Immutable caching for registry JSON; fully static docs site
-- End-to-end "agent adds a component" workflow: registry-item PR template, auto-changeset, auto-publish
+- [x] ✅ (2026-07-12) CDN caching for registry JSON: `/r/*` served with
+  `max-age=300, s-maxage=31536000, stale-while-revalidate=86400` + CORS `*` (Vercel's
+  edge cache is deployment-scoped, so the long CDN TTL is bust-on-deploy safe); same
+  cache policy on `llms*.txt`. Docs site was already fully static (60 prerendered pages).
+- [x] ✅ (2026-07-12) Agent-adds-a-component workflow: `.github/PULL_REQUEST_TEMPLATE.md`
+  with registry-item + CLI checklists mirroring the CI gates; `lorre.md` add-item recipe
+  and release flow brought up to date (demo-not-docs-page, drift guard, PR-only flow,
+  changesets only for CLI). Auto-changeset/auto-publish was already live (changesets CI).
+
+Phase 5 complete (2026-07-12).
 
 ## Upgrade backlog (evaluated 2026-07-11)
 

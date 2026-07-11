@@ -5,6 +5,38 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-12 (5) — Phase 5 complete: registry CDN caching + agent PR workflow
+
+**PR #16 owner-merged (`update` command); PR #17 "Version Packages" open — owner merge
+publishes CLI 0.7.0.**
+
+**Shipped (branch `feat/phase5-wrapup` → PR), closing the last two Phase 5 bullets:**
+- **CDN caching for registry JSON** (`apps/www/next.config.mjs` `headers()`): `/r/:path*`
+  → `Cache-Control: public, max-age=300, s-maxage=31536000, stale-while-revalidate=86400`
+  + `Access-Control-Allow-Origin: *` (themes/tokens are public data — playgrounds can
+  fetch them cross-origin). Same cache policy on `llms.txt`/`llms-full.txt`. Rationale:
+  Vercel's edge cache is deployment-scoped, so the year-long `s-maxage` busts on every
+  deploy; the short client `max-age` keeps browsers fresh; the CLI is a fresh process and
+  never caches. Docs site was already fully static (60 prerendered pages) — nothing to do.
+- **Agent-adds-a-component workflow**: `.github/PULL_REQUEST_TEMPLATE.md` with a
+  registry-item checklist that mirrors the CI gates (build validation, drift guard, demo
+  coverage, 3-themes check, reduced-motion) and a CLI checklist (changeset, --json
+  contract, version string). `lorre.md` refreshed: add-item recipe now says *demo, not
+  docs page* (registry-driven pages + coverage test), release flow is PR-only for
+  everything (direct master pushes are no longer used), CLI command list includes
+  update/plan/apply + lorre.lock, and a Motion section joined "Current registry contents".
+
+**Verified:** www build ✓ (60 pages) · headers curl-checked against `next start`:
+`/r/button.json` and `/r/themes/dreamy.json` carry the exact policy + CORS, `llms.txt`
+carries the cache policy, `/docs` control page is untouched. Gotcha reconfirmed: stopping
+the `next start` background task orphans the child on the port — kill by PID before
+re-serving, else you probe the stale build.
+
+**Phase 5 is complete.** Remaining roadmap: Phase 4.3 MCP server (stretch) and continuous
+Phase 2 porting (motion candidates: typewriter, shimmer, animated-gradient).
+
+---
+
 ## 2026-07-12 (4) — `update` command: lock-aware upstream pull (CLI 0.7.0 queued)
 
 **PRs #14 (CLI 0.6.0 → npm, verified `latest`) and #15 (CI hardening) owner-merged.**

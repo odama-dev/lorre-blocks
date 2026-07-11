@@ -17,8 +17,10 @@ in one flat list.
   `/r/<name>.json`, `/r/themes/index.json`, `/r/themes/<theme>.json` (CSS),
   `/r/tokens/<theme>.json` (W3C DTCG), `/r/theme.json` (legacy alias for `basic`)
 - **CLI:** `lorre-blocks` on npm — `init [--theme]`, `add`, `list`, `search`, `info`, `diff`,
-  `theme list`, `theme apply`. Every command takes `--json` (one JSON doc on stdout,
-  never prompts) — this is the contract agents build on.
+  `update`, `theme list`, `theme apply`, `plan check`, `apply`. Every command takes `--json`
+  (one JSON doc on stdout, never prompts) — this is the contract agents build on.
+  Installs are recorded in the consumer's `lorre.lock`; `diff` attributes changes
+  (local / upstream / diverged) and `update` pulls upstream safely.
 - **Monorepo:** `packages/registry` (source of truth) · `packages/cli` · `apps/www` (docs + registry host)
 
 ## Classification system (registry schema v2)
@@ -92,8 +94,15 @@ src/tokens/themes/<name>.ts   ThemeDefinition (seeds + overrides, may `extends` 
 2. Register it in `packages/registry/registry.ts` with **full classification metadata**.
 3. `pnpm build:registry` — must pass validation (kebab-case name, description length,
    license on ported items, resolvable `registryDependencies`, no duplicate names).
-4. Add a docs page under `apps/www/app/docs/` (Phase 3 layout).
-5. Ship (see release flow below).
+   Commit the regenerated `src/styles/theme.css` if it changed — CI fails on drift.
+4. Add a demo in `apps/www/components/demos/` and map it (demos/blockDemos/motionDemos
+   in `demos/index.ts`). That is all the www work: docs page, sidebar, ⌘K search and
+   llms twins all derive from the registry. The www test suite **fails if a registry
+   ui/block/motion item has no demo**, and every demo is render-smoke-tested in CI.
+5. `pnpm test` (cli + registry + www) and, before merging, check the item renders under
+   all 3 themes in light + dark. Motion items must honor `prefers-reduced-motion`.
+6. Ship (see release flow below). No changeset needed — the registry deploys with www;
+   changesets are only for `packages/cli` behavior changes.
 
 ### Decision tree: sculpt vs. create (for agents resolving a PRD gap)
 
@@ -103,14 +112,18 @@ src/tokens/themes/<name>.ts   ThemeDefinition (seeds + overrides, may `extends` 
 2. Can an existing basic component be adapted with token overrides / variants ("sculpted")? → sculpt it; do **not** create a new item.
 3. Nothing fits? → create a new item following the steps above, ship it as a patch release, then consume it.
 
-## Release flow (important — split by area)
+## Release flow (important)
 
-- **`packages/cli` / `packages/registry` changes** → commit to `master`, push directly.
-  Publishing the CLI needs a changeset (`pnpm changeset`); release CI auto-publishes on master.
-- **`apps/www` changes** → feature branch → PR → repo owner merges. The Vercel Hobby plan
-  blocks collaborator-triggered deploys, so only owner-merged changes go live.
+- **Everything ships via feature branch → PR → repo owner merges** (use the PR template's
+  checklists). The Vercel Hobby plan blocks collaborator-triggered deploys, so only
+  owner-merged changes go live; owner merge is also what publishes the CLI.
+- **CLI publishing:** behavior changes need a changeset (`pnpm changeset`). After the PR
+  merges, the changesets bot opens a "Version Packages" PR — the owner merging *that*
+  publishes to npm. Keep the `--version` string in `packages/cli/src/index.ts` in sync.
 - Generated registry JSON (`apps/www/public/r/`) is **gitignored** — the www `prebuild` script
   regenerates it on every deploy, so registry changes go live with the next www deploy.
+  Registry JSON is CDN-cached per deployment (long `s-maxage`); verify production with a
+  cache-busting query param right after a deploy.
 
 ## Current registry contents
 
@@ -127,5 +140,10 @@ palette. Query the live list with `lorre-blocks list` or `/r/index.json`.
 as serializable props and compose the ui set; together they cover a complete marketing
 page. Installed to `components/blocks/` by the CLI. `navbar` is the only
 client-interactive block (mobile menu state).
+
+**Motion** (3, all `source: "lorre"`): `marquee` (pure CSS, `--animate-marquee` token),
+`count-up` (viewport-triggered rAF counter) and `fade-in` (reveal-on-scroll riding
+`--motion-duration-slow`). All honor `prefers-reduced-motion`. Installed to
+`components/motion/`.
 
 Porting queue and roadmap live in `docs/PLAN.md`; progress log in `docs/PROGRESS.md`.
