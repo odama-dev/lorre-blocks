@@ -611,4 +611,49 @@ export const registry: RegistryItem[] = [
     registryDependencies: ["utils", "separator"],
     files: [{ path: "blocks/footer.tsx", type: "registry:block" }],
   },
+  {
+    name: "features",
+    type: "registry:block",
+    description:
+      "Feature grid section: header plus a responsive 2-4 column grid of feature entries ({title, description, icon?}). Use for product capabilities or benefit lists.",
+    source: "lorre",
+    category: "block",
+    tags: ["features", "grid", "benefits", "capabilities", "marketing", "section"],
+    registryDependencies: ["utils"],
+    files: [{ path: "blocks/features.tsx", type: "registry:block" }],
+  },
+  {
+    name: "testimonials",
+    type: "registry:block",
+    description:
+      "Testimonials section: header plus a responsive grid of quote cards with author, role and avatar (image URL or initials fallback). Items are data ({quote, author, role?, avatar?}[]).",
+    source: "lorre",
+    category: "block",
+    tags: ["testimonials", "quotes", "social-proof", "reviews", "marketing", "section"],
+    registryDependencies: ["utils", "avatar", "card"],
+    files: [{ path: "blocks/testimonials.tsx", type: "registry:block" }],
+  },
+  {
+    name: "stats",
+    type: "registry:block",
+    description:
+      "Stats band: a row of large key numbers with labels and optional descriptions. Values are free-form strings so percentages, counts and latencies all work.",
+    source: "lorre",
+    category: "block",
+    tags: ["stats", "metrics", "numbers", "kpi", "marketing", "section"],
+    registryDependencies: ["utils"],
+    files: [{ path: "blocks/stats.tsx", type: "registry:block" }],
+  },
+  {
+    name: "navbar",
+    type: "registry:block",
+    description:
+      "Site header / navigation bar: brand, links, action buttons, and a mobile hamburger menu. Optionally sticky with a blur backdrop. Links and actions are data props; the mobile disclosure state is internal.",
+    source: "lorre",
+    category: "block",
+    tags: ["navbar", "header", "navigation", "menu", "mobile", "site", "sticky"],
+    dependencies: ["lucide-react", "class-variance-authority"],
+    registryDependencies: ["utils", "button"],
+    files: [{ path: "blocks/navbar.tsx", type: "registry:block" }],
+  },
 ]

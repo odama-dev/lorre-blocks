@@ -65,8 +65,12 @@ menubar (registry total **43**).
 **Batch 5 done 2026-07-11** — first `registry:block` items, all `source: "lorre"`: hero,
 pricing, faq, cta, footer (registry total **48**). Blocks take content as serializable
 props, compose the ui set, and install to `components/blocks/` via the CLI path mapping
-that has existed since Phase 0. Next: motion/interaction items (Magic UI / React Bits
-style) and more blocks (features, testimonials, stats, header/nav).
+that has existed since Phase 0.
+**Batch 6 done 2026-07-11** — features, testimonials, stats, navbar (registry total
+**52**). navbar is the first client-interactive block (mobile hamburger, `"use client"`).
+The marketing-page block set is complete: navbar + hero + features + stats + testimonials +
+pricing + faq + cta + footer composes a full landing page. Next: motion/interaction items
+(Magic UI / React Bits style).
 
 ## Phase 3 — Docs app (`apps/www`)
 

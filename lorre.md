@@ -122,8 +122,10 @@ and `date-picker` are `source: "lorre"` compositions) plus the `utils` lib: the 
 shadcn-style primitive set — buttons, forms, overlays, data display, dates, command
 palette. Query the live list with `lorre-blocks list` or `/r/index.json`.
 
-**Blocks** (5, all `source: "lorre"`): `hero`, `pricing`, `faq`, `cta`, `footer` — full
-page sections that take content as serializable props and compose the ui set. Installed
-to `components/blocks/` by the CLI.
+**Blocks** (9, all `source: "lorre"`): `navbar`, `hero`, `features`, `stats`,
+`testimonials`, `pricing`, `faq`, `cta`, `footer` — full page sections that take content
+as serializable props and compose the ui set; together they cover a complete marketing
+page. Installed to `components/blocks/` by the CLI. `navbar` is the only
+client-interactive block (mobile menu state).
 
 Porting queue and roadmap live in `docs/PLAN.md`; progress log in `docs/PROGRESS.md`.

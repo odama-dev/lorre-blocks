@@ -5,6 +5,39 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-11 (5) — Batch 6: marketing block set complete (features, testimonials, stats, navbar) — registry 52
+
+**PR #8 owner-merged 10:11Z, batch 5 confirmed live in production** (manifest 48, block
+pages + md twins 200, llms.txt Blocks section; published CLI 0.4.0 `search --category
+block` returns all 5). Gotcha: Vercel's edge cache in `sin1` served the *old* deploy for
+several minutes after "Deployment has completed" — verify production with a cache-busting
+query param before concluding a deploy failed.
+
+**Shipped (registry 48 → 52), same conventions as batch 5:** **features** (2-4 col grid,
+optional `icon` ReactNode), **testimonials** (quote cards with avatar/initials fallback,
+composes card + avatar), **stats** (big-number band, free-form value strings, grid adapts
+3 vs 4 cols by item count), **navbar** (brand + links + actions + sticky blur; **first
+client-interactive block** — mobile hamburger via `useState`, so `"use client"`). The
+marketing-page set is now complete: navbar + hero + features + stats + testimonials +
+pricing + faq + cta + footer composes a full landing page — Phase 4.2's `plan` will have
+a real palette to work with.
+
+**www (branch `feat/batch6-blocks` → PR):** only 4 demos + map entries — the blocks docs
+route, sidebar, ⌘K search, and llms twins all derive from the registry, so batch 5's
+infrastructure picked the new items up with zero code changes.
+
+**Verified:** registry build ✓ (52) · typecheck ✓ · tests 56/56 ✓ · www build ✓ (57
+pages) · Playwright vs `next start`: 4 pages × 3 themes × light/dark (24 combos, theme
+override + `.dark` asserted), navbar hamburger opened/closed at 390px with all 6
+links/actions present — zero console/page errors · CLI e2e against local registry: `add
+features testimonials stats navbar` resolved 8 (avatar pulled fresh; utils/card/button
+correctly skipped as already installed), consumer `tsc --noEmit` strict PASS.
+
+**Next:** Phase 4.2 (`lorre plan`/`apply`) — recommended now that blocks cover a full
+page — or motion items (batch 7), or Phase 3.3 (landing polish).
+
+---
+
 ## 2026-07-11 (4) — Batch 5: first blocks (hero, pricing, faq, cta, footer) — registry 48
 
 **PR #6 (Version Packages) + PR #7 (Phase 3.2 + Next 16) owner-merged.** Verified: CLI
