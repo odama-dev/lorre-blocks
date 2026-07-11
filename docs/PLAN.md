@@ -73,8 +73,9 @@ pricing + faq + cta + footer composes a full landing page.
 **Batch 7 done 2026-07-11** — first `registry:motion` items, all `source: "lorre"`:
 marquee, count-up, fade-in (registry total **55**). Motion pieces honor
 prefers-reduced-motion and ride the theme motion tokens; installed to
-`components/motion/` via the Phase 0 path mapping. More motion candidates remain
-(typewriter, shimmer, animated-gradient).
+`components/motion/` via the Phase 0 path mapping.
+**Batch 8 done 2026-07-12** — typewriter, shimmer, animated-gradient (registry **58**;
+two new animation tokens: `--animate-shimmer`, `--animate-gradient`).
 
 ## Phase 3 — Docs app (`apps/www`)
 
