@@ -30,6 +30,15 @@ const blockLinks = registry
     isNew: item.source === "lorre",
   }))
 
+const motionLinks = registry
+  .filter((item) => item.type === "registry:motion")
+  .sort((a, b) => a.name.localeCompare(b.name))
+  .map((item) => ({
+    title: item.name,
+    href: `/docs/motion/${item.name}`,
+    isNew: item.source === "lorre",
+  }))
+
 function SidebarLink({
   href,
   active,
@@ -74,6 +83,23 @@ export function DocsSidebar() {
       <div>
         <h4 className="mb-2 px-2 text-sm font-semibold">Blocks</h4>
         {blockLinks.map((link) => (
+          <SidebarLink
+            key={link.href}
+            href={link.href}
+            active={pathname === link.href}
+          >
+            {link.title}
+            {link.isNew && (
+              <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+                lorre
+              </span>
+            )}
+          </SidebarLink>
+        ))}
+      </div>
+      <div>
+        <h4 className="mb-2 px-2 text-sm font-semibold">Motion</h4>
+        {motionLinks.map((link) => (
           <SidebarLink
             key={link.href}
             href={link.href}

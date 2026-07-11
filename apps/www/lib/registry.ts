@@ -14,6 +14,11 @@ export const blockItems: RegistryItem[] = registry
   .filter((item) => item.type === "registry:block")
   .sort((a, b) => a.name.localeCompare(b.name))
 
+/** Motion items (animation/interaction pieces), alphabetical. */
+export const motionItems: RegistryItem[] = registry
+  .filter((item) => item.type === "registry:motion")
+  .sort((a, b) => a.name.localeCompare(b.name))
+
 export function getItem(name: string): RegistryItem | undefined {
   return registry.find((item) => item.name === name)
 }

@@ -32,6 +32,10 @@ const blockItems = registry
   .filter((item) => item.type === "registry:block")
   .sort((a, b) => a.name.localeCompare(b.name))
 
+const motionItems = registry
+  .filter((item) => item.type === "registry:motion")
+  .sort((a, b) => a.name.localeCompare(b.name))
+
 async function readSource(item: RegistryItem): Promise<string> {
   return fs.readFile(path.join(REGISTRY_SRC, item.files[0].path), "utf8")
 }
@@ -134,6 +138,8 @@ Package: \`lorre-blocks\` on npm. Requires Node >=22.12.
 - \`info <name>\` — metadata, install order, resolved target paths
 - \`diff <name>\` — compare installed source against the registry
 - \`theme list\` / \`theme apply <name>\` — manage the active theme
+- \`plan check <plan.json>\` — validate a plan and resolve it against the registry (read-only; all problems in one pass)
+- \`apply <plan.json>\` — execute a plan: theme + token overrides + items in one run, records lorre.plan.json
 
 ## Agent usage
 
@@ -174,6 +180,19 @@ async function build() {
   }
   console.log(`✓ ${blockItems.length} block twins -> public/docs/blocks/<name>.md`)
 
+  const motionDir = path.join(PUBLIC_DIR, "docs", "motion")
+  await fs.mkdir(motionDir, { recursive: true })
+  for (const item of motionItems) {
+    const source = await readSource(item)
+    sources.set(item.name, source)
+    await fs.writeFile(
+      path.join(motionDir, `${item.name}.md`),
+      componentMd(item, source),
+      "utf8"
+    )
+  }
+  console.log(`✓ ${motionItems.length} motion twins -> public/docs/motion/<name>.md`)
+
   await fs.writeFile(path.join(PUBLIC_DIR, "docs", "index.md"), INDEX_MD, "utf8")
   await fs.writeFile(path.join(PUBLIC_DIR, "docs", "theming.md"), THEMING_MD, "utf8")
   await fs.writeFile(path.join(PUBLIC_DIR, "docs", "cli.md"), CLI_MD, "utf8")
@@ -197,6 +216,13 @@ async function build() {
     ...blockItems.map(
       (item) =>
         `- [${item.name}](${SITE}/docs/blocks/${item.name}.md): ${item.description}`
+    ),
+    "",
+    "## Motion",
+    "",
+    ...motionItems.map(
+      (item) =>
+        `- [${item.name}](${SITE}/docs/motion/${item.name}.md): ${item.description}`
     ),
     "",
     "## Components",
@@ -229,6 +255,7 @@ async function build() {
     "---",
     "",
     ...blockItems.flatMap((item) => [componentMd(item, sources.get(item.name)!), "---", ""]),
+    ...motionItems.flatMap((item) => [componentMd(item, sources.get(item.name)!), "---", ""]),
     ...uiItems.flatMap((item) => [componentMd(item, sources.get(item.name)!), "---", ""]),
   ].join("\n")
   await fs.writeFile(path.join(PUBLIC_DIR, "llms-full.txt"), full, "utf8")

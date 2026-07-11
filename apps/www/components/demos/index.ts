@@ -61,6 +61,11 @@ import {
   StatsDemo,
   TestimonialsDemo,
 } from "@www/components/demos/blocks"
+import {
+  CountUpDemo,
+  FadeInDemo,
+  MarqueeDemo,
+} from "@www/components/demos/motion"
 
 /** Registry item name → live demo rendered on its docs page. */
 export const demos: Record<string, React.ComponentType> = {
@@ -119,4 +124,11 @@ export const blockDemos: Record<string, React.ComponentType> = {
   pricing: PricingDemo,
   stats: StatsDemo,
   testimonials: TestimonialsDemo,
+}
+
+/** Registry motion name → live demo rendered on its docs page. */
+export const motionDemos: Record<string, React.ComponentType> = {
+  "count-up": CountUpDemo,
+  "fade-in": FadeInDemo,
+  marquee: MarqueeDemo,
 }
