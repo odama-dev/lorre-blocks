@@ -5,6 +5,31 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-11 (3) — Phase 3.2: llms.txt + markdown twins; Next 16 (backlog 4)
+
+**PR #5 merged by owner 09:31Z** (backlog 1–3 + engines). Changesets opened **PR #6
+"Version Packages"** — owner must merge it to publish CLI 0.4.0 to npm.
+
+**Phase 3.2 shipped (branch `feat/llms-txt`):** new `apps/www/scripts/build-llms.ts` runs
+in www's prebuild (after registry build) and generates into `public/` (gitignored,
+deterministic — no timestamps, sorted order):
+- `/llms.txt` — llmstxt.org index: project summary + links to every markdown twin
+- `/llms-full.txt` — everything inlined (~124 KB): guides + all 42 component docs with source
+- `/docs/components/<name>.md` — twin per component (description, install, deps, tags, full source)
+- `/docs/{index,theming,cli}.md` — twins of the static docs pages (content maintained in the script)
+
+**Backlog item 4 (same branch):** `next` ^15.1 → **^16.2.10**. Zero code changes — async
+params were already in use; Turbopack is now the default bundler (build output says so).
+
+**Verified:** `next build` clean on 16.2.10 (48 static pages) · `next start` serves
+llms.txt / llms-full.txt / button.md / calendar page all 200 with expected content ·
+Playwright on landing + date-picker popover: renders fine, zero console/page errors.
+
+**Next:** batch 5 (blocks: hero, pricing, FAQ, CTA, footer) or Phase 3.3 (landing polish)
+or Phase 4.2 (`lorre plan`/`apply`). Upgrade backlog is fully cleared.
+
+---
+
 ## 2026-07-11 (2) — Upgrade backlog items 1+2: dep majors + React 19 sweep
 
 **Backlog item 1 — dependency drift (high):** workspace now tests what consumers install:

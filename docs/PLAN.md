@@ -68,7 +68,10 @@ FAQ, CTA, footer) and motion.
 - 3.1 ✅ (2026-07-10, PR #3 merged) Docs layout: sidebar generated from registry metadata,
   landing page with runtime theme switcher, component pages with Preview/Code tabs + `lorre add`
   snippet, ⌘K search. Live in production — `/r/manifest.json` confirms 37 items, all 3 themes.
-- 3.2 Agent readability: `llms.txt` + `llms-full.txt`, raw-markdown twin per docs page
+- 3.2 ✅ (2026-07-11) Agent readability: `llms.txt` + `llms-full.txt` (llmstxt.org format),
+  markdown twin per docs page (`/docs/components/<name>.md`, `/docs/{index,theming,cli}.md`) —
+  all generated at prebuild by `apps/www/scripts/build-llms.ts` into `public/` (gitignored,
+  deterministic). Next upgraded 15→16 in the same branch (backlog item 4).
 - 3.3 Landing page polish (last): Radix-style single-section with theme-switching carousel
 - Workflow: every www change ships via feature branch → PR → owner merge (Vercel Hobby constraint)
 
@@ -112,10 +115,11 @@ Findings from a dependency/pattern audit. Ordered by priority.
    dialog, theme switch basic→dreamy→utilitarian + dark — zero console errors.
 3. ✅ (2026-07-11) **CLI deps (low).** `commander` ^15, `@clack/prompts` ^1.7, `zod` ^4
    (registry build script). Zero code changes needed; rides the 0.4.0 release (PR #5).
-4. **www deps (low).** `next` 15.1→16.x. Take it with a Phase 3.2/3.3 www branch, not alone,
-   given the PR-per-www-change workflow.
+4. ✅ (2026-07-11) **www deps (low).** `next` ^16.2.10, shipped with the Phase 3.2 branch.
+   Zero code changes (async params were already in use); Turbopack is now the default
+   bundler. Visual + runtime check clean.
 
-Remaining: item 4 only (next 16 — take with a Phase 3.2/3.3 www branch).
+All four items cleared (2026-07-11).
 
 ## Execution order
 
