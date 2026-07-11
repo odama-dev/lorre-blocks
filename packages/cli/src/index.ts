@@ -4,6 +4,7 @@ import { runInit } from "./commands/init"
 import { runAdd } from "./commands/add"
 import { runList } from "./commands/list"
 import { runDiff } from "./commands/diff"
+import { runUpdate } from "./commands/update"
 import { runSearch } from "./commands/search"
 import { runInfo } from "./commands/info"
 import { runThemeApply, runThemeList } from "./commands/theme"
@@ -16,7 +17,7 @@ const program = new Command()
 program
   .name("lorre-blocks")
   .description("Add lorre-blocks components to your project by copying their source in.")
-  .version("0.6.0")
+  .version("0.7.0")
 
 /**
  * `--json` is declared per-command (commander has no true global flag) and read
@@ -180,6 +181,19 @@ program
   .addOption(jsonOption())
   .action(async (components: string[], opts) => {
     await runDiff({ cwd: opts.cwd, components })
+  })
+
+program
+  .command("update")
+  .description(
+    "Pull registry updates for installed items. Only rewrites files you have not edited (per lorre.lock); diverged files need --force."
+  )
+  .argument("[components...]", "component names; omit to update everything in lorre.lock")
+  .option("-c, --cwd <path>", "working directory", process.cwd())
+  .option("-f, --force", "also overwrite diverged/untracked files and restore deleted ones", false)
+  .addOption(jsonOption())
+  .action(async (components: string[], opts) => {
+    await runUpdate({ cwd: opts.cwd, components, force: opts.force })
   })
 
 program.parseAsync(process.argv).catch((err) => {

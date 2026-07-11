@@ -5,6 +5,37 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-12 (4) — `update` command: lock-aware upstream pull (CLI 0.7.0 queued)
+
+**PRs #14 (CLI 0.6.0 → npm, verified `latest`) and #15 (CI hardening) owner-merged.**
+
+**Shipped (branch `feat/cli-update` → PR): `lorre-blocks update [names...] [--force]`.**
+New `utils/update.ts` — `decideUpdate(local, registryContent, lockedHash, force)` pure
+policy function on top of `classifyChange`: up-to-date → keep · upstream → write ·
+local → keep (registry unchanged; the user's customization is not a problem to fix) ·
+both/unknown/missing(deleted) → skip with a --force hint, write under `--force`.
+`commands/update.ts`: no-arg updates everything in `lorre.lock` (fails with guidance when
+no lock); items resolved via `resolveTree`, so a **new registry dependency introduced by
+an update is added automatically** (files written only if absent) and its npm deps
+installed; npm deps installed only for items actually touched; lock updated per write;
+**stale/missing lock hashes self-heal** when a file's content matches the registry.
+Changeset minor → **0.7.0**. www docs caught up in the same branch: CLI page rows for
+update + lock-aware diff, llms CLI_MD gains a `## lorre.lock` section (clears the
+standing 0.6.0 docs follow-up).
+
+**Verified:** typecheck ✓ · CLI tests 61/61 (+6 decideUpdate matrix) ✓ · root tests
+192/192 ✓ · www build ✓ · e2e against a mutable local registry: clean install → update is
+a no-op; upstream-mutated button (+ new dep avatar) → button rewritten, **avatar
+auto-added with its npm deps**; locally-edited badge → kept intact; diverged card →
+skipped, `--force` overwrites; deleted button.tsx → skipped, `--force` restores;
+post-update no-arg diff shows only badge `local`, avatar tracked; no-lock guard exits 1
+with guidance; consumer strict `tsc` PASS.
+
+**Next:** remaining Phase 5 (CDN caching for registry JSON, agent-adds-a-component
+workflow) or Phase 4.3 MCP server.
+
+---
+
 ## 2026-07-12 (3) — Phase 5 continued: CI hardening (render smoke tests, audit, drift guard)
 
 **PR #13 owner-merged (lorre.lock); PR #14 "Version Packages" open — owner merge publishes
