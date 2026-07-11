@@ -110,13 +110,12 @@ Findings from a dependency/pattern audit. Ordered by priority.
    `React.ComponentProps<typeof Button>`); combobox/date-picker take `ref` as a plain prop.
    Visual acceptance in www: calendar/date-picker (rdp 10), sonner toast (v2), dropdown,
    dialog, theme switch basic→dreamy→utilitarian + dark — zero console errors.
-3. **CLI deps (low).** `commander` 13→15, `@clack/prompts` 0.9→1.x (hit 1.0), `zod` 3→4
-   (build-time only). No user-facing behavior expected; batch with a normal CLI release.
+3. ✅ (2026-07-11) **CLI deps (low).** `commander` ^15, `@clack/prompts` ^1.7, `zod` ^4
+   (registry build script). Zero code changes needed; rides the 0.4.0 release (PR #5).
 4. **www deps (low).** `next` 15.1→16.x. Take it with a Phase 3.2/3.3 www branch, not alone,
    given the PR-per-www-change workflow.
 
-Remaining: item 3 (CLI deps: commander 15, clack 1.x, zod 4 — batch with a normal CLI
-release) and item 4 (next 16 — take with a Phase 3.2/3.3 www branch).
+Remaining: item 4 only (next 16 — take with a Phase 3.2/3.3 www branch).
 
 ## Execution order
 

@@ -35,8 +35,13 @@ against `next start`: calendar + date-picker open/select (rdp 10), sonner toast 
 dropdown + dialog open, landing re-themes live to dreamy and utilitarian incl. dark mode,
 `data-slot` attributes confirmed in DOM — zero console/page errors across all pages driven.
 
-**Next:** batch 5 (blocks) or Phase 3.2 (llms.txt); backlog 3 (CLI deps) can ride the next
-CLI release; backlog 4 (next 16) waits for a www branch.
+**Backlog item 3 (same session, pushed to the same PR):** commander ^15, @clack/prompts
+^1.7, zod ^4 (registry build script only user of zod). Zero code changes — typecheck, 56/56
+tests, registry build, and a built-CLI smoke test (`--version`, `search button --json`
+against the production registry) all pass. Patch changeset added; rides the 0.4.0 release.
+
+**Next:** batch 5 (blocks) or Phase 3.2 (llms.txt); backlog 4 (next 16) waits for a www
+branch.
 
 ---
 
