@@ -106,7 +106,11 @@ prefers-reduced-motion and ride the theme motion tokens; installed to
 
 ## Phase 5 — Security, performance, automation hardening
 
-- `lorre.lock` in consumer projects (version + checksum per installed item) → accurate `diff`
+- [x] ✅ (2026-07-12, CLI 0.6.0) `lorre.lock` in consumer projects: `init`/`add`/`apply`
+  record per-file sha256 of the content as written + the registry item checksum. `diff`
+  attributes modified files (`local` / `upstream` / `both` / `unknown`, human + `--json`),
+  and no-arg `diff` now covers every locked item (blocks/motion/lib), not just the ui dir.
+  Lock-less projects keep the old behavior.
 - CI: registry validation on every PR, render-test per component, dependency audit
 - Immutable caching for registry JSON; fully static docs site
 - End-to-end "agent adds a component" workflow: registry-item PR template, auto-changeset, auto-publish

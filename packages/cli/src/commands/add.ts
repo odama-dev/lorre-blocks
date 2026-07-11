@@ -16,6 +16,7 @@ import {
   targetDirForType,
 } from "../utils/paths"
 import type { RegistryItem } from "../registry/schema"
+import { LOCK_FILE, emptyLock, readLock, recordInstall, writeLock } from "../utils/lock"
 import * as out from "../utils/output"
 
 export interface AddOptions {
@@ -70,8 +71,12 @@ export async function runAdd(options: AddOptions): Promise<void> {
   const baseDir = await resolveBaseDir(cwd)
   const written: string[] = []
   const skipped: string[] = []
+  const lock = (await readLock(cwd)) ?? emptyLock(config.registry)
+  lock.registry = config.registry
+  let lockDirty = false
 
   for (const item of tree) {
+    const writtenForItem: Array<{ rel: string; content: string }> = []
     for (const file of item.files) {
       const dir = targetDirForType(file.type, config.aliases, baseDir)
       const dest = path.join(dir, path.basename(file.path))
@@ -95,10 +100,21 @@ export async function runAdd(options: AddOptions): Promise<void> {
         }
       }
 
+      const content = rewriteImports(file.content, config)
       await fs.mkdir(dir, { recursive: true })
-      await fs.writeFile(dest, rewriteImports(file.content, config), "utf8")
+      await fs.writeFile(dest, content, "utf8")
       written.push(rel)
+      writtenForItem.push({ rel, content })
     }
+    if (writtenForItem.length > 0) {
+      recordInstall(lock, item, writtenForItem)
+      lockDirty = true
+    }
+  }
+
+  if (lockDirty) {
+    await writeLock(cwd, lock)
+    out.success(`Recorded ${LOCK_FILE}`)
   }
 
   if (out.isJsonMode()) {
@@ -108,6 +124,7 @@ export async function runAdd(options: AddOptions): Promise<void> {
       skipped,
       npmDependencies: npmDeps,
       packageManager: packageManager ?? null,
+      lock: lockDirty ? LOCK_FILE : null,
     })
     return
   }
