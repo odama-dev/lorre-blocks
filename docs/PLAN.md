@@ -83,6 +83,10 @@ typography, carousel, chart, data-table, navigation-menu, resizable, sidebar (re
 **Batch 10 done 2026-07-12** — Radix Themes uniques, first `source: "radix"` items:
 callout, kbd, spinner, segmented-control, quote, data-list (registry **72**). Radix
 `code`/`blockquote` deduped into typography per the ledger.
+**Batch 11 done 2026-07-13** — first `source: "magicui"` items: shimmer-button,
+rainbow-button, pulsating-button, ripple-button, interactive-hover-button, magic-card,
+neon-gradient-card, shine-border (registry **80**). `motion` dep still deferred — all
+pure CSS/React; one new token (`--animate-ripple`).
 
 ## Phase 3 — Docs app (`apps/www`)
 

@@ -80,6 +80,16 @@ import {
   SpinnerDemo,
 } from "@www/components/demos/batch10"
 import {
+  InteractiveHoverButtonDemo,
+  MagicCardDemo,
+  NeonGradientCardDemo,
+  PulsatingButtonDemo,
+  RainbowButtonDemo,
+  RippleButtonDemo,
+  ShimmerButtonDemo,
+  ShineBorderDemo,
+} from "@www/components/demos/batch11"
+import {
   AnimatedGradientDemo,
   CountUpDemo,
   FadeInDemo,
@@ -146,6 +156,13 @@ export const demos: Record<string, React.ComponentType> = {
   quote: QuoteDemo,
   "segmented-control": SegmentedControlDemo,
   spinner: SpinnerDemo,
+  "shimmer-button": ShimmerButtonDemo,
+  "rainbow-button": RainbowButtonDemo,
+  "pulsating-button": PulsatingButtonDemo,
+  "ripple-button": RippleButtonDemo,
+  "interactive-hover-button": InteractiveHoverButtonDemo,
+  "magic-card": MagicCardDemo,
+  "neon-gradient-card": NeonGradientCardDemo,
 }
 
 /** Registry block name → live demo rendered full-width on its docs page. */
@@ -167,6 +184,7 @@ export const motionDemos: Record<string, React.ComponentType> = {
   "count-up": CountUpDemo,
   "fade-in": FadeInDemo,
   marquee: MarqueeDemo,
+  "shine-border": ShineBorderDemo,
   shimmer: ShimmerDemo,
   typewriter: TypewriterDemo,
 }

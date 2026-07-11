@@ -5,6 +5,38 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-13 — Batch 11: Magic UI buttons + cards — registry 80
+
+**Shipped (branch `feat/batch11-magicui-buttons`, stacked on batch 10 → PR; merge #24
+first):** first **`source: "magicui"`** items. **The `motion` npm dep stayed deferred** —
+all eight reimplement at full fidelity on CSS/React (upstream only uses framer-motion in
+magic-card, replaced by pointer-tracked CSS vars): **shimmer-button** (orbiting streak =
+rotating conic gradient, Tailwind's built-in spin), **rainbow-button** (the "rainbow" is
+the theme's accent/success/warning/danger 9-steps — re-themes instead of hardcoding
+hues), **pulsating-button** (built-in ping), **ripple-button** (click ripple via new
+`--animate-ripple` token; ripples GC on animationend), **interactive-hover-button**
+(dot floods button, label slides out/returns with arrow — pure group transitions),
+**magic-card** (pointer-following spotlight: border tint + accent-3 wash),
+**neon-gradient-card** (drifting accent gradient + blurred glow),
+**shine-border** (`registry:motion` — border-ring shine via mask-composite exclude).
+All honor motion-reduce. One new keyframe/token (`lorre-ripple`).
+
+**Gotchas:** (1) node-script append to registry.ts silently no-opped — the file is CRLF
+and the `\n`-based regex didn't match; entries landed via a proper Edit. Lesson: after
+any scripted file mutation, verify the artifact (manifest itemCount), not the script's
+own echo. (2) www demos must import motion items via `@lorre-blocks/registry/motion/*`
+(the `@/components/motion/*` alias doesn't exist in www's tsconfig/vitest).
+
+**Verified:** registry build ✓ (80) · typecheck ✓ · tests **249/249** (www 161: +8
+render, +8 coverage) · www build ✓ (85 pages) · manifest itemCount 80 confirmed. CLI e2e
+skipped — no new deps/routing (single-file items on existing paths).
+
+**Next:** Batch 12 — Magic UI effects + layout (border-beam, animated-beam, meteors,
+particles, confetti, orbiting-circles, avatar-circles, bento-grid, animated-list, dock).
+confetti needs canvas-confetti; dock may finally need `motion`.
+
+---
+
 ## 2026-07-12 (10) — Batch 10: Radix Themes uniques — registry 72
 
 **PRs #22 (Phase 6 plan) + #23 (batch 9) owner-merged.** Shipped (branch
