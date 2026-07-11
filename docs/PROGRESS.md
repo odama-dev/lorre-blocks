@@ -5,6 +5,49 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-11 (2) — Upgrade backlog items 1+2: dep majors + React 19 sweep
+
+**Backlog item 1 — dependency drift (high):** workspace now tests what consumers install:
+tailwind-merge ^3.6.0, sonner ^2.0.7, lucide-react ^1.24.0, react-day-picker ^10.0.1 (www
+package.json bumped to match). calendar.tsx survived rdp v10 untouched — v10 only removed
+v8-era classNames aliases (`nav_button`, `day_selected`…); we already use the v9 names. No
+code changes needed anywhere for the four majors; typecheck/tests caught nothing.
+
+**Decision — versioned registry deps:** `registry.ts` keeps *bare* npm dep names;
+`build-registry.ts` resolves each against `packages/registry/package.json` dependencies at
+build time and emits `name@range` (e.g. `tailwind-merge@^3.6.0`) into `/r/<name>.json` +
+index. Build fails if an item's dep isn't declared in package.json — the drift class of bug
+is now structurally impossible. CLI (queued as **0.4.0** via changeset): `init`
+BASE_DEPENDENCIES pinned to the same ranges, and install args are quoted on Windows because
+`spawn(..., { shell: true })` routes through cmd.exe, whose escape char is `^` — unquoted
+`pkg@^3.6.0` would silently degrade to `pkg@3.6.0`.
+
+**Backlog item 2 — React 19 sweep:** all 31 pre-batch-4 components rewritten as plain
+functions + `data-slot` (matching batch 4); `forwardRef`/`ElementRef`/`displayName` fully
+gone from `src/ui/`; `"use client"` added to Radix-based files. Breaking for consumers who
+re-add: `ButtonProps` no longer exported (pagination now uses
+`Pick<React.ComponentProps<typeof Button>, "size">`); combobox/date-picker accept `ref` as a
+plain prop (React 19). Pure re-export aliases (Tooltip, Dialog, Select roots…) became
+wrapper functions so every slot carries `data-slot`.
+
+**Verified:** typecheck ✓ · tests 56/56 ✓ · www production build ✓ (49 pages) · Playwright
+against `next start`: calendar + date-picker open/select (rdp 10), sonner toast fires (v2),
+dropdown + dialog open, landing re-themes live to dreamy and utilitarian incl. dark mode,
+`data-slot` attributes confirmed in DOM — zero console/page errors across all pages driven.
+
+**Backlog item 3 (same session, pushed to the same PR):** commander ^15, @clack/prompts
+^1.7, zod ^4 (registry build script only user of zod). Zero code changes — typecheck, 56/56
+tests, registry build, and a built-CLI smoke test (`--version`, `search button --json`
+against the production registry) all pass. Patch changeset added; rides the 0.4.0 release.
+Follow-up: CLI now declares `engines.node >=22.12.0` (commander 15's floor — install-time
+warning instead of runtime crash on old Node); workspace root bumped `>=18` → `>=22.13`
+(pnpm 11 floor). CI already on Node 22.
+
+**Next:** batch 5 (blocks) or Phase 3.2 (llms.txt); backlog 4 (next 16) waits for a www
+branch.
+
+---
+
 ## 2026-07-11 — Batch 4: 6 items (registry 43) + upgrade audit → PLAN backlog
 
 **Shipped (registry 37 → 43):** textarea, input-otp (new `input-otp` dep; fake caret uses a

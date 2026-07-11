@@ -94,29 +94,28 @@ FAQ, CTA, footer) and motion.
 
 Findings from a dependency/pattern audit. Ordered by priority.
 
-1. **Dependency drift vs consumers (high).** `registry.ts` lists npm deps *unversioned*, so
-   the CLI installs **latest** into consumer projects — consumers already get
-   `tailwind-merge` 3.x, `sonner` 2.x, `lucide-react` 1.x — while the registry workspace
-   typechecks and visually verifies against old majors (`tailwind-merge` ^2.6, `sonner` ^1.7,
-   `lucide-react` ^0.469, `react-day-picker` ^9). Tailwind-merge matters most: **v3 is the
-   Tailwind-v4-aware release** and this repo is Tailwind v4 — v2's class-group table can
-   mis-merge v4 utilities. Fix: upgrade workspace deps to the majors consumers receive
-   (tailwind-merge 3, sonner 2, lucide-react 1, react-day-picker 10 — check calendar.tsx v10
-   API), re-run visual acceptance, and decide whether registry deps should carry version
-   ranges so consumer installs are reproducible (ties into Phase 5 `lorre.lock`).
-2. **React 19 component style (medium).** All 31 ported components use `forwardRef` +
-   `ElementRef`/`ComponentPropsWithoutRef`, the React-18-era shadcn style. The registry
-   targets React 19, where `ref` is a plain prop; current shadcn convention is plain function
-   components + `data-slot` attributes (better styling hooks, less boilerplate, and
-   `React.ElementRef` is deprecated). Mechanical migration across `src/ui/`; do it in one
-   sweep with visual acceptance, before the component count grows further.
-3. **CLI deps (low).** `commander` 13→15, `@clack/prompts` 0.9→1.x (hit 1.0), `zod` 3→4
-   (build-time only). No user-facing behavior expected; batch with a normal CLI release.
+1. ✅ (2026-07-11) **Dependency drift vs consumers (high).** Workspace upgraded to the majors
+   consumers receive: tailwind-merge 3.6, sonner 2.0, lucide-react 1.24, react-day-picker
+   10.0 (calendar.tsx needed no changes — v10 only removed v8-era classNames aliases; we
+   already use v9 names). **Decision: registry deps now carry version ranges** — build script
+   resolves each bare name in `registry.ts` against `packages/registry/package.json`
+   dependencies at build time (single source of truth; build fails on undeclared deps), so
+   `/r/<name>.json` publishes e.g. `tailwind-merge@^3.6.0`. CLI: `init` base deps pinned to
+   the same ranges, install args quoted on Windows (cmd.exe eats `^`). Full reproducibility
+   (exact versions + checksums) still lands with Phase 5 `lorre.lock`.
+2. ✅ (2026-07-11) **React 19 component style (medium).** All 31 pre-batch-4 components
+   migrated in one sweep to plain functions + `data-slot` attributes (no more
+   `forwardRef`/`ElementRef`/`displayName`); `"use client"` added on Radix-based files to
+   match batch-4 convention. API break: `button` no longer exports `ButtonProps` (use
+   `React.ComponentProps<typeof Button>`); combobox/date-picker take `ref` as a plain prop.
+   Visual acceptance in www: calendar/date-picker (rdp 10), sonner toast (v2), dropdown,
+   dialog, theme switch basic→dreamy→utilitarian + dark — zero console errors.
+3. ✅ (2026-07-11) **CLI deps (low).** `commander` ^15, `@clack/prompts` ^1.7, `zod` ^4
+   (registry build script). Zero code changes needed; rides the 0.4.0 release (PR #5).
 4. **www deps (low).** `next` 15.1→16.x. Take it with a Phase 3.2/3.3 www branch, not alone,
    given the PR-per-www-change workflow.
 
-New batch-4 items should be written React-19-style from the start (item 2's target), even
-before the back-migration sweep happens.
+Remaining: item 4 only (next 16 — take with a Phase 3.2/3.3 www branch).
 
 ## Execution order
 

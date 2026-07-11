@@ -455,7 +455,7 @@ export const registry: RegistryItem[] = [
     name: "calendar",
     type: "registry:ui",
     description:
-      "Month calendar for picking dates, built on react-day-picker v9. Supports single, multiple and range modes; nav uses button variants.",
+      "Month calendar for picking dates, built on react-day-picker v10. Supports single, multiple and range modes; nav uses button variants.",
     source: "shadcn",
     category: "component",
     license: "MIT",
