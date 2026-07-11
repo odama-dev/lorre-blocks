@@ -70,6 +70,8 @@ below are the planning snapshot (2026-07-12) and upstream catalogs move.
 | reactbits dock / magicui dock | one `dock` (source: magicui) | single port |
 | reactbits carousel / magicui — | `carousel` (source: shadcn, embla) | single port |
 | radix themes avatar/badge/card/checkbox/dialog/… | existing shadcn-ported set | no new items |
+| radix themes code | `typography` (TypographyInlineCode) | deduped; batch 10 shipped `data-list` in its slot |
+| radix themes blockquote | `typography` (TypographyBlockquote) | deduped; inline `quote` still ships (different element) |
 
 ## Batches (est. 6–10 items per session at proven cadence)
 

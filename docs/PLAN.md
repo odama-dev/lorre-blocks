@@ -80,6 +80,9 @@ two new animation tokens: `--animate-shimmer`, `--animate-gradient`).
 typography, carousel, chart, data-table, navigation-menu, resizable, sidebar (registry
 **66**). sidebar is the first multi-file item (ui + `registry:hook` →
 `hooks/use-mobile.ts`); "all of shadcn" is now covered.
+**Batch 10 done 2026-07-12** — Radix Themes uniques, first `source: "radix"` items:
+callout, kbd, spinner, segmented-control, quote, data-list (registry **72**). Radix
+`code`/`blockquote` deduped into typography per the ledger.
 
 ## Phase 3 — Docs app (`apps/www`)
 

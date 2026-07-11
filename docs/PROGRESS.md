@@ -5,6 +5,32 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-12 (10) — Batch 10: Radix Themes uniques — registry 72
+
+**PRs #22 (Phase 6 plan) + #23 (batch 9) owner-merged.** Shipped (branch
+`feat/batch10-radix` → PR): the **first `source: "radix"` items** — Radix Themes
+components the shadcn set doesn't cover: **callout** (soft tinted note straight off the
+scale steps `*-3`/`*-11`, info/success/warning/danger — first component to use scale-step
+utilities directly), **kbd**, **spinner** (8-blade, pure CSS on the existing fade
+keyframe, reduced-motion slows to a pulse), **segmented-control** (Radix ToggleGroup
+single-select, selection always required), **quote** (inline `<q>`), **data-list**
+(semantic `<dl>` label/value pairs). Dedupe rule applied: Radix `code` and `blockquote`
+collapse into batch 9's typography (ledger updated) — data-list took code's slot.
+Zero new npm deps (toggle-group primitive already present). TS gotcha: after `Omit` on
+Radix ToggleGroup's props union the discriminant is lost — type against
+`ToggleGroupSingleProps` instead of `ComponentProps<typeof Root>`.
+
+**Verified:** registry build ✓ (72) · typecheck ✓ (3 pkgs) · tests **241/241** (www 145:
++6 render, +6 coverage) · www build ✓ (77 pages) · CLI e2e skipped this batch — no new
+routing paths or npm deps (all six are single-file ui items over existing
+infrastructure); per-theme eyeball rides the post-merge deploy.
+
+**Next:** Batch 11 — Magic UI buttons + cards (shimmer-button, rainbow-button,
+pulsating-button, ripple-button, interactive-hover-button, magic-card,
+neon-gradient-card, shine-border) — first `motion` npm dep decision point.
+
+---
+
 ## 2026-07-12 (9) — Batch 9: shadcn completion (Phase 6 opener) — registry 66
 
 **Shipped (branch `feat/batch9-shadcn-completion`, stacked on the Phase 6 plan branch →
