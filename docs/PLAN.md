@@ -87,6 +87,10 @@ callout, kbd, spinner, segmented-control, quote, data-list (registry **72**). Ra
 rainbow-button, pulsating-button, ripple-button, interactive-hover-button, magic-card,
 neon-gradient-card, shine-border (registry **80**). `motion` dep still deferred — all
 pure CSS/React; one new token (`--animate-ripple`).
+**Batch 12 done 2026-07-13** — Magic UI effects + layout: border-beam, animated-beam
+(SVG SMIL), meteors, particles, confetti (canvas-confetti — first effect dep),
+orbiting-circles, animated-list, bento-grid, avatar-circles, dock (registry **90**).
+`motion` dep still unused; two new tokens (border-beam, meteor).
 
 ## Phase 3 — Docs app (`apps/www`)
 

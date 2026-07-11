@@ -5,6 +5,35 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-13 (2) — Batch 12: Magic UI effects + layout — registry 90
+
+**PRs #24 + #25 owner-merged (batches 10–11 live).** Shipped (branch
+`feat/batch12-magicui-effects` → PR), 10 items, all `source: "magicui"` MIT — **the
+`motion` dep is STILL unused**; the two hard cases fell to platform primitives:
+**animated-beam** (refs + ResizeObserver compute the path, the traveling pulse is an
+**SVG SMIL gradient** — no JS animation loop) and **dock** (magnification = linear
+distance falloff + CSS transition instead of springs). Rest: **border-beam** (CSS
+`offset-path: rect(...)` around the border ring — new `--animate-border-beam` token),
+**meteors** (new `--animate-meteor` token; **index-seeded positions, no Math.random →
+SSR-safe**), **particles** (rAF canvas, pointer-attract, foreground-token color; static
+field under reduced motion), **confetti** (first canvas-confetti dep: ConfettiButton +
+imperative fireConfetti, skipped under reduced motion), **orbiting-circles** (spin +
+counter-rotation), **animated-list** (tw-animate-css enter utilities),
+**bento-grid** (background-slot cards, hover CTA), **avatar-circles**, **dock**.
+7 motion + 3 ui. New deps: canvas-confetti + @types (registry only — demos import
+components, not the lib, so www needed nothing).
+
+**Verified:** registry build ✓ (90, manifest confirmed) · typecheck ✓ · tests
+**269/269** (www 181: +10 render, +10 coverage) · www build ✓ (95 pages) · CLI e2e:
+`add confetti dock bento-grid` → canvas-confetti + @types in npmDependencies, consumer
+strict `tsc` PASS.
+
+**Next:** Batch 13 — Magic UI text + media (text-reveal, box-reveal, sparkles-text,
+morphing-text, aurora-text, scroll-progress, hero-video-dialog, terminal, file-tree,
+device mocks if time).
+
+---
+
 ## 2026-07-13 — Batch 11: Magic UI buttons + cards — registry 80
 
 **Shipped (branch `feat/batch11-magicui-buttons`, stacked on batch 10 → PR; merge #24

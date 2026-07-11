@@ -90,6 +90,18 @@ import {
   ShineBorderDemo,
 } from "@www/components/demos/batch11"
 import {
+  AnimatedBeamDemo,
+  AnimatedListDemo,
+  AvatarCirclesDemo,
+  BentoGridDemo,
+  BorderBeamDemo,
+  ConfettiDemo,
+  DockDemo,
+  MeteorsDemo,
+  OrbitingCirclesDemo,
+  ParticlesDemo,
+} from "@www/components/demos/batch12"
+import {
   AnimatedGradientDemo,
   CountUpDemo,
   FadeInDemo,
@@ -163,6 +175,9 @@ export const demos: Record<string, React.ComponentType> = {
   "interactive-hover-button": InteractiveHoverButtonDemo,
   "magic-card": MagicCardDemo,
   "neon-gradient-card": NeonGradientCardDemo,
+  "bento-grid": BentoGridDemo,
+  "avatar-circles": AvatarCirclesDemo,
+  dock: DockDemo,
 }
 
 /** Registry block name → live demo rendered full-width on its docs page. */
@@ -185,6 +200,13 @@ export const motionDemos: Record<string, React.ComponentType> = {
   "fade-in": FadeInDemo,
   marquee: MarqueeDemo,
   "shine-border": ShineBorderDemo,
+  "border-beam": BorderBeamDemo,
+  "animated-beam": AnimatedBeamDemo,
+  "animated-list": AnimatedListDemo,
+  confetti: ConfettiDemo,
+  meteors: MeteorsDemo,
+  "orbiting-circles": OrbitingCirclesDemo,
+  particles: ParticlesDemo,
   shimmer: ShimmerDemo,
   typewriter: TypewriterDemo,
 }

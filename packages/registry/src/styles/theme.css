@@ -308,6 +308,8 @@
   --animate-shimmer: lorre-shimmer 2.5s linear infinite;
   --animate-gradient: lorre-gradient 6s ease-in-out infinite;
   --animate-ripple: lorre-ripple 0.6s ease-out forwards;
+  --animate-border-beam: lorre-border-beam 6s linear infinite;
+  --animate-meteor: lorre-meteor 5s linear infinite;
 
   @keyframes lorre-fade-in {
     from { opacity: 0; }
@@ -353,6 +355,14 @@
   @keyframes lorre-ripple {
     from { transform: scale(0); opacity: 0.5; }
     to { transform: scale(4); opacity: 0; }
+  }
+  @keyframes lorre-border-beam {
+    to { offset-distance: 100%; }
+  }
+  @keyframes lorre-meteor {
+    from { transform: rotate(215deg) translateX(0); opacity: 1; }
+    70% { opacity: 1; }
+    to { transform: rotate(215deg) translateX(-500px); opacity: 0; }
   }
 }
 
