@@ -59,9 +59,14 @@ tabs, tooltip, accordion, dialog, popover, dropdown-menu, select (12 items).
 sheet, hover-card, context-menu, sonner (registry total 26).
 **Batch 3 done 2026-07-10** — toggle, collapsible, progress, slider, breadcrumb, pagination,
 command, form, calendar, plus the first two `source: "lorre"` compositions: combobox and
-date-picker (registry total **37**). Core primitive set is complete; batch 4 candidates:
-input-otp, textarea, toggle-group, scroll-area, drawer, menubar, then blocks (hero, pricing,
-FAQ, CTA, footer) and motion.
+date-picker (registry total **37**). Core primitive set is complete.
+**Batch 4 done 2026-07-11** — textarea, input-otp, toggle-group, scroll-area, drawer,
+menubar (registry total **43**).
+**Batch 5 done 2026-07-11** — first `registry:block` items, all `source: "lorre"`: hero,
+pricing, faq, cta, footer (registry total **48**). Blocks take content as serializable
+props, compose the ui set, and install to `components/blocks/` via the CLI path mapping
+that has existed since Phase 0. Next: motion/interaction items (Magic UI / React Bits
+style) and more blocks (features, testimonials, stats, header/nav).
 
 ## Phase 3 — Docs app (`apps/www`)
 

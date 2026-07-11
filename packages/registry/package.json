@@ -11,6 +11,7 @@
   },
   "exports": {
     "./ui/*": "./src/ui/*.tsx",
+    "./blocks/*": "./src/blocks/*.tsx",
     "./lib/utils": "./src/lib/utils.ts",
     "./styles/theme.css": "./src/styles/theme.css",
     "./tokens": "./src/tokens/index.ts",

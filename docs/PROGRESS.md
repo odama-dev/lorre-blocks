@@ -5,6 +5,41 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-11 (4) — Batch 5: first blocks (hero, pricing, faq, cta, footer) — registry 48
+
+**PR #6 (Version Packages) + PR #7 (Phase 3.2 + Next 16) owner-merged.** Verified: CLI
+**0.4.0 live on npm** (`latest`), production serves `llms.txt` + md twins (200), manifest
+still 43 items pre-batch — Next 16 built clean on Vercel.
+
+**Shipped (registry 43 → 48): the first `registry:block` items**, all `source: "lorre"`
+(written from scratch), under `packages/registry/src/blocks/`: **hero** (eyebrow badge +
+headline + actions), **pricing** (tier cards, free-form price strings, `highlighted`),
+**faq** (accordion of Q/A pairs), **cta** (accent- or outline-variant banner), **footer**
+(brand + link groups + legal line). Design decisions: content is **serializable props**
+(RSC-safe, agent-configurable — no JSX children required), links render as plain `<a>` via
+`buttonVariants` so blocks work in any React app (not just Next), semantic tokens only,
+plain functions + `data-slot`, theme-agnostic. CLI needed **zero changes** —
+`targetDirForType` has routed `registry:block` → `components/blocks/` since Phase 0.
+Registry package gained a `./blocks/*` export for www imports.
+
+**www (branch `feat/batch5-blocks` → PR):** new `/docs/blocks/[name]` pages with
+**full-width preview** (blocks are page sections — the centered component preview box
+doesn't fit), Blocks group in the sidebar and ⌘K search, 5 hand-written demos;
+`build-llms.ts` now emits `/docs/blocks/<name>.md` twins plus a Blocks section in
+`llms.txt`/`llms-full.txt`.
+
+**Verified:** registry build ✓ (48 items, validation + deterministic) · typecheck ✓ ·
+tests 56/56 ✓ · www build ✓ (53 static pages) · Playwright vs `next start`: all 5 block
+pages under basic/dreamy/utilitarian × light/dark (30 combos) with theme-override and
+`.dark` asserted per page, FAQ accordion opens, Code/Preview tabs switch, ⌘K "pricing"
+lands on `/docs/blocks/pricing` — zero console/page errors. Screenshots reviewed: dreamy
+dark pricing shows violet accent + highlighted tier; utilitarian cta panel goes monochrome.
+
+**Next:** Phase 4.2 (`lorre plan`/`apply`), Phase 3.3 (landing polish), or batch 6
+(motion items / more blocks: features, testimonials, stats, header-nav).
+
+---
+
 ## 2026-07-11 (3) — Phase 3.2: llms.txt + markdown twins; Next 16 (backlog 4)
 
 **PR #5 merged by owner 09:31Z** (backlog 1–3 + engines). Changesets opened **PR #6

@@ -553,4 +553,62 @@ export const registry: RegistryItem[] = [
     registryDependencies: ["utils"],
     files: [{ path: "ui/menubar.tsx", type: "registry:ui" }],
   },
+  {
+    name: "hero",
+    type: "registry:block",
+    description:
+      "Landing page hero section: eyebrow badge, headline, supporting copy and action buttons. Content is passed as serializable props (title, description, actions), centered or start-aligned.",
+    source: "lorre",
+    category: "block",
+    tags: ["hero", "landing", "header", "marketing", "section", "cta"],
+    dependencies: ["class-variance-authority"],
+    registryDependencies: ["utils", "badge", "button"],
+    files: [{ path: "blocks/hero.tsx", type: "registry:block" }],
+  },
+  {
+    name: "pricing",
+    type: "registry:block",
+    description:
+      "Pricing section: header plus a responsive grid of tier cards with feature checklists and CTA links. Tiers are data ({name, price, features, cta, highlighted?, badge?}); prices are free-form strings so Free/Custom work.",
+    source: "lorre",
+    category: "block",
+    tags: ["pricing", "plans", "tiers", "marketing", "section", "billing"],
+    dependencies: ["lucide-react"],
+    registryDependencies: ["utils", "badge", "button", "card"],
+    files: [{ path: "blocks/pricing.tsx", type: "registry:block" }],
+  },
+  {
+    name: "faq",
+    type: "registry:block",
+    description:
+      "FAQ section: header plus an accordion of question/answer pairs, one open at a time. Items are data ({question, answer}[]).",
+    source: "lorre",
+    category: "block",
+    tags: ["faq", "questions", "accordion", "marketing", "section", "support"],
+    registryDependencies: ["utils", "accordion"],
+    files: [{ path: "blocks/faq.tsx", type: "registry:block" }],
+  },
+  {
+    name: "cta",
+    type: "registry:block",
+    description:
+      "Call-to-action banner: rounded panel with headline, supporting copy and action buttons. \"accent\" variant fills with the primary color, \"outline\" stays on the card surface — both resolve per theme.",
+    source: "lorre",
+    category: "block",
+    tags: ["cta", "call-to-action", "banner", "marketing", "section", "conversion"],
+    dependencies: ["class-variance-authority"],
+    registryDependencies: ["utils", "button"],
+    files: [{ path: "blocks/cta.tsx", type: "registry:block" }],
+  },
+  {
+    name: "footer",
+    type: "registry:block",
+    description:
+      "Site footer: brand with description, link groups in a responsive grid, and a bottom line with copyright and legal links. All content passed as serializable props.",
+    source: "lorre",
+    category: "block",
+    tags: ["footer", "navigation", "links", "site", "section", "legal"],
+    registryDependencies: ["utils", "separator"],
+    files: [{ path: "blocks/footer.tsx", type: "registry:block" }],
+  },
 ]

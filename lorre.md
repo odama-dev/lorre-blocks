@@ -117,9 +117,13 @@ src/tokens/themes/<name>.ts   ThemeDefinition (seeds + overrides, may `extends` 
 **Themes:** `basic` (root), `dreamy` and `utilitarian` (both extend `basic`). Each ships a
 12-step OKLCH scale per color axis, in light and dark, as Tailwind CSS and DTCG JSON.
 
-**Components** (all `source: "shadcn"`, MIT, + `utils` lib): `button`, `input`, `label`,
-`separator`, `checkbox`, `switch`, `radio-group`, `tabs`, `tooltip`, `accordion`, `dialog`,
-`popover`, `dropdown-menu`, `select`, `card`, `badge`, `avatar`, `alert`, `skeleton`,
-`table`, `alert-dialog`, `sheet`, `hover-card`, `context-menu`, `sonner`.
+**Components** (42, mostly `source: "shadcn"` MIT, rewired onto Lorre tokens; `combobox`
+and `date-picker` are `source: "lorre"` compositions) plus the `utils` lib: the full
+shadcn-style primitive set — buttons, forms, overlays, data display, dates, command
+palette. Query the live list with `lorre-blocks list` or `/r/index.json`.
+
+**Blocks** (5, all `source: "lorre"`): `hero`, `pricing`, `faq`, `cta`, `footer` — full
+page sections that take content as serializable props and compose the ui set. Installed
+to `components/blocks/` by the CLI.
 
 Porting queue and roadmap live in `docs/PLAN.md`; progress log in `docs/PROGRESS.md`.
