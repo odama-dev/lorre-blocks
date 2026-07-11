@@ -136,10 +136,17 @@ Package: \`lorre-blocks\` on npm. Requires Node >=22.12.
 - \`list\` — list all registry items
 - \`search <query> [--category|--source|--theme|--type|--limit]\` — faceted search
 - \`info <name>\` — metadata, install order, resolved target paths
-- \`diff <name>\` — compare installed source against the registry
+- \`diff [name...]\` — compare installed source against the registry; with lorre.lock present each modified file carries a \`cause\`: \`local\` (you edited), \`upstream\` (registry moved), \`both\` (diverged), \`unknown\` (pre-lock install). No-arg diff covers every locked item (ui, blocks, motion, lib).
+- \`update [name...] [--force]\` — pull registry updates; rewrites only files whose content still hashes to what an install wrote (lorre.lock). Local edits are kept when the registry is unchanged; diverged/untracked/deleted files are skipped unless \`--force\`. New registry dependencies are added automatically.
 - \`theme list\` / \`theme apply <name>\` — manage the active theme
 - \`plan check <plan.json>\` — validate a plan and resolve it against the registry (read-only; all problems in one pass)
 - \`apply <plan.json>\` — execute a plan: theme + token overrides + items in one run, records lorre.plan.json
+
+## lorre.lock
+
+\`init\`, \`add\`, \`apply\` and \`update\` record installs in \`lorre.lock\` (schema v1):
+per item, the registry-declared checksum plus a sha256 per file of the content as
+written. It powers diff attribution and safe updates. Commit it to version control.
 
 ## Agent usage
 

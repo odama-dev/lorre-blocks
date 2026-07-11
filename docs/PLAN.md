@@ -111,6 +111,11 @@ prefers-reduced-motion and ride the theme motion tokens; installed to
   attributes modified files (`local` / `upstream` / `both` / `unknown`, human + `--json`),
   and no-arg `diff` now covers every locked item (blocks/motion/lib), not just the ui dir.
   Lock-less projects keep the old behavior.
+- [x] ✅ (2026-07-12, CLI 0.7.0) `update [names...]` — lock-aware upstream pull: rewrites
+  only files whose content still hashes to what an install wrote; keeps local edits when
+  the registry is unchanged; diverged/untracked/deleted files need `--force`; new registry
+  dependencies are added automatically; stale lock hashes self-heal. www CLI docs + llms
+  CLI_MD caught up (lorre.lock, diff causes, update).
 - [x] ✅ (2026-07-12) CI: registry validation ran on every PR already (build-time zod);
   added a generated-file drift guard (`git diff --exit-code` after `build:registry`),
   `pnpm audit --audit-level high`, and **render smoke tests for every demo** (www vitest +
