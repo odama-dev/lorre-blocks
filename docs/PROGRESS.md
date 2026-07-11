@@ -33,8 +33,15 @@ links/actions present — zero console/page errors · CLI e2e against local regi
 features testimonials stats navbar` resolved 8 (avatar pulled fresh; utils/card/button
 correctly skipped as already installed), consumer `tsc --noEmit` strict PASS.
 
-**Next:** Phase 4.2 (`lorre plan`/`apply`) — recommended now that blocks cover a full
-page — or motion items (batch 7), or Phase 3.3 (landing polish).
+**Same session, after PR #9 owner-merged (batch 6 verified live: manifest 52, all
+endpoints 200):** Phase 4.2 **design locked** → `docs/phase-4.2-design.md`. Key decision:
+the CLI stays deterministic — the *agent* reads the PRD and writes `plan.json`; the CLI
+gets `plan check` (validate + resolve, read-only) and `apply` (init+add in one run,
+records `lorre.plan.json`). v1 fences: `pages` is metadata only, `tokenOverrides` =
+semantic remaps only, gaps never block. Ships as CLI 0.5.0.
+
+**Next:** implement Phase 4.2 per the design doc, or motion items (batch 7), or
+Phase 3.3 (landing polish).
 
 ---
 

@@ -90,8 +90,10 @@ pricing + faq + cta + footer composes a full landing page. Next: motion/interact
   stdout; `{ok:false,error}` + exit 1 on failure; package-manager output captured so stdout
   stays parseable), `--json` implies non-interactive, `search <query>` with category/source/
   theme/type/limit facets, `info <name>` with install order + resolved target paths
-- 4.2 Build-from-spec: `lorre plan --spec prd.md --json` (theme choice + add-list + token
-  overrides + gap list) and `lorre apply plan.json`. Gap handling follows the sculpt-vs-create
+- 4.2 Build-from-spec: agent writes `plan.json` (theme + add-list + token overrides + gap
+  list); CLI validates and executes it — `lorre plan check` / `lorre apply`. **Design locked
+  2026-07-11 → [`phase-4.2-design.md`](./phase-4.2-design.md)** (CLI stays deterministic,
+  agent does the reasoning; ships as CLI 0.5.0). Gap handling follows the sculpt-vs-create
   decision tree in `lorre.md`; new items ship as patch releases via existing CI.
 - 4.3 (Stretch) `@lorre-blocks/mcp` MCP server: `search_registry`, `get_component`, `apply_theme`
 
