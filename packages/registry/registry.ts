@@ -656,4 +656,37 @@ export const registry: RegistryItem[] = [
     registryDependencies: ["utils", "button"],
     files: [{ path: "blocks/navbar.tsx", type: "registry:block" }],
   },
+  {
+    name: "marquee",
+    type: "registry:motion",
+    description:
+      "Infinite horizontal scroll strip for logo clouds and tickers. Pure CSS (content rendered twice, -50% loop via the --animate-marquee token); pauseOnHover and reverse props; honors prefers-reduced-motion.",
+    source: "lorre",
+    category: "motion",
+    tags: ["marquee", "ticker", "logo-cloud", "scroll", "animation", "motion"],
+    registryDependencies: ["utils"],
+    files: [{ path: "motion/marquee.tsx", type: "registry:motion" }],
+  },
+  {
+    name: "count-up",
+    type: "registry:motion",
+    description:
+      "Animated number that counts from 0 to a value with an ease-out curve when it enters the viewport. Locale-formatted with decimals/prefix/suffix; jumps straight to the value under prefers-reduced-motion. Pair with the stats block.",
+    source: "lorre",
+    category: "motion",
+    tags: ["count-up", "counter", "number", "stats", "animation", "motion"],
+    registryDependencies: ["utils"],
+    files: [{ path: "motion/count-up.tsx", type: "registry:motion" }],
+  },
+  {
+    name: "fade-in",
+    type: "registry:motion",
+    description:
+      "Reveal-on-scroll wrapper: children fade and slide in the first time they enter the viewport. Duration rides the theme's --motion-duration-slow token; delay prop staggers siblings; motion-reduce disables the transition.",
+    source: "lorre",
+    category: "motion",
+    tags: ["fade-in", "reveal", "scroll", "viewport", "animation", "motion", "stagger"],
+    registryDependencies: ["utils"],
+    files: [{ path: "motion/fade-in.tsx", type: "registry:motion" }],
+  },
 ]

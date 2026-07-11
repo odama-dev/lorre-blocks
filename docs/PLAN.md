@@ -69,8 +69,12 @@ that has existed since Phase 0.
 **Batch 6 done 2026-07-11** — features, testimonials, stats, navbar (registry total
 **52**). navbar is the first client-interactive block (mobile hamburger, `"use client"`).
 The marketing-page block set is complete: navbar + hero + features + stats + testimonials +
-pricing + faq + cta + footer composes a full landing page. Next: motion/interaction items
-(Magic UI / React Bits style).
+pricing + faq + cta + footer composes a full landing page.
+**Batch 7 done 2026-07-11** — first `registry:motion` items, all `source: "lorre"`:
+marquee, count-up, fade-in (registry total **55**). Motion pieces honor
+prefers-reduced-motion and ride the theme motion tokens; installed to
+`components/motion/` via the Phase 0 path mapping. More motion candidates remain
+(typewriter, shimmer, animated-gradient).
 
 ## Phase 3 — Docs app (`apps/www`)
 

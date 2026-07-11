@@ -29,6 +29,10 @@ const blockSearchItems = registry
   .filter((item) => item.type === "registry:block")
   .sort((a, b) => a.name.localeCompare(b.name))
 
+const motionSearchItems = registry
+  .filter((item) => item.type === "registry:motion")
+  .sort((a, b) => a.name.localeCompare(b.name))
+
 export function SearchCommand() {
   const router = useRouter()
   const [open, setOpen] = React.useState(false)
@@ -83,6 +87,18 @@ export function SearchCommand() {
                 onSelect={() => go(`/docs/blocks/${item.name}`)}
               >
                 <LayoutTemplate className="h-4 w-4" />
+                {item.name}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+          <CommandGroup heading="Motion">
+            {motionSearchItems.map((item) => (
+              <CommandItem
+                key={item.name}
+                keywords={item.tags}
+                onSelect={() => go(`/docs/motion/${item.name}`)}
+              >
+                <SquareDashed className="h-4 w-4" />
                 {item.name}
               </CommandItem>
             ))}

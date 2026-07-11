@@ -5,6 +5,41 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-11 (6) — Batch 7: first motion items (marquee, count-up, fade-in) — registry 55
+
+**Shipped (registry 52 → 55): the first `registry:motion` items**, all `source: "lorre"`,
+under `packages/registry/src/motion/`: **marquee** (infinite logo/ticker strip — pure CSS,
+content rendered twice + `-50%` loop via a new `--animate-marquee` token emitted by
+`build-css.ts`; `pauseOnHover`/`reverse` props; no `"use client"` needed), **count-up**
+(IntersectionObserver + rAF ease-out counter; fixed `en-US` Intl formatting and a single
+text child to avoid RSC hydration mismatches; jumps straight to the value under
+prefers-reduced-motion), **fade-in** (reveal-on-scroll wrapper whose duration rides
+`--motion-duration-slow`, so utilitarian reveals faster than dreamy; `delay` staggers
+siblings; `motion-reduce` disables the transition). CLI needed **zero changes** —
+`targetDirForType` has routed `registry:motion` → `components/motion/` since Phase 0, so
+no changeset/release this batch. Registry package gained a `./motion/*` export.
+
+**www (branch `feat/batch7-motion` → PR):** new `/docs/motion/[name]` pages (full-column
+preview like blocks), Motion group in sidebar + ⌘K search, 3 demos, llms motion twins +
+Motion section. Also cleared the Phase 4.2 follow-up: `/docs/cli` page and the llms
+CLI_MD now document `plan check` / `apply`.
+
+**Verified:** registry build ✓ (55, deterministic) · typecheck ✓ · tests 67/67 ✓ · www
+build ✓ (60 pages) · Playwright vs `next start`: 3 pages × 3 themes × light/dark (18
+combos, real theme-switcher driven, `--primary` + `.dark` asserted) — marquee transform
+advances and pauses on hover, count-up lands on exactly "52 / 99.9% / +1,284", fade-in
+staggers 0/150/300ms; a `reducedMotion: "reduce"` context shows count-up instantly,
+marquee `animation-name: none`, fade-in `transition: none`; sidebar/⌘K/Code-tab checks
+pass — zero console/page errors. CLI e2e in a fresh consumer against the local registry:
+`init` + `add marquee count-up fade-in` → `components/motion/`, strict `tsc --noEmit`
+PASS, re-add without `--yes` correctly skips (note: `--yes` implies overwrite).
+Repo now has `.claude/skills/verify/SKILL.md` capturing this recipe.
+
+**Next:** PR → owner merge (deploys registry 55 + motion docs). Then Phase 3.3 (landing
+polish, last www phase) or more motion items (typewriter, shimmer, animated-gradient).
+
+---
+
 ## 2026-07-11 (5) — Batch 6: marketing block set complete (features, testimonials, stats, navbar) — registry 52
 
 **PR #8 owner-merged 10:11Z, batch 5 confirmed live in production** (manifest 48, block

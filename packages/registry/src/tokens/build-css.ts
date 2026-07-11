@@ -174,6 +174,9 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push(
     "  --animate-caret-blink: lorre-caret-blink 1.25s ease-out infinite;"
   )
+  // Fixed duration too: marquee speed is content pacing, not UI motion —
+  // consumers override with [animation-duration:_20s] utilities when needed.
+  out.push("  --animate-marquee: lorre-marquee 40s linear infinite;")
   out.push("")
   out.push("  @keyframes lorre-fade-in {")
   out.push("    from { opacity: 0; }")
@@ -203,6 +206,10 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push("  @keyframes lorre-caret-blink {")
   out.push("    0%, 70%, 100% { opacity: 1; }")
   out.push("    20%, 50% { opacity: 0; }")
+  out.push("  }")
+  // -50% because marquee renders its content twice for a seamless loop.
+  out.push("  @keyframes lorre-marquee {")
+  out.push("    to { transform: translateX(-50%); }")
   out.push("  }")
   out.push("}", "")
 

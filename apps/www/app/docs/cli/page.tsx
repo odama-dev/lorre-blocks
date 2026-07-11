@@ -20,6 +20,8 @@ const COMMANDS = [
   ["info <name> [--files]", "One item's metadata, dependencies and target paths."],
   ["diff [names...]", "Compare your local copies against the registry."],
   ["theme list / theme apply <name>", "Inspect and swap themes."],
+  ["plan check <plan.json>", "Validate a plan and resolve it against the registry (read-only)."],
+  ["apply <plan.json> [-o]", "Execute a plan: theme + token overrides + items in one run."],
 ]
 
 export default function CliPage() {
