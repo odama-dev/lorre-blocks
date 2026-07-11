@@ -11,6 +11,11 @@ out/
 # generated registry output
 apps/www/public/r/
 
+# generated agent docs (Phase 3.2)
+apps/www/public/llms.txt
+apps/www/public/llms-full.txt
+apps/www/public/docs/
+
 # env / logs
 .env
 .env.*
