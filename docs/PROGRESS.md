@@ -40,8 +40,29 @@ gets `plan check` (validate + resolve, read-only) and `apply` (init+add in one r
 records `lorre.plan.json`). v1 fences: `pages` is metadata only, `tokenOverrides` =
 semantic remaps only, gaps never block. Ships as CLI 0.5.0.
 
-**Next:** implement Phase 4.2 per the design doc, or motion items (batch 7), or
-Phase 3.3 (landing polish).
+**Same session — Phase 4.2 implemented (`plan check` + `apply`), queued as CLI 0.5.0.**
+New `src/utils/plan.ts` (hand-rolled validation — flat problems list an agent can iterate
+on; overrides emitter re-declares every override under `.dark` per the Phase 1 rule) +
+`commands/plan.ts` / `commands/apply.ts`, wired as `plan check <file>` and
+`apply <file>`. Apply = init+add in one run: components.json (existing aliases/registry
+preserved), theme block + `/* lorre-blocks overrides start|end */` block (stripped when a
+re-applied plan has none), one package-manager pass (base + item deps), records
+`lorre.plan.json`. Changeset added (minor → 0.5.0); `--version` string bumped.
+
+**Verified:** typecheck ✓ · CLI tests 47/47 (was 36; +11 for plan validation/overrides
+CSS/injection) ✓ · e2e in a fresh consumer against a local registry: bad plan → `{ok:
+false, problems:[4]}` exit 1 (all problems in one pass); the acme-landing plan (9 blocks,
+dreamy, `primary: accent-10` override, 1 gap) → one `apply` = 16 items resolved, 16 files
+written, theme+overrides blocks correctly ordered in globals.css with `.dark` re-declare,
+`lorre.plan.json` recorded, re-run idempotent (0 written / 16 skipped), consumer strict
+`tsc --noEmit` PASS on TS 6.
+
+**Follow-ups:** www docs CLI page + build-llms CLI_MD don't mention plan/apply yet (ride
+the next www branch); `plan.schema.json` not published at lorre-blocks.dev; owner must
+merge the next Version Packages PR to publish 0.5.0.
+
+**Next:** merge Version Packages (0.5.0), update www CLI docs, then motion items
+(batch 7) or Phase 3.3 (landing polish).
 
 ---
 

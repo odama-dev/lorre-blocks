@@ -7,6 +7,8 @@ import { runDiff } from "./commands/diff"
 import { runSearch } from "./commands/search"
 import { runInfo } from "./commands/info"
 import { runThemeApply, runThemeList } from "./commands/theme"
+import { runPlanCheck } from "./commands/plan"
+import { runApply } from "./commands/apply"
 import { setJsonMode } from "./utils/output"
 
 const program = new Command()
@@ -14,7 +16,7 @@ const program = new Command()
 program
   .name("lorre-blocks")
   .description("Add lorre-blocks components to your project by copying their source in.")
-  .version("0.3.0")
+  .version("0.5.0")
 
 /**
  * `--json` is declared per-command (commander has no true global flag) and read
@@ -135,6 +137,38 @@ program
       name,
       registry: opts.registry,
       files: opts.files,
+    })
+  })
+
+const plan = program
+  .command("plan")
+  .description("Work with plan.json files (see docs/phase-4.2-design.md).")
+
+plan
+  .command("check")
+  .description("Validate a plan and resolve it against the registry (read-only).")
+  .argument("<file>", "path to plan.json")
+  .option("-c, --cwd <path>", "working directory", process.cwd())
+  .option("-r, --registry <url>", "registry base URL")
+  .addOption(jsonOption())
+  .action(async (file: string, opts) => {
+    await runPlanCheck({ cwd: opts.cwd, file, registry: opts.registry })
+  })
+
+program
+  .command("apply")
+  .description("Execute a plan: theme + components + deps in one run; records lorre.plan.json.")
+  .argument("<file>", "path to plan.json")
+  .option("-c, --cwd <path>", "working directory", process.cwd())
+  .option("-r, --registry <url>", "registry base URL")
+  .option("-o, --overwrite", "overwrite existing files", false)
+  .addOption(jsonOption())
+  .action(async (file: string, opts) => {
+    await runApply({
+      cwd: opts.cwd,
+      file,
+      registry: opts.registry,
+      overwrite: opts.overwrite,
     })
   })
 
