@@ -1,8 +1,11 @@
 import { Blocks, Palette, Terminal, Wrench, Zap, Layers } from "lucide-react"
 
+import { AnimatedGradient } from "@lorre-blocks/registry/motion/animated-gradient"
 import { CountUp } from "@lorre-blocks/registry/motion/count-up"
 import { FadeIn } from "@lorre-blocks/registry/motion/fade-in"
 import { Marquee } from "@lorre-blocks/registry/motion/marquee"
+import { Shimmer } from "@lorre-blocks/registry/motion/shimmer"
+import { Typewriter } from "@lorre-blocks/registry/motion/typewriter"
 
 const LOGOS = [
   { icon: Palette, name: "Tokenly" },
@@ -65,5 +68,33 @@ export function FadeInDemo() {
         </FadeIn>
       ))}
     </div>
+  )
+}
+
+export function TypewriterDemo() {
+  return (
+    <p className="text-center text-2xl font-semibold">
+      Build{" "}
+      <Typewriter
+        words={["dashboards", "marketing sites", "design systems"]}
+        className="text-primary"
+      />
+    </p>
+  )
+}
+
+export function ShimmerDemo() {
+  return (
+    <p className="text-center text-lg font-medium">
+      <Shimmer>Generating your themed project…</Shimmer>
+    </p>
+  )
+}
+
+export function AnimatedGradientDemo() {
+  return (
+    <p className="text-center text-4xl font-bold tracking-tight">
+      <AnimatedGradient>Tokens all the way down.</AnimatedGradient>
+    </p>
   )
 }
