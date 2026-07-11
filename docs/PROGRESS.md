@@ -39,6 +39,9 @@ dropdown + dialog open, landing re-themes live to dreamy and utilitarian incl. d
 ^1.7, zod ^4 (registry build script only user of zod). Zero code changes — typecheck, 56/56
 tests, registry build, and a built-CLI smoke test (`--version`, `search button --json`
 against the production registry) all pass. Patch changeset added; rides the 0.4.0 release.
+Follow-up: CLI now declares `engines.node >=22.12.0` (commander 15's floor — install-time
+warning instead of runtime crash on old Node); workspace root bumped `>=18` → `>=22.13`
+(pnpm 11 floor). CI already on Node 22.
 
 **Next:** batch 5 (blocks) or Phase 3.2 (llms.txt); backlog 4 (next 16) waits for a www
 branch.
