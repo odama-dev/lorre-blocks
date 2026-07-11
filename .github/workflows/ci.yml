@@ -41,5 +41,8 @@ jobs:
       - name: Build CLI
         run: pnpm build:cli
 
+      - name: Build MCP server
+        run: pnpm build:mcp
+
       - name: Build docs site
         run: pnpm build:www

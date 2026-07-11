@@ -21,7 +21,9 @@ in one flat list.
   (one JSON doc on stdout, never prompts) — this is the contract agents build on.
   Installs are recorded in the consumer's `lorre.lock`; `diff` attributes changes
   (local / upstream / diverged) and `update` pulls upstream safely.
-- **Monorepo:** `packages/registry` (source of truth) · `packages/cli` · `apps/www` (docs + registry host)
+- **Monorepo:** `packages/registry` (source of truth) · `packages/cli` · `packages/mcp`
+  (`lorre-blocks-mcp` — MCP server wrapping the CLI's `--json` contract) · `apps/www`
+  (docs + registry host)
 
 ## Classification system (registry schema v2)
 
