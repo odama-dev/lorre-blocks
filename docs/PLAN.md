@@ -111,7 +111,11 @@ prefers-reduced-motion and ride the theme motion tokens; installed to
   attributes modified files (`local` / `upstream` / `both` / `unknown`, human + `--json`),
   and no-arg `diff` now covers every locked item (blocks/motion/lib), not just the ui dir.
   Lock-less projects keep the old behavior.
-- CI: registry validation on every PR, render-test per component, dependency audit
+- [x] ✅ (2026-07-12) CI: registry validation ran on every PR already (build-time zod);
+  added a generated-file drift guard (`git diff --exit-code` after `build:registry`),
+  `pnpm audit --audit-level high`, and **render smoke tests for every demo** (www vitest +
+  jsdom: 54 items render + a coverage test that fails when a registry ui/block/motion item
+  lacks a demo). `pnpm test` now spans cli + registry + www (186 tests).
 - Immutable caching for registry JSON; fully static docs site
 - End-to-end "agent adds a component" workflow: registry-item PR template, auto-changeset, auto-publish
 

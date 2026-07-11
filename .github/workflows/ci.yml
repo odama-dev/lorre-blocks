@@ -23,10 +23,19 @@ jobs:
       - name: Build registry
         run: pnpm build:registry
 
+      # The registry build regenerates tracked output (src/styles/theme.css);
+      # a diff here means someone changed tokens without rebuilding, or the
+      # build stopped being deterministic.
+      - name: Check generated files are in sync
+        run: git diff --exit-code
+
+      - name: Dependency audit
+        run: pnpm audit --audit-level high
+
       - name: Typecheck
         run: pnpm typecheck
 
-      - name: Test CLI
+      - name: Test (cli, registry, www render smoke)
         run: pnpm test
 
       - name: Build CLI
