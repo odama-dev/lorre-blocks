@@ -5,6 +5,28 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-12 (8) — Phase 6 locked: full catalog expansion (shadcn · Radix · Magic UI · React Bits)
+
+**PR #21 owner-merged; batch 8 verified live** (manifest 58, pages 200) **and the
+deferred visual pass completed**: correct animation tokens on all three, typewriter
+cycles words, dreamy re-themes the gradient violet, reduced-motion disables everything,
+zero console errors. `lorre-blocks-mcp` 0.1.0 confirmed live on npm.
+
+**Planning session (Dimas): Phase 6 locked** → [`phase-6-expansion.md`](./phase-6-expansion.md).
+Port the complete catalogs of shadcn/ui, Radix Themes, Magic UI and React Bits.
+Decisions: every port classified by origin (`source` + MIT); **same-looking components
+dedupe to one canonical basic item** (precedence shadcn → radix → magicui → reactbits;
+existing lorre motion originals stay canonical; absorbed names become search tags —
+ledger in the doc); `motion` npm dep allowed; GSAP/WebGL gated to the final batch with
+bundle warnings; Align UI stays rewrite-only. Batches 9–16 sketched (~130–140 items
+end state). Schema prep in the same PR: `"reactbits"` added to `RegistrySource`
+(schema.ts + build zod enum + CLI --source help).
+
+**Next:** Batch 9 — shadcn completion (aspect-ratio, carousel, chart, data-table,
+navigation-menu, resizable, sidebar, typography).
+
+---
+
 ## 2026-07-12 (7) — Batch 8 motion: typewriter, shimmer, animated-gradient — registry 58
 
 **PR #19 owner-merged (MCP server).** Shipped (branch `feat/batch8-motion` → PR #21),

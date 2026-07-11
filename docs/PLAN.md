@@ -137,6 +137,15 @@ two new animation tokens: `--animate-shimmer`, `--animate-gradient`).
 
 Phase 5 complete (2026-07-12).
 
+## Phase 6 — Full catalog expansion (locked 2026-07-12)
+
+Port the **complete catalogs** of shadcn/ui, Radix Themes, Magic UI and React Bits,
+classified by origin (`source`), MIT license carried; **same-looking components dedupe
+to one canonical basic item** (no per-source twins; absorbed names become search tags).
+`motion` npm dep allowed; GSAP/WebGL gated to the final batch. Full rules, dedupe
+ledger and batch breakdown (batches 9–16, → ~130–140 items) in
+[`phase-6-expansion.md`](./phase-6-expansion.md). Align UI stays rewrite-only.
+
 ## Upgrade backlog (evaluated 2026-07-11)
 
 Findings from a dependency/pattern audit. Ordered by priority.

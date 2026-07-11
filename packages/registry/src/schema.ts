@@ -22,7 +22,7 @@ export type RegistryItemType =
   | "registry:asset"
 
 /** Origin of the item. Ported code keeps its source; rewritten-from-scratch code is "lorre". */
-export type RegistrySource = "shadcn" | "magicui" | "radix" | "lorre"
+export type RegistrySource = "shadcn" | "magicui" | "radix" | "reactbits" | "lorre"
 
 export type RegistryCategory =
   | "token"

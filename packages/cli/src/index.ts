@@ -106,7 +106,7 @@ program
   .option("-c, --cwd <path>", "working directory", process.cwd())
   .option("-r, --registry <url>", "registry base URL")
   .option("--category <name>", "filter by category (component, block, token, motion…)")
-  .option("--source <name>", "filter by source (shadcn, magicui, radix, lorre)")
+  .option("--source <name>", "filter by source (shadcn, magicui, radix, reactbits, lorre)")
   .option("--theme <name>", "only items compatible with this theme")
   .option("--type <name>", "filter by registry type (registry:ui, registry:block…)")
   .option("--limit <n>", "cap the number of results", (v) => parseInt(v, 10))
