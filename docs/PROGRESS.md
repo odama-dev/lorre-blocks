@@ -34,6 +34,11 @@ pages under basic/dreamy/utilitarian × light/dark (30 combos) with theme-overri
 `.dark` asserted per page, FAQ accordion opens, Code/Preview tabs switch, ⌘K "pricing"
 lands on `/docs/blocks/pricing` — zero console/page errors. Screenshots reviewed: dreamy
 dark pricing shows violet accent + highlighted tier; utilitarian cta panel goes monochrome.
+**CLI e2e (first block install ever):** built CLI against a locally served registry in a
+fresh consumer — `init --theme basic` then `add hero pricing faq cta footer` resolved 11
+items (button/badge/card/accordion/separator pulled automatically), wrote blocks to
+`src/components/blocks/`, one npm pass with versioned ranges; consumer then passes
+`tsc --noEmit` strict on TypeScript 6.
 
 **Next:** Phase 4.2 (`lorre plan`/`apply`), Phase 3.3 (landing polish), or batch 6
 (motion items / more blocks: features, testimonials, stats, header-nav).
