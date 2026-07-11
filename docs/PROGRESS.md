@@ -5,6 +5,35 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-12 (3) — Phase 5 continued: CI hardening (render smoke tests, audit, drift guard)
+
+**PR #13 owner-merged (lorre.lock); PR #14 "Version Packages" open — owner merge publishes
+CLI 0.6.0.**
+
+**Shipped (branch `feat/ci-hardening` → PR):**
+- **Render smoke tests for every registry item with a docs demo** — new www vitest setup
+  (jsdom + @testing-library/react + @vitejs/plugin-react; `esbuild.jsx` is ignored under
+  Vite 8/rolldown, the plugin is required). `test/demos.test.tsx` renders all 54 demos
+  (42 ui + 9 blocks + 3 motion) and a **coverage suite fails if any registry
+  ui/block/motion item lacks a demo** — a new batch can't forget one. jsdom shims in
+  `test/setup.ts`: IntersectionObserver, ResizeObserver, matchMedia, Radix pointer-capture.
+  www gains a `test` script, so root `pnpm test` (and CI) picks it up automatically —
+  186 tests total (cli 55, registry 20, www 111).
+- **CI (`ci.yml`):** after `build:registry`, `git diff --exit-code` catches
+  token-changed-without-rebuild drift and non-determinism (theme.css is tracked, generated);
+  `pnpm audit --audit-level high` gate (repo currently has only 1 low + 1 moderate, so the
+  gate is green and non-noisy).
+
+**Verified locally in CI order:** registry build ✓ · theme.css drift 0 ✓ · audit ✓ ·
+typecheck ✓ · 186/186 ✓ · CLI build ✓ · www build ✓ (test files are inside www's tsconfig
+include, so `next build` typechecks them — confirmed clean).
+
+**Remaining Phase 5:** immutable/CDN caching for registry JSON, `lorre.lock`-aware CLI
+update flows, agent-adds-a-component workflow (PR template + auto-changeset). Phase 4.3
+MCP server still the stretch goal.
+
+---
+
 ## 2026-07-12 (2) — Phase 5 started: lorre.lock + attributed diff (CLI 0.6.0 queued)
 
 **PR #12 owner-merged 17:03Z** (Phase 3.3 landing; production check pending next deploy
