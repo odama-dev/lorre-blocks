@@ -1,11 +1,15 @@
 import Link from "next/link"
 import { ArrowRight, Bot, Palette, SwatchBook, Terminal } from "lucide-react"
 
+import { CountUp } from "@lorre-blocks/registry/motion/count-up"
+import { FadeIn } from "@lorre-blocks/registry/motion/fade-in"
+import { Marquee } from "@lorre-blocks/registry/motion/marquee"
 import { registry } from "@lorre-blocks/registry/registry"
 import { Badge } from "@lorre-blocks/registry/ui/badge"
 import { Button } from "@lorre-blocks/registry/ui/button"
 import { CommandSnippet } from "@www/components/code-block"
 import { Showcase } from "@www/components/showcase"
+import { ThemeCarousel } from "@www/components/theme-carousel"
 
 const FEATURES = [
   {
@@ -26,7 +30,7 @@ const FEATURES = [
   {
     icon: Bot,
     title: "Agent-first",
-    body: "Every CLI command takes --json and never prompts. Agents search the registry, read metadata and assemble projects unattended.",
+    body: "Every CLI command takes --json and never prompts. Agents write a plan.json and assemble a themed project in one apply.",
   },
 ]
 
@@ -34,12 +38,22 @@ export default function HomePage() {
   const componentCount = registry.filter(
     (item) => item.type === "registry:ui"
   ).length
+  const blockCount = registry.filter(
+    (item) => item.type === "registry:block"
+  ).length
+  const motionCount = registry.filter(
+    (item) => item.type === "registry:motion"
+  ).length
+  const itemNames = registry
+    .filter((item) => item.type !== "registry:lib")
+    .map((item) => item.name)
 
   return (
     <main>
-      <section className="mx-auto max-w-7xl px-6 pb-20 pt-24 text-center">
+      <section className="mx-auto max-w-7xl px-6 pb-12 pt-24 text-center">
         <Badge variant="secondary" className="mb-6">
-          {componentCount} components · 3 themes · CLI on npm
+          {componentCount} components · {blockCount} blocks · {motionCount}{" "}
+          motion · 3 themes
         </Badge>
         <h1 className="mx-auto max-w-3xl text-balance text-5xl font-bold tracking-tight">
           Design tokens and components for every Lorre project
@@ -64,25 +78,67 @@ export default function HomePage() {
           command="npx lorre-blocks init --theme dreamy"
           className="mx-auto mt-8 max-w-md"
         />
-        <p className="mt-4 text-xs text-muted-foreground">
-          Try the palette icon in the header — the page below re-themes live.
-        </p>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 pb-20">
-        <Showcase />
+        <ThemeCarousel />
+        <div className="mt-8">
+          <Showcase />
+        </div>
+      </section>
+
+      <section className="border-t py-6">
+        <Marquee className="mx-auto max-w-7xl px-6 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+          {itemNames.map((name) => (
+            <span
+              key={name}
+              className="font-mono text-sm text-muted-foreground"
+            >
+              {name}
+            </span>
+          ))}
+        </Marquee>
       </section>
 
       <section className="border-t bg-muted/40">
+        <div className="mx-auto grid max-w-7xl gap-8 px-6 py-14 text-center sm:grid-cols-3">
+          <div>
+            <div className="text-4xl font-bold tracking-tight">
+              <CountUp value={registry.length} />
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground">
+              registry items, source included
+            </p>
+          </div>
+          <div>
+            <div className="text-4xl font-bold tracking-tight">
+              <CountUp value={3} />
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground">
+              themes from one token source
+            </p>
+          </div>
+          <div>
+            <div className="text-4xl font-bold tracking-tight">
+              <CountUp value={1} />
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground">
+              command from plan.json to themed project
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t">
         <div className="mx-auto grid max-w-7xl gap-8 px-6 py-20 sm:grid-cols-2 lg:grid-cols-4">
-          {FEATURES.map((feature) => (
-            <div key={feature.title}>
+          {FEATURES.map((feature, index) => (
+            <FadeIn key={feature.title} delay={index * 100}>
               <feature.icon className="h-5 w-5 text-primary" />
               <h2 className="mt-3 font-semibold">{feature.title}</h2>
               <p className="mt-2 text-sm text-muted-foreground">
                 {feature.body}
               </p>
-            </div>
+            </FadeIn>
           ))}
         </div>
       </section>

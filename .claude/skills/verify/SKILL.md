@@ -45,3 +45,8 @@ npx tsc --noEmit                                              # strict pass requ
   background process on Windows.
 - `--yes` on `add` implies overwrite; idempotency is only visible without it.
 - `pnpm --filter www start -- -p 3100` fails ("Invalid project directory `-p`"); use `PORT=`.
+- Stopping the background `pnpm --filter www start` task kills pnpm but can orphan the child
+  `next start` node process, which keeps holding the port — find it with
+  `netstat -ano | grep :3100` and Stop-Process it before restarting.
+- The landing showcase's Tabs also expose `role="tab"` — scope theme-carousel selectors to
+  `[aria-label="Theme"] [role="tab"]`.
