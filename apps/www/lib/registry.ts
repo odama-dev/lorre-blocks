@@ -9,6 +9,11 @@ export const uiItems: RegistryItem[] = registry
   .filter((item) => item.type === "registry:ui")
   .sort((a, b) => a.name.localeCompare(b.name))
 
+/** Block items (full page sections), alphabetical. */
+export const blockItems: RegistryItem[] = registry
+  .filter((item) => item.type === "registry:block")
+  .sort((a, b) => a.name.localeCompare(b.name))
+
 export function getItem(name: string): RegistryItem | undefined {
   return registry.find((item) => item.name === name)
 }

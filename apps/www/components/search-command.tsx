@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { FileText, Search, SquareDashed } from "lucide-react"
+import { FileText, LayoutTemplate, Search, SquareDashed } from "lucide-react"
 
 import { registry } from "@lorre-blocks/registry/registry"
 import { Button } from "@lorre-blocks/registry/ui/button"
@@ -23,6 +23,10 @@ const GUIDE_PAGES = [
 
 const componentItems = registry
   .filter((item) => item.type === "registry:ui")
+  .sort((a, b) => a.name.localeCompare(b.name))
+
+const blockSearchItems = registry
+  .filter((item) => item.type === "registry:block")
   .sort((a, b) => a.name.localeCompare(b.name))
 
 export function SearchCommand() {
@@ -68,6 +72,18 @@ export function SearchCommand() {
               <CommandItem key={page.href} onSelect={() => go(page.href)}>
                 <FileText className="h-4 w-4" />
                 {page.title}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+          <CommandGroup heading="Blocks">
+            {blockSearchItems.map((item) => (
+              <CommandItem
+                key={item.name}
+                keywords={item.tags}
+                onSelect={() => go(`/docs/blocks/${item.name}`)}
+              >
+                <LayoutTemplate className="h-4 w-4" />
+                {item.name}
               </CommandItem>
             ))}
           </CommandGroup>

@@ -50,6 +50,13 @@ import {
   TableDemo,
   TabsDemo,
 } from "@www/components/demos/structure"
+import {
+  CtaDemo,
+  FaqDemo,
+  FooterDemo,
+  HeroDemo,
+  PricingDemo,
+} from "@www/components/demos/blocks"
 
 /** Registry item name → live demo rendered on its docs page. */
 export const demos: Record<string, React.ComponentType> = {
@@ -95,4 +102,13 @@ export const demos: Record<string, React.ComponentType> = {
   toggle: ToggleDemo,
   "toggle-group": ToggleGroupDemo,
   tooltip: TooltipDemo,
+}
+
+/** Registry block name → live demo rendered full-width on its docs page. */
+export const blockDemos: Record<string, React.ComponentType> = {
+  cta: CtaDemo,
+  faq: FaqDemo,
+  footer: FooterDemo,
+  hero: HeroDemo,
+  pricing: PricingDemo,
 }
