@@ -5,6 +5,35 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-12 (9) — Batch 9: shadcn completion (Phase 6 opener) — registry 66
+
+**Shipped (branch `feat/batch9-shadcn-completion`, stacked on the Phase 6 plan branch →
+PR):** the 8 items that complete "all of shadcn", all `source: "shadcn"` MIT:
+**aspect-ratio**, **typography** (their style guide as components), **carousel** (embla),
+**chart** (recharts 2.x wrapper: config-driven `--color-<key>` vars, themed
+tooltip/legend), **data-table** (the upstream *pattern* packaged as one generic TanStack
+v8 component over our table — copy-and-specialize), **navigation-menu**, **resizable**
+(react-resizable-panels), **sidebar** — the big one, and the **first multi-file item**:
+`ui/sidebar.tsx` + `hooks/use-mobile.ts` (`registry:hook` → consumer `hooks/`, a path
+mapped since Phase 0 but never exercised). Design decision: shadcn's `--sidebar-*` token
+family is **not** adopted — sidebar is rewired onto existing Lorre semantics (muted
+surface, accent hover, standard border/ring), keeping the token surface small. New
+registry npm deps: embla-carousel-react, recharts, react-resizable-panels,
+@tanstack/react-table, @radix-ui/react-{aspect-ratio,navigation-menu}. www needed
+recharts as its own dep (demos import it directly; registry-transitive deps don't
+resolve under pnpm strict layout).
+
+**Verified:** registry build ✓ (66, deterministic) · typecheck ✓ · tests **229/229**
+(www 133 — 8 new render + 8 coverage) · www build ✓ (71 pages) · CLI e2e vs local
+registry: `add sidebar data-table carousel` resolved the full 11-item chain, **hook file
+landed in `hooks/use-mobile.ts`**, versioned npm deps correct, consumer strict `tsc`
+PASS. Per-theme browser pass rides the standard post-merge eyeball.
+
+**Next:** Batch 10 — Radix Themes uniques (callout, kbd, spinner, segmented-control,
+quote, code).
+
+---
+
 ## 2026-07-12 (8) — Phase 6 locked: full catalog expansion (shadcn · Radix · Magic UI · React Bits)
 
 **PR #21 owner-merged; batch 8 verified live** (manifest 58, pages 200) **and the

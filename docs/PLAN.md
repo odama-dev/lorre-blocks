@@ -76,6 +76,10 @@ prefers-reduced-motion and ride the theme motion tokens; installed to
 `components/motion/` via the Phase 0 path mapping.
 **Batch 8 done 2026-07-12** — typewriter, shimmer, animated-gradient (registry **58**;
 two new animation tokens: `--animate-shimmer`, `--animate-gradient`).
+**Batch 9 done 2026-07-12** (Phase 6 opener) — shadcn completion: aspect-ratio,
+typography, carousel, chart, data-table, navigation-menu, resizable, sidebar (registry
+**66**). sidebar is the first multi-file item (ui + `registry:hook` →
+`hooks/use-mobile.ts`); "all of shadcn" is now covered.
 
 ## Phase 3 — Docs app (`apps/www`)
 

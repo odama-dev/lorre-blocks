@@ -62,6 +62,16 @@ import {
   TestimonialsDemo,
 } from "@www/components/demos/blocks"
 import {
+  AspectRatioDemo,
+  CarouselDemo,
+  ChartDemo,
+  DataTableDemo,
+  NavigationMenuDemo,
+  ResizableDemo,
+  SidebarDemo,
+  TypographyDemo,
+} from "@www/components/demos/batch9"
+import {
   AnimatedGradientDemo,
   CountUpDemo,
   FadeInDemo,
@@ -114,6 +124,14 @@ export const demos: Record<string, React.ComponentType> = {
   toggle: ToggleDemo,
   "toggle-group": ToggleGroupDemo,
   tooltip: TooltipDemo,
+  "aspect-ratio": AspectRatioDemo,
+  carousel: CarouselDemo,
+  chart: ChartDemo,
+  "data-table": DataTableDemo,
+  "navigation-menu": NavigationMenuDemo,
+  resizable: ResizableDemo,
+  sidebar: SidebarDemo,
+  typography: TypographyDemo,
 }
 
 /** Registry block name → live demo rendered full-width on its docs page. */
