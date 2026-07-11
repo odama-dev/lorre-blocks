@@ -5,10 +5,16 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
-## 2026-07-10 — Phase 3.1: docs app + landing page (branch `feat/docs-app`, PR pending)
+## 2026-07-10 — Phase 3.1: docs app + landing page (PR #3 merged)
 
 Owner enabled "Allow GitHub Actions to create and approve pull requests" — the Release
 workflow can now open Version Packages PRs itself.
+
+**PR #3 merged 2026-07-10T08:04:18Z** (merge commit `9089db6`). CI build passed; the
+"Vercel" status check showed FAILURE but that's the known Hobby-plan collaborator-invite
+link artifact, not a real deploy failure. Confirmed live: `https://lorre-blocks.vercel.app/r/manifest.json`
+reports `itemCount: 37`, both sources (`shadcn`, `lorre`), all 3 themes — batch 1–3 registry
+JSON and the docs app are both in production.
 
 **Shipped (all `apps/www`, fully static — 43 pages):**
 - **Landing:** hero + quickstart snippet + live component sampler + feature grid. The header
@@ -31,8 +37,7 @@ dreamy applied via header picker **and persisting across reload**, docs intro, d
 page preview + code tabs, ⌘K search typed "combo" → lands on `/docs/components/combobox`;
 zero console errors.
 
-**Next:** owner merges the PR (also publishes batch 1–3 registry JSON to production), then
-Phase 3.2 (`llms.txt` + raw-markdown twins) or Phase 2 batch 4.
+**Next:** Phase 3.2 (`llms.txt` + raw-markdown twins) or Phase 2 batch 4.
 
 ---
 

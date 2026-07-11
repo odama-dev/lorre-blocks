@@ -65,10 +65,11 @@ FAQ, CTA, footer) and motion.
 
 ## Phase 3 — Docs app (`apps/www`)
 
-- 3.1 Docs layout: hierarchical sidebar (Getting Started → Tokens → Components → Blocks → Motion),
-  component pages with Preview/Code tabs + `lorre add` snippet + props table, ⌘K search
+- 3.1 ✅ (2026-07-10, PR #3 merged) Docs layout: sidebar generated from registry metadata,
+  landing page with runtime theme switcher, component pages with Preview/Code tabs + `lorre add`
+  snippet, ⌘K search. Live in production — `/r/manifest.json` confirms 37 items, all 3 themes.
 - 3.2 Agent readability: `llms.txt` + `llms-full.txt`, raw-markdown twin per docs page
-- 3.3 Landing page (last): Radix-style single-section with theme-switching carousel; simple placeholder until then
+- 3.3 Landing page polish (last): Radix-style single-section with theme-switching carousel
 - Workflow: every www change ships via feature branch → PR → owner merge (Vercel Hobby constraint)
 
 ## Phase 4 — Agent-friendly CLI
@@ -97,7 +98,7 @@ FAQ, CTA, footer) and motion.
 | 2 | Phase 1 (tokens + 3 themes) | ✅ done 2026-07-09 |
 | 3 | Phase 4.1 (CLI `--json`, `search`, `info`) | ✅ done 2026-07-09 |
 | 4 | Phase 2 (porting, continuous) | ~1 component/hour once patterns exist |
-| 5 | Phase 3.1–3.2 (docs + tokens pages + llms.txt) | 3–4 days |
+| 5 | Phase 3.1 ✅ done 2026-07-10; 3.2 (llms.txt) | remaining: 1 day |
 | 6 | Phase 4.2 (`plan`/`apply`) | 2–3 days |
 | 7 | Phase 5 + 3.3 | follows |
 
