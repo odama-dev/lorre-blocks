@@ -1,8 +1,14 @@
+import { Blocks, Palette, Terminal, Wrench } from "lucide-react"
+
 import { Cta } from "@lorre-blocks/registry/blocks/cta"
 import { Faq } from "@lorre-blocks/registry/blocks/faq"
+import { Features } from "@lorre-blocks/registry/blocks/features"
 import { Footer } from "@lorre-blocks/registry/blocks/footer"
 import { Hero } from "@lorre-blocks/registry/blocks/hero"
+import { Navbar } from "@lorre-blocks/registry/blocks/navbar"
 import { Pricing } from "@lorre-blocks/registry/blocks/pricing"
+import { Stats } from "@lorre-blocks/registry/blocks/stats"
+import { Testimonials } from "@lorre-blocks/registry/blocks/testimonials"
 
 export function HeroDemo() {
   return (
@@ -105,6 +111,107 @@ export function CtaDemo() {
       actions={[
         { label: "Get started", href: "#" },
         { label: "Read the docs", href: "#" },
+      ]}
+    />
+  )
+}
+
+export function FeaturesDemo() {
+  return (
+    <Features
+      className="py-12 md:py-16"
+      title="Everything you need to ship"
+      description="A complete design system, distributed as source you own."
+      items={[
+        {
+          title: "Design tokens",
+          description:
+            "12-step OKLCH scales generated from five seeds, with semantic aliases that make themes swappable.",
+          icon: <Palette className="h-5 w-5" />,
+        },
+        {
+          title: "Copy, don't install",
+          description:
+            "Components land in your repo as plain source files — no runtime dependency, no lock-in.",
+          icon: <Blocks className="h-5 w-5" />,
+        },
+        {
+          title: "Agent-first CLI",
+          description:
+            "Every command supports --json with exactly one document on stdout, built for automation.",
+          icon: <Terminal className="h-5 w-5" />,
+        },
+        {
+          title: "Sculpt, don't fork",
+          description:
+            "Adapt components with token overrides and variants instead of maintaining private copies.",
+          icon: <Wrench className="h-5 w-5" />,
+        },
+      ]}
+      columns={4}
+    />
+  )
+}
+
+export function TestimonialsDemo() {
+  return (
+    <Testimonials
+      className="py-12 md:py-16"
+      title="Loved by teams that ship"
+      description="What people building with Lorre Blocks say."
+      items={[
+        {
+          quote:
+            "We swapped our whole dashboard to the utilitarian theme in one command. Zero component edits.",
+          author: "Ayu Prameswari",
+          role: "Design Engineer, Nimbus",
+        },
+        {
+          quote:
+            "The --json CLI is the first component registry our build agents can actually drive end to end.",
+          author: "Marco Lindgren",
+          role: "Platform Lead, Vektor",
+        },
+        {
+          quote:
+            "Owning the source without owning the maintenance burden is exactly the trade we wanted.",
+          author: "Sari Wibowo",
+          role: "Frontend Lead, Kanaya Studio",
+        },
+      ]}
+    />
+  )
+}
+
+export function StatsDemo() {
+  return (
+    <Stats
+      className="py-12 md:py-16"
+      title="Built to be adopted"
+      items={[
+        { value: "52", label: "Registry items" },
+        { value: "3", label: "Themes", description: "basic, dreamy, utilitarian" },
+        { value: "100%", label: "Source owned", description: "copied into your repo" },
+        { value: "1", label: "Command to re-theme" },
+      ]}
+    />
+  )
+}
+
+export function NavbarDemo() {
+  return (
+    <Navbar
+      sticky={false}
+      brand="Lorre Blocks"
+      links={[
+        { label: "Docs", href: "#" },
+        { label: "Components", href: "#" },
+        { label: "Blocks", href: "#" },
+        { label: "Themes", href: "#" },
+      ]}
+      actions={[
+        { label: "Sign in", href: "#" },
+        { label: "Get started", href: "#" },
       ]}
     />
   )

@@ -53,9 +53,13 @@ import {
 import {
   CtaDemo,
   FaqDemo,
+  FeaturesDemo,
   FooterDemo,
   HeroDemo,
+  NavbarDemo,
   PricingDemo,
+  StatsDemo,
+  TestimonialsDemo,
 } from "@www/components/demos/blocks"
 
 /** Registry item name → live demo rendered on its docs page. */
@@ -108,7 +112,11 @@ export const demos: Record<string, React.ComponentType> = {
 export const blockDemos: Record<string, React.ComponentType> = {
   cta: CtaDemo,
   faq: FaqDemo,
+  features: FeaturesDemo,
   footer: FooterDemo,
   hero: HeroDemo,
+  navbar: NavbarDemo,
   pricing: PricingDemo,
+  stats: StatsDemo,
+  testimonials: TestimonialsDemo,
 }
