@@ -47,12 +47,17 @@ export async function installDependencies(
 ): Promise<void> {
   if (deps.length === 0) return
 
-  const args = installArgs(pm, deps)
+  const useShell = process.platform === "win32"
+  const args = installArgs(pm, deps).map((arg) =>
+    // cmd.exe treats ^ as its escape character, which would mangle version
+    // ranges like pkg@^1.2.3 — quoting each arg keeps them literal.
+    useShell ? `"${arg}"` : arg
+  )
   await new Promise<void>((resolve, reject) => {
     const child = spawn(pm, args, {
       cwd,
       stdio: options.silent ? ["ignore", "pipe", "pipe"] : "inherit",
-      shell: process.platform === "win32",
+      shell: useShell,
     })
 
     let captured = ""

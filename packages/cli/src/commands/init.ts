@@ -32,11 +32,14 @@ export interface InitOptions {
   yes?: boolean
 }
 
+// Ranges must track packages/registry/package.json (what the registry is
+// tested against) — registry items carry their own ranges, but these four
+// are installed before any item is fetched.
 const BASE_DEPENDENCIES = [
-  "clsx",
-  "tailwind-merge",
-  "class-variance-authority",
-  "tw-animate-css",
+  "clsx@^2.1.1",
+  "tailwind-merge@^3.6.0",
+  "class-variance-authority@^0.7.1",
+  "tw-animate-css@^1.4.0",
 ]
 
 export async function runInit(options: InitOptions): Promise<void> {

@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto"
-import { promises as fs } from "node:fs"
+import { promises as fs, readFileSync } from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -19,6 +19,17 @@ const REGISTRY_ROOT = path.resolve(__dirname, "..")
 const SRC_DIR = path.join(REGISTRY_ROOT, "src")
 
 const OUTPUT_DIR = path.resolve(REGISTRY_ROOT, "..", "..", "apps", "www", "public", "r")
+
+// npm deps in registry.ts are bare names; the version range each consumer
+// receives is resolved from this package's own dependencies, so the published
+// registry always matches what the workspace typechecks and tests against.
+const DEP_RANGES: Record<string, string> = JSON.parse(
+  readFileSync(path.join(REGISTRY_ROOT, "package.json"), "utf8")
+).dependencies ?? {}
+
+function withVersionRanges(deps: string[] | undefined): string[] | undefined {
+  return deps?.map((dep) => `${dep}@${DEP_RANGES[dep]}`)
+}
 
 const itemTypeSchema = z.enum([
   "registry:ui",
@@ -101,6 +112,18 @@ function validate() {
       }
     }
   }
+  // npm deps must be bare names declared (and therefore tested) in this
+  // package's dependencies — that's where their published range comes from
+  for (const item of registry) {
+    for (const dep of item.dependencies ?? []) {
+      if (!DEP_RANGES[dep]) {
+        console.error(
+          `✗ "${item.name}" npm dep "${dep}" is not in packages/registry/package.json dependencies — add it there (bare name in registry.ts, range in package.json)`
+        )
+        process.exit(1)
+      }
+    }
+  }
 }
 
 async function readFileContent(filePath: string): Promise<string> {
@@ -128,7 +151,12 @@ async function build() {
     )
 
     const checksum = sha256(files.map((f) => f.content).join("\n"))
-    const built: BuiltRegistryItem = { ...item, files, checksum }
+    const built: BuiltRegistryItem = {
+      ...item,
+      dependencies: withVersionRanges(item.dependencies),
+      files,
+      checksum,
+    }
 
     const outPath = path.join(OUTPUT_DIR, `${item.name}.json`)
     await fs.writeFile(outPath, JSON.stringify(built, null, 2) + "\n", "utf8")
