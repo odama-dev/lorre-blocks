@@ -179,6 +179,7 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push("  --animate-marquee: lorre-marquee 40s linear infinite;")
   out.push("  --animate-shimmer: lorre-shimmer 2.5s linear infinite;")
   out.push("  --animate-gradient: lorre-gradient 6s ease-in-out infinite;")
+  out.push("  --animate-ripple: lorre-ripple 0.6s ease-out forwards;")
   out.push("")
   out.push("  @keyframes lorre-fade-in {")
   out.push("    from { opacity: 0; }")
@@ -221,6 +222,10 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push("  @keyframes lorre-gradient {")
   out.push("    0%, 100% { background-position: 0% 50%; }")
   out.push("    50% { background-position: 100% 50%; }")
+  out.push("  }")
+  out.push("  @keyframes lorre-ripple {")
+  out.push("    from { transform: scale(0); opacity: 0.5; }")
+  out.push("    to { transform: scale(4); opacity: 0; }")
   out.push("  }")
   out.push("}", "")
 
