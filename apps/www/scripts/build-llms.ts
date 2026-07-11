@@ -155,6 +155,12 @@ Every command accepts \`--json\`: exactly one JSON document on stdout,
 non-interactive (no prompts). Package-manager output is captured so stdout stays parseable.
 
 Custom registry: \`--registry <url>\` or the \`registry\` field in components.json.
+
+## MCP server
+
+\`lorre-blocks-mcp\` on npm (stdio): \`search_registry\`, \`get_component\`,
+\`add_component\`, \`apply_theme\`, \`list_themes\` — each tool is one CLI \`--json\`
+invocation. Setup: \`claude mcp add lorre-blocks -- npx -y lorre-blocks-mcp\`.
 `
 
 async function build() {

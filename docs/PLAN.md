@@ -102,7 +102,11 @@ prefers-reduced-motion and ride the theme motion tokens; installed to
   2026-07-11 → [`phase-4.2-design.md`](./phase-4.2-design.md)** (CLI stays deterministic,
   agent does the reasoning; ships as CLI 0.5.0). Gap handling follows the sculpt-vs-create
   decision tree in `lorre.md`; new items ship as patch releases via existing CI.
-- 4.3 (Stretch) `@lorre-blocks/mcp` MCP server: `search_registry`, `get_component`, `apply_theme`
+- 4.3 ✅ (2026-07-12) MCP server, published as **`lorre-blocks-mcp`** (unscoped — the
+  `@lorre-blocks` npm scope is unclaimed/unverified): `search_registry`, `get_component`,
+  `add_component`, `apply_theme`, `list_themes` — stdio transport, every tool a thin
+  adapter over the CLI's `--json` contract, so MCP agents and CLI agents behave
+  identically. `npx -y lorre-blocks-mcp`.
 
 ## Phase 5 — Security, performance, automation hardening
 

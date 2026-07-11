@@ -5,6 +5,43 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-12 (6) — Phase 4.3: MCP server (`lorre-blocks-mcp` 0.1.0 queued)
+
+**PRs #17 (CLI 0.7.0 → npm) and #18 (Phase 5 wrap-up) owner-merged — Phase 5 closed.**
+
+**Shipped (branch `feat/mcp-server` → PR): new `packages/mcp`, published as
+`lorre-blocks-mcp`** (unscoped — PLAN said `@lorre-blocks/mcp`, but the npm scope is
+unclaimed/unverified and the unscoped name is guaranteed publishable with the existing
+token; mirrors the CLI's name). Stdio MCP server on the official SDK (`McpServer` +
+`registerTool`, zod v3 per SDK requirement). **Design: every tool is one spawn of the
+lorre-blocks CLI with `--json`** — the CLI stays the single contract, so MCP-driven and
+CLI-driven agents behave identically and the server needs no registry/business logic of
+its own. CLI binary resolved via `require.resolve("lorre-blocks/package.json")` + bin
+field (workspace copy in dev, the dependency after npm install). Tools: `search_registry`,
+`get_component` (always `--files`), `add_component` (needs projectDir; init'ed project),
+`apply_theme`, `list_themes`. `{ok:false}` docs map to MCP `isError`. Found + worked
+around a CLI inconsistency: `theme list` is the only command without a DEFAULT_REGISTRY
+fallback (it demands components.json or --registry) — the MCP layer injects the default
+registry URL itself rather than forcing a CLI patch release.
+
+**Wiring:** root `build`/`release` scripts + CI gain build:mcp; changeset minor → 0.1.0;
+package README with `claude mcp add` / Claude Desktop setup; lorre.md monorepo line and
+llms CLI_MD gained an MCP section.
+
+**Verified:** typecheck ✓ (3 pkgs) · tests 199/199 (mcp 7: arg builders + bin resolution)
+✓ · builds ✓ · **e2e over real MCP stdio** (SDK Client ↔ spawned server): `tools/list`
+returns all 5; `search_registry("logo cloud", motion)` → marquee; `get_component(fade-in)`
+returns full file contents; `list_themes` → basic/dreamy/utilitarian; unknown component →
+`isError` with the CLI's `{ok:false}` payload; against a fresh init'ed consumer:
+`add_component(badge, marquee)` wrote both files, `apply_theme(utilitarian)` swapped
+globals.css, bogus theme → `isError`.
+
+**Roadmap state: Phases 0–5 + 4.x all complete.** What remains is continuous Phase 2
+porting (motion candidates: typewriter, shimmer, animated-gradient) and whatever the next
+planning session locks.
+
+---
+
 ## 2026-07-12 (5) — Phase 5 complete: registry CDN caching + agent PR workflow
 
 **PR #16 owner-merged (`update` command); PR #17 "Version Packages" open — owner merge

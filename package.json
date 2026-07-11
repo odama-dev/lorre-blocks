@@ -8,10 +8,11 @@
     "build:cli": "pnpm --filter lorre-blocks build",
     "build:www": "pnpm --filter www build",
     "dev:www": "pnpm --filter www dev",
-    "build": "pnpm build:registry && pnpm build:cli",
+    "build": "pnpm build:registry && pnpm build:cli && pnpm build:mcp",
     "typecheck": "pnpm -r --if-present typecheck",
     "test": "pnpm -r --if-present test",
-    "release": "pnpm build:cli && changeset publish"
+    "release": "pnpm build:cli && pnpm build:mcp && changeset publish",
+    "build:mcp": "pnpm --filter lorre-blocks-mcp build"
   },
   "engines": {
     "node": ">=22.13"
