@@ -72,6 +72,14 @@ import {
   TypographyDemo,
 } from "@www/components/demos/batch9"
 import {
+  CalloutDemo,
+  DataListDemo,
+  KbdDemo,
+  QuoteDemo,
+  SegmentedControlDemo,
+  SpinnerDemo,
+} from "@www/components/demos/batch10"
+import {
   AnimatedGradientDemo,
   CountUpDemo,
   FadeInDemo,
@@ -132,6 +140,12 @@ export const demos: Record<string, React.ComponentType> = {
   resizable: ResizableDemo,
   sidebar: SidebarDemo,
   typography: TypographyDemo,
+  callout: CalloutDemo,
+  "data-list": DataListDemo,
+  kbd: KbdDemo,
+  quote: QuoteDemo,
+  "segmented-control": SegmentedControlDemo,
+  spinner: SpinnerDemo,
 }
 
 /** Registry block name → live demo rendered full-width on its docs page. */
