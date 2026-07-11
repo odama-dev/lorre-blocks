@@ -44,6 +44,15 @@ import {
   DialogTrigger,
 } from "@lorre-blocks/registry/ui/dialog"
 import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@lorre-blocks/registry/ui/drawer"
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -58,6 +67,21 @@ import {
 } from "@lorre-blocks/registry/ui/hover-card"
 import { Input } from "@lorre-blocks/registry/ui/input"
 import { Label } from "@lorre-blocks/registry/ui/label"
+import {
+  Menubar,
+  MenubarCheckboxItem,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarSub,
+  MenubarSubContent,
+  MenubarSubTrigger,
+  MenubarTrigger,
+} from "@lorre-blocks/registry/ui/menubar"
 import {
   Popover,
   PopoverContent,
@@ -279,5 +303,69 @@ export function SonnerDemo() {
         Show toast
       </Button>
     </>
+  )
+}
+
+export function DrawerDemo() {
+  return (
+    <Drawer>
+      <DrawerTrigger asChild>
+        <Button variant="outline">Open drawer</Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <div className="mx-auto w-full max-w-sm">
+          <DrawerHeader>
+            <DrawerTitle>Move goal</DrawerTitle>
+            <DrawerDescription>
+              Drag down or press Escape to dismiss.
+            </DrawerDescription>
+          </DrawerHeader>
+          <p className="p-4 text-center text-4xl font-bold">350</p>
+          <DrawerFooter>
+            <Button>Submit</Button>
+          </DrawerFooter>
+        </div>
+      </DrawerContent>
+    </Drawer>
+  )
+}
+
+export function MenubarDemo() {
+  return (
+    <Menubar>
+      <MenubarMenu>
+        <MenubarTrigger>File</MenubarTrigger>
+        <MenubarContent>
+          <MenubarItem>
+            New Tab <MenubarShortcut>⌘T</MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem>New Window</MenubarItem>
+          <MenubarSeparator />
+          <MenubarSub>
+            <MenubarSubTrigger>Share</MenubarSubTrigger>
+            <MenubarSubContent>
+              <MenubarItem>Email link</MenubarItem>
+              <MenubarItem>Messages</MenubarItem>
+            </MenubarSubContent>
+          </MenubarSub>
+          <MenubarSeparator />
+          <MenubarItem>
+            Print… <MenubarShortcut>⌘P</MenubarShortcut>
+          </MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+        <MenubarTrigger>View</MenubarTrigger>
+        <MenubarContent>
+          <MenubarCheckboxItem checked>Show Bookmarks</MenubarCheckboxItem>
+          <MenubarCheckboxItem>Show Full URLs</MenubarCheckboxItem>
+          <MenubarSeparator />
+          <MenubarRadioGroup value="andy">
+            <MenubarRadioItem value="andy">Andy</MenubarRadioItem>
+            <MenubarRadioItem value="benoit">Benoit</MenubarRadioItem>
+          </MenubarRadioGroup>
+        </MenubarContent>
+      </MenubarMenu>
+    </Menubar>
   )
 }

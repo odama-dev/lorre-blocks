@@ -19,6 +19,12 @@ import {
   FormMessage,
 } from "@lorre-blocks/registry/ui/form"
 import { Input } from "@lorre-blocks/registry/ui/input"
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@lorre-blocks/registry/ui/input-otp"
 import { Label } from "@lorre-blocks/registry/ui/label"
 import { Progress } from "@lorre-blocks/registry/ui/progress"
 import {
@@ -34,7 +40,12 @@ import {
 } from "@lorre-blocks/registry/ui/select"
 import { Slider } from "@lorre-blocks/registry/ui/slider"
 import { Switch } from "@lorre-blocks/registry/ui/switch"
+import { Textarea } from "@lorre-blocks/registry/ui/textarea"
 import { Toggle } from "@lorre-blocks/registry/ui/toggle"
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@lorre-blocks/registry/ui/toggle-group"
 
 export function CheckboxDemo() {
   return (
@@ -178,5 +189,48 @@ export function CalendarDemo() {
       onSelect={setDate}
       className="rounded-md border"
     />
+  )
+}
+
+export function TextareaDemo() {
+  return (
+    <div className="grid w-full max-w-md gap-2">
+      <Label htmlFor="message">Your message</Label>
+      <Textarea id="message" placeholder="Type your message here." />
+    </div>
+  )
+}
+
+export function InputOTPDemo() {
+  return (
+    <InputOTP maxLength={6}>
+      <InputOTPGroup>
+        <InputOTPSlot index={0} />
+        <InputOTPSlot index={1} />
+        <InputOTPSlot index={2} />
+      </InputOTPGroup>
+      <InputOTPSeparator />
+      <InputOTPGroup>
+        <InputOTPSlot index={3} />
+        <InputOTPSlot index={4} />
+        <InputOTPSlot index={5} />
+      </InputOTPGroup>
+    </InputOTP>
+  )
+}
+
+export function ToggleGroupDemo() {
+  return (
+    <ToggleGroup type="multiple" variant="outline" defaultValue={["bold"]}>
+      <ToggleGroupItem value="bold" aria-label="Toggle bold">
+        <Bold className="h-4 w-4" />
+      </ToggleGroupItem>
+      <ToggleGroupItem value="italic" aria-label="Toggle italic">
+        <Italic className="h-4 w-4" />
+      </ToggleGroupItem>
+      <ToggleGroupItem value="underline" aria-label="Toggle underline">
+        <Underline className="h-4 w-4" />
+      </ToggleGroupItem>
+    </ToggleGroup>
   )
 }

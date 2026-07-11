@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import { ChevronsUpDown } from "lucide-react"
 
 import {
@@ -40,6 +41,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@lorre-blocks/registry/ui/pagination"
+import { ScrollArea } from "@lorre-blocks/registry/ui/scroll-area"
+import { Separator } from "@lorre-blocks/registry/ui/separator"
 import {
   Table,
   TableBody,
@@ -182,6 +185,23 @@ export function BreadcrumbDemo() {
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
+  )
+}
+
+export function ScrollAreaDemo() {
+  const versions = Array.from({ length: 30 }, (_, i) => `v0.${30 - i}.0`)
+  return (
+    <ScrollArea className="h-56 w-52 rounded-md border">
+      <div className="p-4">
+        <h4 className="mb-3 text-sm font-semibold">Releases</h4>
+        {versions.map((v) => (
+          <React.Fragment key={v}>
+            <div className="py-1.5 text-sm">{v}</div>
+            <Separator />
+          </React.Fragment>
+        ))}
+      </div>
+    </ScrollArea>
   )
 }
 
