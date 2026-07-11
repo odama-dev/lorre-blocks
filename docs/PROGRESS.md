@@ -5,6 +5,26 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-12 (7) — Batch 8 motion: typewriter, shimmer, animated-gradient — registry 58
+
+**PR #19 owner-merged (MCP server).** Shipped (branch `feat/batch8-motion` → PR #21),
+same conventions as batch 7: **typewriter** (word cycler, caret via the existing
+caret-blink token; reduced-motion renders the first word statically), **shimmer**
+(pure-CSS text sweep, new `--animate-shimmer` token; motion-reduce → plain muted text),
+**animated-gradient** (drifting accent-scale gradient text, new `--animate-gradient`
+token; re-themes automatically). Two new keyframes/tokens in build-css.ts; www side is
+just 3 demos + map entries — everything else registry-derived.
+
+**Verified (lean run — session usage budget):** registry build ✓ (58) · typecheck ✓ ·
+tests **205/205** (www 117 — render smoke + demo coverage picked the new items up
+automatically) · www build ✓ (63 pages). **Deferred: the Playwright 3-themes ×
+light/dark visual pass** — eyeball the three docs pages after the deploy.
+
+**Next:** batch 8 visual pass, or a fresh planning session (all planned phases 0–5 +
+4.x are complete).
+
+---
+
 ## 2026-07-12 (6) — Phase 4.3: MCP server (`lorre-blocks-mcp` 0.1.0 queued)
 
 **PRs #17 (CLI 0.7.0 → npm) and #18 (Phase 5 wrap-up) owner-merged — Phase 5 closed.**

@@ -62,9 +62,12 @@ import {
   TestimonialsDemo,
 } from "@www/components/demos/blocks"
 import {
+  AnimatedGradientDemo,
   CountUpDemo,
   FadeInDemo,
   MarqueeDemo,
+  ShimmerDemo,
+  TypewriterDemo,
 } from "@www/components/demos/motion"
 
 /** Registry item name → live demo rendered on its docs page. */
@@ -128,7 +131,10 @@ export const blockDemos: Record<string, React.ComponentType> = {
 
 /** Registry motion name → live demo rendered on its docs page. */
 export const motionDemos: Record<string, React.ComponentType> = {
+  "animated-gradient": AnimatedGradientDemo,
   "count-up": CountUpDemo,
   "fade-in": FadeInDemo,
   marquee: MarqueeDemo,
+  shimmer: ShimmerDemo,
+  typewriter: TypewriterDemo,
 }

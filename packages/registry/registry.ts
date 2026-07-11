@@ -689,4 +689,37 @@ export const registry: RegistryItem[] = [
     registryDependencies: ["utils"],
     files: [{ path: "motion/fade-in.tsx", type: "registry:motion" }],
   },
+  {
+    name: "typewriter",
+    type: "registry:motion",
+    description:
+      "Types through a list of words character by character with a blinking caret (theme caret-blink token). Configurable typing/deleting speeds and pause; loops by default; prefers-reduced-motion renders the first word statically.",
+    source: "lorre",
+    category: "motion",
+    tags: ["typewriter", "typing", "text", "hero", "animation", "motion"],
+    registryDependencies: ["utils"],
+    files: [{ path: "motion/typewriter.tsx", type: "registry:motion" }],
+  },
+  {
+    name: "shimmer",
+    type: "registry:motion",
+    description:
+      "Text with a highlight sweeping through it — pure CSS gradient clipped to the text, driven by the --animate-shimmer token. motion-reduce freezes it to plain muted text. For loading labels and subtle emphasis.",
+    source: "lorre",
+    category: "motion",
+    tags: ["shimmer", "text", "loading", "skeleton", "animation", "motion"],
+    registryDependencies: ["utils"],
+    files: [{ path: "motion/shimmer.tsx", type: "registry:motion" }],
+  },
+  {
+    name: "animated-gradient",
+    type: "registry:motion",
+    description:
+      "Text filled with a slowly drifting gradient built from the theme accent scale (--primary to --accent-8), driven by the --animate-gradient token. Re-themes automatically; motion-reduce parks the gradient still.",
+    source: "lorre",
+    category: "motion",
+    tags: ["gradient", "text", "hero", "accent", "animation", "motion"],
+    registryDependencies: ["utils"],
+    files: [{ path: "motion/animated-gradient.tsx", type: "registry:motion" }],
+  },
 ]
