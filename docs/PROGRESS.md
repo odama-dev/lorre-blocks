@@ -5,6 +5,43 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-11 — Batch 4: 6 items (registry 43) + upgrade audit → PLAN backlog
+
+**Shipped (registry 37 → 43):** textarea, input-otp (new `input-otp` dep; fake caret uses a
+new `--animate-caret-blink` token — fixed 1.25s cadence on purpose, a caret shouldn't speed
+up with a theme's motion), toggle-group (composes `toggleVariants` via a `toggle`
+registryDependency), scroll-area, drawer (vaul; direction-aware via
+`data-[vaul-drawer-direction=*]` selectors, bottom drawers get a drag handle), menubar
+(mirrors dropdown-menu's styling vocabulary).
+
+**First React-19-style items:** written as plain function components with `data-slot`
+attributes — no `forwardRef`/`ElementRef` (deprecated in React 19). Per the upgrade backlog
+in PLAN.md, the existing 31 components get back-migrated in one sweep later; new items use
+the new style from the start.
+
+**Upgrade audit (also 2026-07-11, see PLAN.md "Upgrade backlog"):** the key finding is that
+registry npm deps are unversioned, so consumers install *latest* (tailwind-merge 3, sonner 2,
+lucide 1) while the workspace tests against old majors — confirmed live during acceptance
+(`init` installed tailwind-merge ^3.6.0). tailwind-merge v3 is the Tailwind-v4-aware release;
+workspace should catch up.
+
+**Verified:** typecheck ✓ (all packages) · tests 56/56 ✓ · deterministic rebuild ✓ (+5
+intended caret-blink lines in generated theme.css) · www production build ✓ (42 component
+pages incl. the 6 new) · CLI end-to-end in a fresh Vite + Tailwind v4 app against a locally
+served registry: `init --theme basic` + `add` (6 requested → 7 written, toggle pulled
+automatically, one npm pass), then visual acceptance under basic/dreamy/utilitarian ×
+light/dark — OTP typed with caret visible, menubar File menu + Share submenu opened, drawer
+opened with drag handle; zero console errors in all 6 runs.
+
+**Not done:** www demos for the 6 new items (docs pages render without a Preview until then —
+the page guards missing demos). Needs a small www feature-branch PR, same as batch 1–3 got
+in PR #3.
+
+**Next:** www demos PR for batch 4, then Phase 3.2 (llms.txt) or batch 5 (blocks: hero,
+pricing, FAQ, CTA, footer) or the PLAN upgrade backlog item 1 (dependency alignment).
+
+---
+
 ## 2026-07-10 — Phase 3.1: docs app + landing page (PR #3 merged)
 
 Owner enabled "Allow GitHub Actions to create and approve pull requests" — the Release

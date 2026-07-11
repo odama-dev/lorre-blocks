@@ -169,6 +169,11 @@ export function themeToCss(theme: ResolvedTheme): string {
       `  --animate-slide-in-${side}: lorre-slide-in-${side} var(--motion-duration-slow) var(--ease-smooth);`
     )
   }
+  // Fixed cadence on purpose: a text caret blinks at OS speed regardless of
+  // how fast a theme's panels animate.
+  out.push(
+    "  --animate-caret-blink: lorre-caret-blink 1.25s ease-out infinite;"
+  )
   out.push("")
   out.push("  @keyframes lorre-fade-in {")
   out.push("    from { opacity: 0; }")
@@ -195,6 +200,10 @@ export function themeToCss(theme: ResolvedTheme): string {
     out.push(`    from { transform: ${transform}; }`)
     out.push("  }")
   }
+  out.push("  @keyframes lorre-caret-blink {")
+  out.push("    0%, 70%, 100% { opacity: 1; }")
+  out.push("    20%, 50% { opacity: 0; }")
+  out.push("  }")
   out.push("}", "")
 
   out.push("@layer base {")

@@ -303,6 +303,7 @@
   --animate-slide-in-bottom: lorre-slide-in-bottom var(--motion-duration-slow) var(--ease-smooth);
   --animate-slide-in-left: lorre-slide-in-left var(--motion-duration-slow) var(--ease-smooth);
   --animate-slide-in-right: lorre-slide-in-right var(--motion-duration-slow) var(--ease-smooth);
+  --animate-caret-blink: lorre-caret-blink 1.25s ease-out infinite;
 
   @keyframes lorre-fade-in {
     from { opacity: 0; }
@@ -329,6 +330,10 @@
   }
   @keyframes lorre-slide-in-right {
     from { transform: translateX(100%); }
+  }
+  @keyframes lorre-caret-blink {
+    0%, 70%, 100% { opacity: 1; }
+    20%, 50% { opacity: 0; }
   }
 }
 
