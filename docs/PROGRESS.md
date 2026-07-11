@@ -33,12 +33,12 @@ automatically, one npm pass), then visual acceptance under basic/dreamy/utilitar
 light/dark — OTP typed with caret visible, menubar File menu + Share submenu opened, drawer
 opened with drag handle; zero console errors in all 6 runs.
 
-**Not done:** www demos for the 6 new items (docs pages render without a Preview until then —
-the page guards missing demos). Needs a small www feature-branch PR, same as batch 1–3 got
-in PR #3.
+**www demos: PR #4 (`feat/batch4-demos`) owner-merged same day (03:29Z).** Production
+confirmed: `/r/manifest.json` → 43 items, `/r/drawer.json` → 200, docs pages live with
+Previews. Batch 4 is installable by real users.
 
-**Next:** www demos PR for batch 4, then Phase 3.2 (llms.txt) or batch 5 (blocks: hero,
-pricing, FAQ, CTA, footer) or the PLAN upgrade backlog item 1 (dependency alignment).
+**Next:** Phase 3.2 (llms.txt) or batch 5 (blocks: hero, pricing, FAQ, CTA, footer) or the
+PLAN upgrade backlog item 1 (dependency alignment).
 
 ---
 
