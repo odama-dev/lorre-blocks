@@ -16,7 +16,7 @@ const program = new Command()
 program
   .name("lorre-blocks")
   .description("Add lorre-blocks components to your project by copying their source in.")
-  .version("0.5.0")
+  .version("0.6.0")
 
 /**
  * `--json` is declared per-command (commander has no true global flag) and read

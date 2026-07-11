@@ -6,6 +6,7 @@ import { createTwoFilesPatch } from "diff"
 import { readConfig } from "../utils/config"
 import { fetchRegistryItem, fetchIndex } from "../utils/registry"
 import { resolveBaseDir, rewriteImports, targetDirForType } from "../utils/paths"
+import { classifyChange, readLock, toPosix, type ChangeCause } from "../utils/lock"
 import * as out from "../utils/output"
 
 export interface DiffOptions {
@@ -19,7 +20,16 @@ interface DiffEntry {
   name: string
   file: string
   status: FileStatus
+  /** Who moved since install — only known when lorre.lock has the file. */
+  cause?: ChangeCause
   patch?: string
+}
+
+const CAUSE_LABEL: Record<ChangeCause, string> = {
+  local: "local edits",
+  upstream: "registry updated",
+  both: "diverged: local edits + registry update",
+  unknown: "no lock entry; cause unknown",
 }
 
 export async function runDiff(options: DiffOptions): Promise<void> {
@@ -33,17 +43,24 @@ export async function runDiff(options: DiffOptions): Promise<void> {
   }
 
   const baseDir = await resolveBaseDir(cwd)
+  const lock = await readLock(cwd)
 
   let names = options.components
   if (names.length === 0) {
-    const uiDir = targetDirForType("registry:ui", config.aliases, baseDir)
-    const present = await listComponentNames(uiDir)
-    const index = await fetchIndex(config.registry).catch(() => [])
-    const known = new Set(index.map((i) => i.name))
-    names = present.filter((n) => known.has(n))
+    // The lock knows every installed item (blocks, motion, lib included);
+    // without one, fall back to scanning the ui directory.
+    if (lock && Object.keys(lock.items).length > 0) {
+      names = Object.keys(lock.items).sort()
+    } else {
+      const uiDir = targetDirForType("registry:ui", config.aliases, baseDir)
+      const present = await listComponentNames(uiDir)
+      const index = await fetchIndex(config.registry).catch(() => [])
+      const known = new Set(index.map((i) => i.name))
+      names = present.filter((n) => known.has(n))
+    }
     if (names.length === 0) {
       if (out.isJsonMode()) {
-        out.emit({ changed: 0, entries: [] })
+        out.emit({ changed: 0, entries: [], lock: lock !== null })
         return
       }
       out.fail("No known components found in your project to diff.")
@@ -78,6 +95,8 @@ export async function runDiff(options: DiffOptions): Promise<void> {
         continue
       }
 
+      const lockedHash = lock?.items[name]?.files[toPosix(rel)]
+      const cause = classifyChange(local, registryContent, lockedHash)
       const patch = createTwoFilesPatch(
         "your version",
         "registry",
@@ -86,15 +105,17 @@ export async function runDiff(options: DiffOptions): Promise<void> {
         "",
         ""
       )
-      entries.push({ name, file: rel, status: "modified", patch })
-      out.message(`${color.bold(name)} — ${rel}\n${colorizePatch(patch)}`)
+      entries.push({ name, file: rel, status: "modified", cause, patch })
+      out.message(
+        `${color.bold(name)} — ${rel} (${CAUSE_LABEL[cause]})\n${colorizePatch(patch)}`
+      )
     }
   }
 
   const changed = entries.filter((e) => e.status === "modified").length
 
   if (out.isJsonMode()) {
-    out.emit({ changed, entries })
+    out.emit({ changed, entries, lock: lock !== null })
     return
   }
 

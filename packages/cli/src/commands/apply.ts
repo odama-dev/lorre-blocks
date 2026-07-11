@@ -24,6 +24,7 @@ import {
   stripOverridesBlock,
 } from "../utils/plan"
 import { readPlanFile } from "./plan"
+import { LOCK_FILE, emptyLock, readLock, recordInstall, writeLock } from "../utils/lock"
 import * as out from "../utils/output"
 
 export interface ApplyOptions {
@@ -117,7 +118,11 @@ export async function runApply(options: ApplyOptions): Promise<void> {
   const baseDir = await resolveBaseDir(cwd)
   const written: string[] = []
   const skipped: string[] = []
+  const lock = (await readLock(cwd)) ?? emptyLock(registry)
+  lock.registry = registry
+  let lockDirty = false
   for (const item of resolution.items) {
+    const writtenForItem: Array<{ rel: string; content: string }> = []
     for (const f of item.files) {
       const dir = targetDirForType(f.type, config.aliases, baseDir)
       const dest = path.join(dir, path.basename(f.path))
@@ -127,13 +132,23 @@ export async function runApply(options: ApplyOptions): Promise<void> {
         skipped.push(rel)
         continue
       }
+      const content = rewriteImports(f.content, config)
       await fs.mkdir(dir, { recursive: true })
-      await fs.writeFile(dest, rewriteImports(f.content, config), "utf8")
+      await fs.writeFile(dest, content, "utf8")
       written.push(rel)
+      writtenForItem.push({ rel, content })
+    }
+    if (writtenForItem.length > 0) {
+      recordInstall(lock, item, writtenForItem)
+      lockDirty = true
     }
   }
+  if (lockDirty) {
+    await writeLock(cwd, lock)
+    out.success(`Recorded ${LOCK_FILE}`)
+  }
 
-  // --- record the applied plan (input for diff / future lorre.lock)
+  // --- record the applied plan (agent-readable receipt; lorre.lock holds the hashes)
   const record = {
     plan,
     resolved: {
@@ -158,6 +173,7 @@ export async function runApply(options: ApplyOptions): Promise<void> {
       npmDependencies: npmDeps,
       packageManager: pm,
       planRecord: "lorre.plan.json",
+      lock: lockDirty ? LOCK_FILE : null,
     })
     return
   }

@@ -23,6 +23,7 @@ import {
 } from "../utils/registry"
 import { injectThemeBlock } from "../utils/css"
 import { readIfExists, resolveGlobalCss } from "../utils/global-css"
+import { emptyLock, readLock, recordInstall, writeLock } from "../utils/lock"
 import * as out from "../utils/output"
 
 export interface InitOptions {
@@ -98,13 +99,23 @@ export async function runInit(options: InitOptions): Promise<void> {
 
   try {
     const utils = await fetchRegistryItem(registry, "utils")
+    const writtenForItem: Array<{ rel: string; content: string }> = []
     for (const file of utils.files) {
       const dir = targetDirForType(file.type, config.aliases, baseDir)
       await fs.mkdir(dir, { recursive: true })
       const dest = path.join(dir, path.basename(file.path))
-      await fs.writeFile(dest, rewriteImports(file.content, config), "utf8")
-      written.push(path.relative(cwd, dest))
-      out.success(`Wrote ${path.relative(cwd, dest)}`)
+      const content = rewriteImports(file.content, config)
+      await fs.writeFile(dest, content, "utf8")
+      const rel = path.relative(cwd, dest)
+      written.push(rel)
+      writtenForItem.push({ rel, content })
+      out.success(`Wrote ${rel}`)
+    }
+    if (writtenForItem.length > 0) {
+      const lock = (await readLock(cwd)) ?? emptyLock(registry)
+      lock.registry = registry
+      recordInstall(lock, utils, writtenForItem)
+      await writeLock(cwd, lock)
     }
   } catch (err) {
     out.warn(`Could not write utils: ${(err as Error).message}`)

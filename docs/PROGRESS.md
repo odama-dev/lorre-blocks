@@ -5,6 +5,42 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-12 (2) — Phase 5 started: lorre.lock + attributed diff (CLI 0.6.0 queued)
+
+**PR #12 owner-merged 17:03Z** (Phase 3.3 landing; production check pending next deploy
+cycle — verify with a cache-busting param).
+
+**Shipped: `lorre.lock`** (first Phase 5 item). New `src/utils/lock.ts`: schema v1 —
+registry URL + per item `{ type, checksum (registry-declared at install), files: { posix
+rel path → sha256 of content as written, post import-rewrite } }`; deterministic writes
+(sorted keys). `init` (utils), `add` and `apply` merge into it — only items with files
+actually written this run are touched, skipped files keep the hash of the install that
+wrote them. **`diff` is now accurate:** for a modified file it compares local + current
+registry content against the locked hash and reports `cause` — `local` (you edited),
+`upstream` (registry moved), `both` (diverged), `unknown` (pre-lock install) — in human
+output and `--json`; and no-arg `diff` iterates the lock, so blocks/motion/lib items are
+finally covered (previously only the ui dir was scanned). Lock-less projects behave
+exactly as before. Key insight: no registry checksum needed for attribution — three-way
+content-hash comparison (local / current registry / locked) is per-file precise.
+Changeset minor → **0.6.0**; `--version` bumped.
+
+**Verified:** typecheck ✓ · CLI tests 55/55 (+8 lock: merge semantics, deterministic
+round-trip, all 4 causes) ✓ · e2e against a mutable local registry copy (static server
+over `public/r`): `init` → lock has utils; `add button card` → lock has 3 items, no-arg
+diff up-to-date incl. lib; local edit → `cause: local`; mutate served card.json →
+`cause: upstream`; both → `diverged` label in human mode; deleted lock entry →
+`unknown`; `add card --overwrite` heals to up-to-date; `apply` (plan with a motion item)
+→ lock written, diff clean, consumer strict `tsc` PASS; `--version` 0.6.0.
+
+**Follow-ups:** www CLI docs + llms CLI_MD don't mention lorre.lock/diff causes yet
+(ride the next www branch); owner must merge the next Version Packages PR to publish
+0.6.0. Plan-file gotcha for e2e: the items key is `add`, not `items`.
+
+**Next:** remaining Phase 5 items — CI registry validation on PRs / render tests /
+dependency audit; immutable caching for registry JSON. Or Phase 4.3 MCP server.
+
+---
+
 ## 2026-07-12 — Phase 3.3: landing polish (theme carousel + motion dogfood)
 
 **PR #11 owner-merged 16:54Z; batch 7 confirmed live in production** (manifest 55, motion
