@@ -21,6 +21,12 @@ Two front doors, one engine:
   (`lorre-blocks theme create`), which generates the CSS locally and injects it into the
   project's global CSS. No website involved.
 
+Plus a third surface: a dedicated **Icons page** (`/icons`) — a multi-set icon browser
+(Radix Icons has one set on its own page; Untitled UI is the UX bar with per-style
+line/solid/duotone variants and hover-to-copy SVG/JSX). Lorre carries **several icon
+sets**, so the page adds a set switcher on top of that experience, and the chosen set
+becomes part of the design-system config that agents honor too.
+
 **Parity is the acceptance bar for the whole phase**: the Studio's exported CSS and the
 CLI's injected CSS must be byte-identical for the same theme JSON.
 
@@ -52,13 +58,15 @@ user's project instead of our registry. Nothing about the component source chang
 | Every component visible while tweaking | ✅ demos exist for all 126 items | reuse demos as the Studio gallery |
 | Copy as CSS | ❌ | Studio export panel |
 | Apply into a real project | ✅ but preset themes only | `theme create` (custom JSON → inject) |
-| Icon set choice | ❌ lucide hardcoded everywhere | record preference only; remap deferred |
+| Icons page (Radix `/icons`, Untitled UI) | ❌ lucide hardcoded, no browse UI | `/icons` multi-set browser + copy SVG/JSX + set choice in config |
 
 ## Naming decision
 
 - Page: **`/themes` — "Theme Studio"** (header link **Themes**). Short route, obvious
   meaning; "playground" stays an informal synonym. `/docs/theming` remains the concept
   doc and links to the Studio.
+- Icons page: **`/icons` — "Icons"** (header link **Icons**), linked from the Studio's
+  icon-set control.
 - Project-side artifact: **`lorre.theme.json`** at the consumer project root — the theme
   definition source of truth, sibling to `components.json` / `lorre.lock`.
 
@@ -110,8 +118,10 @@ Extract and extend the engine; no user-visible feature yet.
     overrides for the **important set only** (locked list below). Emitted as
     `--<comp>-<token>` vars that default to global tokens, e.g.
     `--button-radius: var(--radius-md)`.
-  - `icons?: "lucide"` — recorded in the definition + `components.json` for future use.
-    **Actual icon-set remapping is out of scope** (all 126 items import lucide today).
+  - `icons?: { set: IconSetName; style?: string }` (e.g. `{ set: "phosphor",
+    style: "duotone" }`) — recorded in the definition + `components.json`. Governs the
+    consumer's own app code and what agents generate; **registry ui internals keep
+    importing lucide** (shadcn does the same) — that remap stays out of scope.
 - [ ] `themeDefinitionSchema` (zod) lives in the tokens package — single validator
       shared by registry build, CLI, plan.json, and the Studio.
 - [ ] Helper: `hexToSeed(hex)` → OKLCH `ColorSeed` (hue/chroma/lightness extraction),
@@ -151,7 +161,8 @@ changes nothing else; all 341+ tests green.
   - flags for quick tailoring: `--name`, `--extends basic`, `--accent "#5B6CFF"`,
     `--secondary "#FF8A5B"`, `--neutral slate|"#hex"`, `--radius sm|md|lg|xl|<rem>`,
     `--font-sans "Geist"`, `--font-mono …`, `--type-base 1rem --type-ratio 1.25`,
-    `--scaling 105`. Flags override `--from` values.
+    `--scaling 105`, `--icons phosphor:duotone` (records the set/style **and installs
+    its npm package**). Flags override `--from` values.
   - Behavior: validate (shared zod) → resolve against registry base themes → run
     `themeToCss` **locally** → `injectThemeBlock` into the global CSS (same idempotent
     markers as `theme apply`) → write/update `lorre.theme.json` → set
@@ -219,13 +230,64 @@ The human front door — Radix-playground-style.
 while watching every component update live in light/dark, copies the CSS into their
 project, and gets exactly what the preview showed.
 
-## 7.5 — Docs, llms, verification
+## 7.5 — Icons page (`/icons` on www) + icon-set catalog
+
+A dedicated icon browser, UX modeled on Untitled UI's resource page (style variants,
+hover-to-copy) but with a **set switcher** on top, since Lorre carries multiple sets.
+Radix's `/icons` proves icons deserve their own page; ours must handle N sets.
+
+- [ ] **Icon-set catalog (v1, locked)** — permissive licenses only, defined as data in
+      the tokens package (`ICON_SETS`) so CLI, Studio, and the page share it:
+
+  | set | package | styles/weights | license |
+  | --- | --- | --- | --- |
+  | `lucide` (default) | `lucide-react` | line | ISC |
+  | `radix` | `@radix-ui/react-icons` | line (15px) | MIT |
+  | `phosphor` | `@phosphor-icons/react` | thin · light · regular · bold · fill · **duotone** | MIT |
+  | `heroicons` | `@heroicons/react` | outline · solid · mini | MIT |
+
+  **Untitled UI is the UX reference only — its icons are proprietary and are NOT
+  ported.** The line/solid/duotone style axis comes from Phosphor + Heroicons instead.
+  Catalog is extensible: adding a set = one adapter + one catalog row.
+- [ ] **Page UX** (`apps/www/app/icons/page.tsx`, header link **Icons**):
+  - set switcher (tabs/select) + **style chips contextual to the active set** (e.g.
+    Phosphor shows thin→duotone; Lucide shows none) + search (fuzzy, name + aliases),
+    virtualized grid (sets are 1–2k icons).
+  - **hover overlay: copy SVG / copy JSX** (Untitled-UI style); click → detail
+    popover: size previews, copy TSX component snippet, copy import statement
+    (`import { ArrowRight } from "lucide-react"` form per set), download `.svg`.
+  - icons render with `currentColor` so they follow the active theme + dark mode;
+    duotone's secondary layer previews with the accent token.
+  - "use this set" action → writes the choice into the Studio state (deep-links to
+    `/themes`) and shows the matching CLI flag.
+- [ ] **Implementation**: one adapter per set (icon name list, React render, and
+      `toSvg()` via client-side `renderToStaticMarkup`); sets loaded via dynamic
+      import so only the active set enters the bundle; name index prebuilt at build
+      time for search.
+- [ ] **Config surface**: `components.json` gains `icons: { set, style? }`; `init`
+      gains an icon-set picker; `/r/icons/index.json` serves the catalog (name,
+      package, styles, license) so agents can enumerate sets remotely. MCP `info` /
+      llms.txt expose it.
+- [ ] **Locked boundary**: registry ui components keep lucide as an internal
+      implementation detail. The configured set governs the user's app code and
+      agent-generated code. A future codemod phase may remap internals.
+- [ ] Tests: adapter unit tests (render + SVG string for a sample icon per set/style),
+      Playwright: search narrows grid, style chip swaps variants, copy-SVG puts valid
+      `<svg` markup on the clipboard, set switch lazy-loads without console errors.
+
+**Acceptance**: a user opens `/icons`, switches to Phosphor duotone, searches "arrow",
+hovers → copies SVG and pastes valid markup; picks "use this set" and the Studio +
+exported JSON + CLI flag all carry `{ set: "phosphor", style: "duotone" }`; an agent
+reading `/r/icons/index.json` installs and uses the same set.
+
+## 7.6 — Docs, llms, verification
 
 - [ ] `/docs/theming` rewritten around custom themes: the JSON contract (annotated
       example), Studio walkthrough, CLI reference, "for agents" section.
-- [ ] `build-llms.ts`: Studio + `theme create`/`show` + `lorre.theme.json` contract in
-      `llms.txt` / CLI_MD — an agent reading llms.txt must be able to author a valid
-      theme JSON without seeing the TS types.
+- [ ] `build-llms.ts`: Studio + Icons page + `theme create`/`show` + the
+      `lorre.theme.json` contract + icon-set catalog in `llms.txt` / CLI_MD — an agent
+      reading llms.txt must be able to author a valid theme JSON (icons included)
+      without seeing the TS types.
 - [ ] `lorre.md`: component-token rule, key-set list, theme-JSON-as-contract principle.
 - [ ] `PLAN.md` Phase 7 section + `PROGRESS.md` entries per session (as always).
 - [ ] Full verification sweep per `.claude/skills/verify`: www build + Playwright
@@ -242,16 +304,22 @@ project, and gets exactly what the preview showed.
 | 7.2 | component tokens in ui | `feat/phase7-component-tokens` | — (registry JSON via www deploy) |
 | 7.3 | CLI + plan.json + MCP | `feat/phase7-theme-create` | CLI 0.8.0, MCP 0.2.0 |
 | 7.4 | Theme Studio page | `feat/phase7-theme-studio` | www deploy |
-| 7.5 | docs + llms + sweep | `feat/phase7-docs` (or folded into 7.4) | www deploy |
+| 7.5 | Icons page + catalog | `feat/phase7-icons` | www deploy (+ CLI patch if `--icons` missed 7.3) |
+| 7.6 | docs + llms + sweep | `feat/phase7-docs` (or folded into the last page PR) | www deploy |
 
 7.1→7.2→7.3 are strictly ordered; 7.4 depends on 7.1 only (can start in parallel after
-it merges, but lands after 7.3 so the CLI tab points at a published command). All PRs
-follow the owner-merge flow.
+it merges, but lands after 7.3 so the CLI tab points at a published command). 7.5 is
+independent of 7.2–7.4 (needs only the catalog data from 7.1) — **it can be built
+early or in parallel**, and per direction (2026-07-12) the www pages (7.4 + 7.5) are
+the next concrete deliverable, with UI/UX tailored from the Radix playground /
+Radix icons / Untitled UI references. All PRs follow the owner-merge flow.
 
 ## Out of scope (explicitly deferred)
 
-- **Icon-set remapping** (swapping lucide across 126 items) — preference is recorded,
-  execution is its own phase.
+- **Icon-set remapping inside registry ui source** (swapping lucide across 126 items) —
+  the Icons page, catalog, and config choice ship in 7.5; rewriting component internals
+  to the chosen set is its own future codemod phase.
+- **Porting Untitled UI's icons** — proprietary; UX reference only.
 - **Per-instance component props** (Radix's `size`/`variant` per element) — that's
   component API and already exists; Phase 7 only themes the defaults.
 - **Self-hosted font pipeline** — Studio previews via Google Fonts; exported CSS
