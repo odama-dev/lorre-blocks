@@ -1,5 +1,18 @@
 # lorre-blocks-mcp
 
+## 0.2.0
+
+### Minor Changes
+
+- e320e9b: New `create_theme` tool (custom design system from a theme definition object — spawns
+  `theme create --from`) and `show_theme` (resolved token inspection); `apply_theme` can
+  omit the theme name to re-apply the project's `lorre.theme.json`.
+
+### Patch Changes
+
+- Updated dependencies [e320e9b]
+  - lorre-blocks@0.8.0
+
 ## 0.1.0
 
 ### Minor Changes
