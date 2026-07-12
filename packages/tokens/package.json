@@ -1,0 +1,21 @@
+{
+  "name": "@lorre-blocks/tokens",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Lorre Blocks token engine: theme definitions -> OKLCH scales, Tailwind v4 CSS, DTCG JSON. Pure TS, browser-safe.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.10"
+  }
+}
