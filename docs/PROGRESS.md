@@ -5,6 +5,40 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-13 (3) — Batch 13: Magic UI text + media — registry 100
+
+**PR #26 owner-merged (batch 12 live).** Shipped (branch `feat/batch13-magicui-text` →
+PR), 10 items, all `source: "magicui"` MIT — **the `motion` dep is STILL unused**, every
+port is CSS/rAF/IntersectionObserver: **text-reveal** (scroll-scrubbed sticky section,
+rAF-throttled scroll listener sets per-word opacity), **box-reveal** (IO + CSS
+transitions; panel hidden entirely under reduced motion), **sparkles-text** (new
+`--animate-sparkle` token; **index-seeded positions, SSR-safe**), **morphing-text**
+(blur crossfade on stacked spans cycled by a timer — no SVG filter), **aurora-text**
+(**reuses `--animate-gradient`** — multi-stop accent-scale drift + blurred glow copy;
+animated-gradient stays the simple two-stop canonical), **scroll-progress** (rAF scroll
+listener scaling a fixed gradient bar; stays on under reduced motion — it only mirrors
+the user's own scrolling), **scroll-based-velocity** (one rAF loop, content ×4 wrapped
+modulo), **hero-video-dialog** (**composes the Lorre dialog** — registryDependencies
+carries the transitive `dialog` add, verified e2e), **terminal** (Terminal +
+TypingAnimation + AnimatedSpan, delay-scheduled; reduced motion shows the full
+transcript), **file-tree** (Tree/Folder/File, local toggle state, native buttons with
+aria-expanded). 7 motion + 3 ui. **Device mocks (safari/iphone/android) skipped** —
+"if time" per plan; fold into a later batch if wanted. No new npm deps.
+
+**Verified:** registry build ✓ (manifest **100**, all magicui) · typecheck ✓ · tests
+**289/289** (www 201: +10 render, +10 coverage) · www build ✓ (105 pages) · CLI e2e
+vs local registry: `add hero-video-dialog terminal file-tree sparkles-text
+scroll-based-velocity` → dialog resolved transitively, versioned deps, consumer strict
+`tsc` PASS · Playwright: 10 docs pages 200 + zero console errors, dialog opens iframe,
+file-tree toggles, dreamy `--primary` oklch(0.62 0.2 292) + dark ✓, reduced-motion
+terminal renders full transcript instantly.
+
+**Next:** Batch 14 — React Bits text animations (split-text, blur-text, decrypted-text,
+scramble-text, ascii-text, circular-text, curved-loop, variable-proximity, text-trail,
+glitch-text) — first `source: "reactbits"` items.
+
+---
+
 ## 2026-07-13 (2) — Batch 12: Magic UI effects + layout — registry 90
 
 **PRs #24 + #25 owner-merged (batches 10–11 live).** Shipped (branch
