@@ -123,8 +123,39 @@ reaches real buttons (7.2 wiring proven in-browser), scaling→--spacing 0.275re
 share URL restores state after reload, JSON tab parses back to the definition,
 portal dialog themed, dark mode intact, style removed on route change.
 
-**Next:** 7.5 `/icons` page, then 7.6 docs/llms sweep (CLI docs page + llms.txt
-must cover `theme create`/`show`, the lorre.theme.json contract, and the pages).
+**Also shipped same session (branch `feat/phase7-icons`, STACKED on the 7.4
+branch): Phase 7.5 — the `/icons` page + icon-set catalog.**
+- `apps/www/app/icons/page.tsx` + `components/icons/icon-browser.tsx` +
+  `lib/icon-sets.ts`; header gains **Icons**. www adds `@radix-ui/react-icons`,
+  `@phosphor-icons/react`, `@heroicons/react` (lucide already present).
+- Browser UX (Untitled-UI-bar, multi-set): set tabs + license badge, per-set
+  style chips (phosphor thin→duotone, heroicons outline/solid/mini), search
+  (startsWith-ranked), grid capped at 240 with a narrow hint, **hover overlay
+  copies SVG or JSX**, click → popover (import line, JSX, copy SVG, download
+  .svg), **"Use this set in the Studio"** deep-links `/themes?t=` with the
+  icon choice baked into the definition — the pages converge.
+- Adapters (one per set, dynamic import so only the active set is bundled):
+  lucide uses its `icons` map (1746); radix strips the `Icon` suffix (~300);
+  **phosphor exports every icon twice (Acorn + AcornIcon) — keep bare names —
+  and takes style as a `weight` prop baked in at wrap time (3045 exports,
+  first vitest import >20s → per-test 60s timeout)**; heroicons styles are
+  subpaths (24/outline, 24/solid, 20/solid=mini).
+- **SVG copy gotcha: `react-dom/server` is unavailable in app-router client
+  components — render synchronously into a detached `createRoot` under
+  `flushSync` and read `outerHTML` instead.**
+- `/r/icons/index.json` emitted by build-registry from ICON_SETS (agents
+  enumerate sets remotely).
+
+**Verified:** www tests 270/270 (8 new: catalog integrity incl. license guard,
+kebab/pascal round-trip, search ranking, all four adapters) · prod build 133
+pages · **Playwright drive 9/9, zero console errors**: grid renders, search
+narrows, hover-copy puts `<svg` on the real clipboard, phosphor duotone JSX
+snippet exact, duotone renders its layered opacity SVG, Studio deep-link
+carries `{set:"phosphor",style:"duotone"}`, heroicons mini resolves 20/solid.
+
+**Next:** 7.6 docs/llms sweep — /docs/theming rewrite (custom themes + Studio +
+Icons), CLI docs page + llms.txt covering `theme create`/`show`, the
+lorre.theme.json contract, and /r/icons/index.json.
 
 ---
 
