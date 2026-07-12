@@ -13,6 +13,7 @@ export * from "./oklch"
 export * from "./scale"
 export * from "./icons"
 export * from "./type-scale"
+export * from "./schema"
 export { themeToCss } from "./build-css"
 export { themeToDtcg } from "./build-dtcg"
 

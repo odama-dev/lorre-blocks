@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest"
 
 import { themeToCss } from "./build-css"
 import { themeToDtcg } from "./build-dtcg"
-import { formatOklch, oklchToHex } from "./oklch"
+import { formatOklch, hexToOklch, hexToSeed, oklchToHex } from "./oklch"
 import { generateScale, onSolidColor } from "./scale"
+import { themeDefinitionSchema } from "./schema"
+import { computeTypeScale } from "./type-scale"
 import { allResolvedThemes, getResolvedTheme, resolveTheme } from "./index"
 
 describe("oklch", () => {
@@ -171,5 +173,213 @@ describe("dtcg output", () => {
     expect(doc.motion.easing.smooth.$type).toBe("cubicBezier")
     expect(doc.motion.easing.smooth.$value).toHaveLength(4)
     expect(doc.motion.duration.fast.$type).toBe("duration")
+  })
+})
+
+describe("hex conversion (7.1)", () => {
+  it("round-trips in-gamut colors through hex", () => {
+    const original = { l: 0.55, c: 0.15, h: 262 }
+    const back = hexToOklch(oklchToHex(original))
+    expect(back.l).toBeCloseTo(original.l, 2)
+    expect(back.c).toBeCloseTo(original.c, 2)
+    expect(Math.abs(back.h - original.h)).toBeLessThan(1.5)
+  })
+
+  it("derives a usable seed from a brand hex", () => {
+    const seed = hexToSeed("#5B6CFF")
+    expect(seed.hue).toBeGreaterThan(250)
+    expect(seed.hue).toBeLessThan(290)
+    expect(seed.chroma).toBeGreaterThan(0.1)
+    expect(seed.lightness).toBeGreaterThan(0.4)
+    expect(seed.lightness).toBeLessThan(0.75)
+  })
+
+  it("pins hue to 0 for achromatic colors and accepts bare hex", () => {
+    expect(hexToOklch("808080").h).toBe(0)
+    expect(hexToOklch("#ffffff").l).toBeCloseTo(1, 2)
+  })
+
+  it("rejects malformed hex", () => {
+    expect(() => hexToOklch("#12345")).toThrow(/6-digit hex/)
+    expect(() => hexToOklch("blue")).toThrow(/6-digit hex/)
+  })
+})
+
+describe("type scale (7.1)", () => {
+  const steps = computeTypeScale({ base: "1rem", ratio: 1.25 })
+  const byName = Object.fromEntries(steps.map((s) => [s.name, s]))
+
+  it("emits h1-h6, body, small", () => {
+    expect(steps.map((s) => s.name)).toEqual([
+      "h1", "h2", "h3", "h4", "h5", "h6", "body", "small",
+    ])
+  })
+
+  it("headings are fluid clamps bounded by 75% and the full modular size", () => {
+    expect(byName.h1.size).toMatch(/^clamp\(2\.861rem, .+vw, 3\.8147rem\)$/)
+    expect(byName.h6.size).toMatch(/^clamp\(1rem, .+vw, 1\.25rem\)$/) // floored at base
+  })
+
+  it("body and small are static", () => {
+    expect(byName.body.size).toBe("1rem")
+    expect(byName.small.size).toBe("0.8rem")
+  })
+
+  it("fluid: false emits static heading sizes", () => {
+    const fixed = computeTypeScale({ base: "1rem", ratio: 1.25, fluid: false })
+    expect(fixed[0].size).toBe("3.8147rem")
+  })
+
+  it("rejects non-rem base", () => {
+    expect(() => computeTypeScale({ base: "16px", ratio: 1.25 })).toThrow(/rem/)
+  })
+})
+
+describe("secondary scale (7.1)", () => {
+  const withSecondary = resolveTheme({
+    name: "branded",
+    description: "adds a secondary scale",
+    extends: "basic",
+    colors: { secondary: { hue: 40, chroma: 0.18, lightness: 0.6 } },
+  })
+
+  it("emits the scale, tailwind mapping, and auto-remapped semantics", () => {
+    const css = themeToCss(withSecondary)
+    expect(css).toContain("--secondary-9: oklch(0.6 0.18 40);")
+    expect(css).toContain("--color-secondary-9: var(--secondary-9);")
+    expect(css).toContain("--secondary: var(--secondary-9);")
+    // secondary-foreground resolves on-secondary to a literal
+    expect(css).toMatch(/--secondary-foreground: oklch\(0\.985/)
+  })
+
+  it("keeps explicit semantic mappings (dreamy maps secondary to accent surfaces)", () => {
+    const dreamyBranded = resolveTheme({
+      name: "dreamy-branded",
+      description: "secondary scale on a theme with explicit secondary semantics",
+      extends: "dreamy",
+      colors: { secondary: { hue: 40, chroma: 0.18, lightness: 0.6 } },
+    })
+    expect(dreamyBranded.semantics.secondary).toBe("accent-2")
+  })
+
+  it("themes without the scale emit no secondary steps", () => {
+    const css = themeToCss(getResolvedTheme("basic"))
+    expect(css).not.toContain("--secondary-1:")
+    expect(css).toContain("--secondary: var(--neutral-3);")
+  })
+})
+
+describe("spacing + component tokens (7.1)", () => {
+  it("basic emits --spacing and the key-set component vars", () => {
+    const css = themeToCss(getResolvedTheme("basic"))
+    expect(css).toContain("--spacing: 0.25rem;")
+    expect(css).toContain("--spacing: var(--spacing);") // @theme mapping
+    expect(css).toContain("--button-radius: var(--radius-md);")
+    expect(css).toContain("--button-height: calc(var(--spacing) * 9);")
+    expect(css).toContain("--panel-padding: calc(var(--spacing) * 6);")
+    expect(css).toContain("--tabs-trigger-radius: var(--radius-md);")
+  })
+
+  it("scaling rescales the base unit", () => {
+    const dense = resolveTheme({
+      name: "dense",
+      description: "denser layout",
+      extends: "basic",
+      spacing: { scaling: 0.9 },
+    })
+    expect(themeToCss(dense)).toContain("--spacing: 0.225rem;")
+  })
+
+  it("component overrides merge per key, inheriting the rest", () => {
+    const pill = resolveTheme({
+      name: "pill",
+      description: "pill buttons only",
+      extends: "basic",
+      components: { button: { radius: "9999px" } },
+    })
+    const css = themeToCss(pill)
+    expect(css).toContain("--button-radius: 9999px;")
+    expect(css).toContain("--button-height: calc(var(--spacing) * 9);") // inherited
+  })
+
+  it("emits type scale tokens with paired line heights", () => {
+    const css = themeToCss(getResolvedTheme("basic"))
+    expect(css).toContain("--text-h1: clamp(")
+    expect(css).toContain("--text-h1--line-height: 1.1;")
+    expect(css).toContain("--text-body: 1rem;")
+  })
+})
+
+describe("themeDefinitionSchema (7.1)", () => {
+  const valid = {
+    name: "acme",
+    description: "Acme brand theme",
+    extends: "basic",
+    colors: { accent: { hue: 280, chroma: 0.2, lightness: 0.55 } },
+    typography: { typeScale: { base: "1rem", ratio: 1.2 } },
+    spacing: { scaling: 1.05 },
+    components: { button: { radius: "9999px" } },
+    icons: { set: "phosphor", style: "duotone" },
+  }
+
+  it("accepts a full custom definition", () => {
+    expect(themeDefinitionSchema.safeParse(valid).success).toBe(true)
+  })
+
+  it("rejects unknown keys, bad names, and out-of-range scaling", () => {
+    expect(themeDefinitionSchema.safeParse({ ...valid, bogus: 1 }).success).toBe(false)
+    expect(themeDefinitionSchema.safeParse({ ...valid, name: "Not Kebab" }).success).toBe(false)
+    expect(
+      themeDefinitionSchema.safeParse({ ...valid, spacing: { scaling: 3 } }).success
+    ).toBe(false)
+  })
+
+  it("validates icon style against the chosen set", () => {
+    expect(
+      themeDefinitionSchema.safeParse({ ...valid, icons: { set: "phosphor", style: "wavy" } })
+        .success
+    ).toBe(false)
+    expect(
+      themeDefinitionSchema.safeParse({ ...valid, icons: { set: "lucide", style: "solid" } })
+        .success
+    ).toBe(false)
+    expect(
+      themeDefinitionSchema.safeParse({ ...valid, icons: { set: "lucide" } }).success
+    ).toBe(true)
+  })
+
+  it("rejects unknown component token keys", () => {
+    expect(
+      themeDefinitionSchema.safeParse({
+        ...valid,
+        components: { button: { rounding: "4px" } },
+      }).success
+    ).toBe(false)
+  })
+})
+
+describe("dtcg v2 groups (7.1)", () => {
+  const doc = themeToDtcg(getResolvedTheme("basic")) as any
+
+  it("emits type-scale, component, spacing scaling, and icon extension", () => {
+    expect(doc.typography["type-scale"].h1.$value).toMatch(/^clamp\(/)
+    expect(doc.component.button.radius.$value).toBe("{radius.md}")
+    expect(doc.component.button.height.$value).toBe("calc(var(--spacing) * 9)")
+    expect(doc.layout.spacing.scaling.$value).toBe(1)
+    expect(doc.$extensions["io.lorre.icons"]).toEqual({ set: "lucide" })
+  })
+
+  it("emits secondary scale groups only when defined", () => {
+    expect(doc.color.light.secondary).toBeUndefined()
+    const branded = themeToDtcg(
+      resolveTheme({
+        name: "branded",
+        description: "with secondary",
+        extends: "basic",
+        colors: { secondary: { hue: 40, chroma: 0.18, lightness: 0.6 } },
+      })
+    ) as any
+    expect(branded.color.light.secondary["9"].$value).toMatch(/^#/)
+    expect(branded.color.semantic.secondary.$value).toBe("{color.light.secondary.9}")
   })
 })
