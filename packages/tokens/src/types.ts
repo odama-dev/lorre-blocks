@@ -151,8 +151,10 @@ export interface SpacingTokens {
  * Per-component token surface — the "important set" only. Each entry becomes
  * a `--<component>-<key>` CSS variable that the component consumes; defaults
  * reference global tokens so themes only override what they care about.
- * `input` also covers textarea/select; `panel` covers dialog/popover/sheet;
- * `control` covers checkbox/radio.
+ * `input` also covers textarea and the select trigger; `panel` covers the
+ * modal surfaces (dialog, alert-dialog, sheet) — floating surfaces like
+ * popover/dropdown keep their own smaller radius; `control` covers
+ * checkbox/radio (radio stays rounded-full).
  */
 export const KEY_COMPONENTS = {
   button: ["radius", "height", "px"],

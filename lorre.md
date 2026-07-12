@@ -54,12 +54,20 @@ and `checksum` (sha256, generated at build time — never hand-written).
    command (`lorre-blocks theme apply <name>`) and touches zero component files.
 3. **Token format:** CSS (Tailwind v4 `@theme`) for consumption, W3C DTCG JSON for tooling
    and agents. Both are generated from one source: the theme definitions in
-   `packages/registry/src/tokens/themes/`. Never hand-edit `src/styles/theme.css` or anything
+   `packages/tokens/src/themes/`. Never hand-edit `src/styles/theme.css` or anything
    under `apps/www/public/r/` — both are build output.
-4. **Ported code keeps its accent, not its tokens.** When porting from shadcn/Magic UI/Radix,
+4. **Component tokens for the key set only** (Phase 7). `button`, `input` (+textarea/
+   select trigger), `card`, `panel` (dialog/alert-dialog/sheet), `badge`, `tabs`,
+   `control` (checkbox/radio), `tooltip` consume `--<component>-<key>` vars via
+   Tailwind's var syntax — `rounded-(--button-radius)`, `h-(--input-height)` — whose
+   defaults (in the `basic` theme) mirror the old literal utilities exactly. New ui
+   components in this set must consume the vars; everything else uses only global
+   semantic tokens. Floating surfaces (popover/dropdown/select content) deliberately
+   keep their own radius — `panel` means modal surfaces.
+5. **Ported code keeps its accent, not its tokens.** When porting from shadcn/Magic UI/Radix,
    rewire all styling onto Lorre tokens. The port is done when the component renders correctly
    under all three themes.
-5. **Align UI is reference-only.** Its license is not open — never copy its code. Rewrite
+6. **Align UI is reference-only.** Its license is not open — never copy its code. Rewrite
    from scratch, mark `source: "lorre"`.
 
 ## Token architecture (schema v2, Phase 1)
