@@ -89,9 +89,42 @@ no-arg `theme apply`, plan check accepts/rejects inline themes correctly, full
 lorre.theme.json recorded), `--from` agent mode (pill button token override
 emitted, phosphor:duotone recorded).
 
-**Next:** 7.4 `/themes` Theme Studio page + 7.5 `/icons` page (the user-facing
-deliverables), then 7.6 docs/llms sweep (CLI docs page + llms.txt must cover
-`theme create`/`show` and the lorre.theme.json contract).
+**Also shipped same session (branch `feat/phase7-theme-studio`, STACKED on the
+7.3 branch): Phase 7.4 — the `/themes` Theme Studio page.**
+- `apps/www/app/themes/page.tsx` + `components/studio/` (theme-studio /
+  studio-controls / studio-preview / studio-export) + `lib/studio.ts`; header
+  gains a **Themes** link. www now depends on `@lorre-blocks/tokens` directly —
+  the engine runs **in the browser**.
+- Controls: base/extends, accent + neutral + optional secondary (preset
+  swatches + live hex input via `hexToSeed`), fonts (curated Google list,
+  runtime `<link>` scoped to the Studio route — docs pages never load it),
+  type-ratio slider, radius presets (CLI ratios), scaling 90–110%, component
+  knobs (button radius/control size/card padding/panel radius), icon set +
+  style chips (ICON_SETS).
+- **Preview mechanism**: page-wide `<style id="lorre-studio-preview">` with
+  ONLY the `:root`/`.dark` custom-property blocks (never `@theme` — build-time
+  construct) + an explicit `body{font-family}` rule (**@theme inline inlines
+  font stacks into utilities at build time, so runtime font swaps need a real
+  rule — the existing switcher never actually changed fonts**). Page-wide (not
+  [data-studio]-scoped) was a deliberate pivot: Radix's playground re-themes
+  the whole page too, and **portal-rendered overlays (dialog/tooltip) escape
+  any scoped wrapper** — page-wide keeps them themed. Removed on unmount.
+- Export panel: CSS / lorre.theme.json / CLI tabs with copy; type specimen
+  renders via inline `var(--text-h*)` styles (utilities are compiled, vars are
+  live). Share URLs: debounced `?t=<base64url(json)>`, decode validates by
+  resolving.
+- **Parity test locked in**: `studioCss(def) === themeToCss(resolveTheme(def))`
+  and the preview carries every :root declaration of the export.
+
+**Verified:** www tests 262/262 (9 new: parity, share round-trip, render
+smokes) · prod build 132 pages (+/themes) · **Playwright drive 14/14, zero
+console errors**: violet swatch re-themes --primary live, pill component token
+reaches real buttons (7.2 wiring proven in-browser), scaling→--spacing 0.275rem,
+share URL restores state after reload, JSON tab parses back to the definition,
+portal dialog themed, dark mode intact, style removed on route change.
+
+**Next:** 7.5 `/icons` page, then 7.6 docs/llms sweep (CLI docs page + llms.txt
+must cover `theme create`/`show`, the lorre.theme.json contract, and the pages).
 
 ---
 
