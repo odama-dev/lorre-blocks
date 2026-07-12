@@ -1,8 +1,12 @@
 import { formatOklch, oklchToHex } from "./oklch"
 import { generateScale, onSolidColor } from "./scale"
+import { computeTypeScale } from "./type-scale"
 import {
-  SCALE_NAMES,
+  KEY_COMPONENTS,
+  themeScaleNames,
   type ColorMode,
+  type ColorSeed,
+  type KeyComponent,
   type ResolvedTheme,
   type SemanticColorName,
 } from "./types"
@@ -30,8 +34,8 @@ function colorToken(oklch: { l: number; c: number; h: number }): Dtcg {
 
 function scaleGroup(theme: ResolvedTheme, mode: ColorMode): Dtcg {
   const group: Dtcg = {}
-  for (const scale of SCALE_NAMES) {
-    const steps = generateScale(theme.colors[scale], mode)
+  for (const scale of themeScaleNames(theme.colors)) {
+    const steps = generateScale(theme.colors[scale]!, mode)
     const scaleGroup: Dtcg = {}
     steps.forEach((color, i) => {
       scaleGroup[String(i + 1)] = colorToken(color)
@@ -43,12 +47,13 @@ function scaleGroup(theme: ResolvedTheme, mode: ColorMode): Dtcg {
 
 function semanticGroup(theme: ResolvedTheme): Dtcg {
   const group: Dtcg = {}
+  const scales = themeScaleNames(theme.colors) as string[]
   for (const name of Object.keys(theme.semantics) as SemanticColorName[]) {
     const ref = theme.semantics[name]
     const scaleRef = ref.match(/^([a-z]+)-(\d{1,2})$/)
     const onRef = ref.match(/^on-([a-z]+)$/)
 
-    if (scaleRef && (SCALE_NAMES as string[]).includes(scaleRef[1])) {
+    if (scaleRef && scales.includes(scaleRef[1])) {
       group[name] = {
         $type: "color",
         $value: `{color.light.${scaleRef[1]}.${scaleRef[2]}}`,
@@ -56,8 +61,8 @@ function semanticGroup(theme: ResolvedTheme): Dtcg {
           "io.lorre.dark": `{color.dark.${scaleRef[1]}.${scaleRef[2]}}`,
         },
       }
-    } else if (onRef && (SCALE_NAMES as string[]).includes(onRef[1])) {
-      const seed = theme.colors[onRef[1] as (typeof SCALE_NAMES)[number]]
+    } else if (onRef && scales.includes(onRef[1])) {
+      const seed = theme.colors[onRef[1] as keyof typeof theme.colors] as ColorSeed
       group[name] = {
         $type: "color",
         $value: oklchToHex(onSolidColor(seed, "light")),
@@ -81,22 +86,54 @@ function dimensionGroup(values: Record<string, string>): Dtcg {
   return group
 }
 
-/** Layout tokens are shared across themes (Tailwind defaults, made explicit). */
-const LAYOUT_TOKENS: Dtcg = {
-  spacing: {
+function layoutTokens(theme: ResolvedTheme): Dtcg {
+  const scaling = theme.spacing?.scaling ?? 1
+  const spacing: Dtcg = {
     base: {
       $type: "dimension",
-      $value: "0.25rem",
+      $value: scaling === 1 ? "0.25rem" : `${Math.round(0.25 * scaling * 10000) / 10000}rem`,
       $description: "Base spacing unit; Tailwind spacing utilities are multiples of it.",
     },
-  },
-  breakpoint: dimensionGroup({
-    sm: "640px",
-    md: "768px",
-    lg: "1024px",
-    xl: "1280px",
-    "2xl": "1536px",
-  }),
+  }
+  if (theme.spacing) {
+    spacing.scaling = {
+      $type: "number",
+      $value: scaling,
+      $description: "Density factor applied to the base spacing unit (0.9 = 90%).",
+    }
+  }
+  return {
+    spacing,
+    breakpoint: dimensionGroup({
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px",
+    }),
+  }
+}
+
+/** `var(--radius-md)` component defaults become DTCG aliases (`{radius.md}`). */
+function componentGroup(theme: ResolvedTheme): Dtcg | undefined {
+  if (!theme.components) return undefined
+  const group: Dtcg = {}
+  for (const component of Object.keys(KEY_COMPONENTS) as KeyComponent[]) {
+    const tokens = theme.components[component]
+    if (!tokens) continue
+    const componentTokens: Dtcg = {}
+    for (const key of KEY_COMPONENTS[component]) {
+      const value = (tokens as Record<string, string>)[key]
+      if (value === undefined) continue
+      const radiusRef = value.match(/^var\(--radius-([a-z0-9]+)\)$/)
+      componentTokens[key] = {
+        $type: "dimension",
+        $value: radiusRef ? `{radius.${radiusRef[1]}}` : value,
+      }
+    }
+    group[component] = componentTokens
+  }
+  return group
 }
 
 const FONT_SIZE_TOKENS: Dtcg = dimensionGroup({
@@ -123,8 +160,24 @@ export function themeToDtcg(theme: ResolvedTheme): Dtcg {
     }
   }
 
+  const typeScale: Dtcg = {}
+  if (theme.typography.typeScale) {
+    for (const step of computeTypeScale(theme.typography.typeScale)) {
+      typeScale[step.name] = {
+        $type: "dimension",
+        $value: step.size,
+        $extensions: { "io.lorre.line-height": step.lineHeight },
+      }
+    }
+  }
+
+  const components = componentGroup(theme)
+
   return {
     $description: `Lorre Blocks theme "${theme.name}" — ${theme.description}`,
+    ...(theme.icons
+      ? { $extensions: { "io.lorre.icons": theme.icons } }
+      : {}),
     color: {
       light: scaleGroup(theme, "light"),
       dark: scaleGroup(theme, "dark"),
@@ -133,6 +186,7 @@ export function themeToDtcg(theme: ResolvedTheme): Dtcg {
     typography: {
       "font-family": fontFamilies,
       "font-size": FONT_SIZE_TOKENS,
+      ...(Object.keys(typeScale).length > 0 ? { "type-scale": typeScale } : {}),
     },
     radius: dimensionGroup({
       base: theme.radius.base,
@@ -163,6 +217,7 @@ export function themeToDtcg(theme: ResolvedTheme): Dtcg {
         snappy: { $type: "cubicBezier", $value: theme.motion.easeSnappy },
       },
     },
-    layout: LAYOUT_TOKENS,
+    ...(components ? { component: components } : {}),
+    layout: layoutTokens(theme),
   }
 }

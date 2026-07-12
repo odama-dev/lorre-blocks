@@ -12,7 +12,7 @@ import {
   type RegistryIndexItem,
   type RegistryManifest,
 } from "../src/schema"
-import { allResolvedThemes, themeToCss, themeToDtcg } from "../src/tokens"
+import { allResolvedThemes, themeToCss, themeToDtcg } from "@lorre-blocks/tokens"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const REGISTRY_ROOT = path.resolve(__dirname, "..")
