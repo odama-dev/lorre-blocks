@@ -4,6 +4,7 @@ import {
   injectOverridesBlock,
   overridesToCss,
   stripOverridesBlock,
+  themeIsInline,
   validatePlanShape,
   OVERRIDES_END,
   OVERRIDES_START,
@@ -63,6 +64,42 @@ describe("validatePlanShape", () => {
       gaps: [{ need: "x", decision: "fork" }],
     })
     expect(problems).toEqual([expect.stringContaining('"sculpt" or "create"')])
+  })
+
+  it("accepts an inline theme definition (7.3)", () => {
+    expect(
+      validatePlanShape({
+        name: "x",
+        theme: {
+          name: "acme",
+          description: "inline custom theme",
+          extends: "basic",
+          colors: { accent: { hue: 150, chroma: 0.15, lightness: 0.55 } },
+        },
+        add: ["button"],
+      })
+    ).toEqual([])
+  })
+
+  it("validates inline themes against the lorre.theme.json contract", () => {
+    const problems = validatePlanShape({
+      name: "x",
+      theme: {
+        name: "acme",
+        description: "bad inline theme",
+        extends: "nope",
+        spacing: { scaling: 9 },
+      },
+      add: ["button"],
+    })
+    expect(problems.some((p) => p.startsWith("theme.spacing.scaling:"))).toBe(true)
+    // extends is checked after shape passes; scaling problem surfaces first
+  })
+
+  it("detects inline vs reference themes", () => {
+    expect(themeIsInline({ name: "basic" })).toBe(false)
+    expect(themeIsInline({ name: "basic", $comment: "hi" })).toBe(false)
+    expect(themeIsInline({ name: "acme", description: "x" })).toBe(true)
   })
 })
 

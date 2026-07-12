@@ -5,7 +5,9 @@ import {
   buildInfoArgs,
   buildSearchArgs,
   buildThemeApplyArgs,
+  buildThemeCreateArgs,
   buildThemeListArgs,
+  buildThemeShowArgs,
   resolveCliBin,
 } from "./cli"
 
@@ -70,6 +72,43 @@ describe("arg builders", () => {
       "--registry",
       "http://localhost:3200",
     ])
+  })
+
+  it("theme apply without a name re-applies lorre.theme.json", () => {
+    expect(buildThemeApplyArgs(undefined, "/proj")).toEqual([
+      "theme",
+      "apply",
+      "--cwd",
+      "/proj",
+    ])
+  })
+
+  it("theme create routes through --from and honors install=false", () => {
+    expect(buildThemeCreateArgs("/tmp/def.json", "/proj")).toEqual([
+      "theme",
+      "create",
+      "--from",
+      "/tmp/def.json",
+      "--cwd",
+      "/proj",
+    ])
+    expect(buildThemeCreateArgs("/tmp/def.json", "/proj", false)).toEqual([
+      "theme",
+      "create",
+      "--from",
+      "/tmp/def.json",
+      "--cwd",
+      "/proj",
+      "--no-install",
+    ])
+    // install: true is the CLI default — no flag emitted
+    expect(buildThemeCreateArgs("/tmp/def.json", "/proj", true)).not.toContain(
+      "--no-install"
+    )
+  })
+
+  it("theme show targets the project dir", () => {
+    expect(buildThemeShowArgs("/proj")).toEqual(["theme", "show", "--cwd", "/proj"])
   })
 })
 

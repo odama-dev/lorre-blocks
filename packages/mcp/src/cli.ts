@@ -89,8 +89,28 @@ export function buildAddArgs(
   return args
 }
 
-export function buildThemeApplyArgs(theme: string, projectDir: string): string[] {
-  return ["theme", "apply", theme, "--cwd", projectDir]
+export function buildThemeApplyArgs(
+  theme: string | undefined,
+  projectDir: string
+): string[] {
+  // No name = re-apply the project's lorre.theme.json (custom theme loop).
+  return theme
+    ? ["theme", "apply", theme, "--cwd", projectDir]
+    : ["theme", "apply", "--cwd", projectDir]
+}
+
+export function buildThemeCreateArgs(
+  fromFile: string,
+  projectDir: string,
+  install?: boolean
+): string[] {
+  const args = ["theme", "create", "--from", fromFile, "--cwd", projectDir]
+  if (install === false) args.push("--no-install")
+  return args
+}
+
+export function buildThemeShowArgs(projectDir: string): string[] {
+  return ["theme", "show", "--cwd", projectDir]
 }
 
 export const DEFAULT_REGISTRY = "https://lorre-blocks.vercel.app"

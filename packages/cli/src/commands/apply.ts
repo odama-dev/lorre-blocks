@@ -22,7 +22,14 @@ import {
   overridesToCss,
   resolvePlan,
   stripOverridesBlock,
+  themeIsInline,
 } from "../utils/plan"
+import {
+  definitionToCss,
+  THEME_FILE,
+  validateDefinition,
+  writeThemeFile,
+} from "../utils/theme-def"
 import { readPlanFile } from "./plan"
 import { LOCK_FILE, emptyLock, readLock, recordInstall, writeLock } from "../utils/lock"
 import * as out from "../utils/output"
@@ -98,7 +105,20 @@ export async function runApply(options: ApplyOptions): Promise<void> {
   // --- theme + overrides in the global stylesheet
   let cssPath: string | null = null
   try {
-    const themeCss = await fetchThemeCss(registry, plan.theme.name)
+    let themeCss: string
+    if (themeIsInline(plan.theme)) {
+      // Inline custom theme: generate locally (bundled engine) and record the
+      // definition so `theme apply` / `theme show` keep working afterwards.
+      const { def, problems: defProblems } = validateDefinition(plan.theme)
+      if (!def) {
+        throw new Error(`inline theme is invalid: ${defProblems.join("; ")}`)
+      }
+      themeCss = definitionToCss(def)
+      await writeThemeFile(cwd, def)
+      out.success(`Wrote ${THEME_FILE} (inline plan theme)`)
+    } else {
+      themeCss = await fetchThemeCss(registry, plan.theme.name)
+    }
     const resolved = await resolveGlobalCss(cwd)
     const existing = await readIfExists(resolved)
     let next = injectThemeBlock(existing ?? "", themeCss)

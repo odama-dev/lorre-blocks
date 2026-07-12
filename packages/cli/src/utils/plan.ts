@@ -1,5 +1,6 @@
 import type { RegistryItem } from "../registry/schema"
 import { fetchRegistryItem, fetchThemesIndex, resolveTree } from "./registry"
+import { validateDefinition } from "./theme-def"
 
 /**
  * Phase 4.2 plan format (see docs/phase-4.2-design.md). The CLI never writes
@@ -22,7 +23,13 @@ export interface PlanGap {
 export interface Plan {
   $schema?: string
   name: string
-  theme: { name: string }
+  /**
+   * Either a registry theme reference ({"name": "dreamy"}) or, since Phase
+   * 7.3, an inline custom-theme definition (lorre.theme.json format —
+   * detected by any key beyond "name"). Inline themes are generated locally
+   * by `apply` and recorded to lorre.theme.json.
+   */
+  theme: { name: string; [key: string]: unknown }
   add: string[]
   /** Documentation-only in v1: apply does not scaffold pages. */
   pages?: PlanPage[]
@@ -33,6 +40,11 @@ export interface Plan {
 }
 
 const KEBAB_RE = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/
+
+/** Any key beyond "name" (and $-prefixed noise) marks an inline definition. */
+export function themeIsInline(theme: Record<string, unknown>): boolean {
+  return Object.keys(theme).some((k) => k !== "name" && !k.startsWith("$"))
+}
 const SCALE_STEP_RE = /^(neutral|accent|danger|success|warning)-(?:[1-9]|1[0-2])$/
 
 /** Structural validation. Returns problems; an empty array means the shape is valid. */
@@ -50,6 +62,10 @@ export function validatePlanShape(data: unknown): string[] {
   const theme = plan.theme as Record<string, unknown> | undefined
   if (typeof theme !== "object" || theme === null || typeof theme.name !== "string") {
     problems.push('"theme" must be an object with a "name" string, e.g. {"name": "basic"}')
+  } else if (themeIsInline(theme)) {
+    // Inline custom definition: validate against the lorre.theme.json contract.
+    const { problems: themeProblems } = validateDefinition(theme)
+    problems.push(...themeProblems.map((p) => `theme.${p}`))
   }
 
   if (
@@ -143,17 +159,22 @@ export async function resolvePlan(
 ): Promise<{ resolution: PlanResolution | null; problems: string[] }> {
   const problems: string[] = []
 
-  try {
-    const themes = await fetchThemesIndex(registry)
-    if (!themes.some((t) => t.name === plan.theme.name)) {
-      problems.push(
-        `theme "${plan.theme.name}" not found; available: ${themes.map((t) => t.name).join(", ")}`
-      )
-    }
-  } catch {
-    // Registry predates named themes: only "basic" can work.
-    if (plan.theme.name !== "basic") {
-      problems.push(`registry has no themes index; only "basic" is supported`)
+  if (themeIsInline(plan.theme)) {
+    // Inline definitions resolve offline (extends is validated in the shape
+    // pass against the bundled base themes) — nothing to check remotely.
+  } else {
+    try {
+      const themes = await fetchThemesIndex(registry)
+      if (!themes.some((t) => t.name === plan.theme.name)) {
+        problems.push(
+          `theme "${plan.theme.name}" not found; available: ${themes.map((t) => t.name).join(", ")}`
+        )
+      }
+    } catch {
+      // Registry predates named themes: only "basic" can work.
+      if (plan.theme.name !== "basic") {
+        problems.push(`registry has no themes index; only "basic" is supported`)
+      }
     }
   }
 

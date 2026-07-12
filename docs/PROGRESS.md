@@ -56,8 +56,42 @@ everything else global tokens only). Verified: 363/363 tests, typecheck ✓, and
 `:root` carries the defaults; `--spacing: var(--spacing)` @theme self-mapping follows
 the proven radius pattern (unlayered :root beats @layer theme).
 
-**Next:** 7.3 CLI `theme create`/`show` + plan.json inline theme + MCP `create_theme`
-→ 7.4 `/themes` Studio + 7.5 `/icons`.
+**Also shipped same session (branch `feat/phase7-theme-create`, STACKED on the
+7.2 branch — merge #35 first): Phase 7.3 — the agent front door.**
+- **`theme create`** (CLI 0.8.0, changeset queued): `--from lorre.theme.json`
+  (agent mode) and/or flags — `--accent "#7C3AED"` (hex or OKLCH triple
+  `h:c:l`), `--neutral`, `--secondary`, `--radius xl|0.75rem` (preset expands to
+  the full scale with the shipped-theme ratios), `--font-sans Geist`,
+  `--type-base/--type-ratio`, `--scaling 105` (percent or factor), `--icons
+  phosphor:duotone` (+ installs the npm package unless `--no-install`). Flags win
+  over --from. Engine is **bundled** (tsup; 631 KB, tokens+zod as devDeps) so
+  generation is fully offline and byte-identical to the Studio's future output.
+  Writes global CSS + `lorre.theme.json` + components.json theme.
+- **`theme apply` (no arg)** re-applies the local `lorre.theme.json` (edit →
+  re-apply loop); **`theme show [--json]`** prints the resolved design system
+  (used by agents instead of parsing CSS).
+- **plan.json v2**: `theme` accepts an inline definition (any key beyond `name`
+  → validated against the shared zod contract, problems prefixed `theme.`);
+  `apply` generates it locally and records `lorre.theme.json`. Inline themes
+  resolve offline — no registry round-trip.
+- **MCP 0.2.0** (changeset queued): new `create_theme` (definition object →
+  temp file → `theme create --from`), `show_theme`; `apply_theme` name now
+  optional. README updated.
+- validateDefinition flattens zod issues into the agent-iterable problems list
+  and rejects unknown `extends` against the bundled base themes.
+
+**Verified:** 385/385 workspace tests (tokens 42, CLI 80, MCP 10, www 253) ·
+typecheck ✓ · e2e in a fresh fake consumer: flags mode (`--accent "#7C3AED"
+--secondary --radius xl --font-sans Geist --scaling 105` → CSS has secondary
+scale, clamp() type scale, --spacing 0.2625rem, radius-lg 1rem), `theme show`,
+no-arg `theme apply`, plan check accepts/rejects inline themes correctly, full
+`apply` of an inline-theme plan (badge installed, accent 150 in CSS,
+lorre.theme.json recorded), `--from` agent mode (pill button token override
+emitted, phosphor:duotone recorded).
+
+**Next:** 7.4 `/themes` Theme Studio page + 7.5 `/icons` page (the user-facing
+deliverables), then 7.6 docs/llms sweep (CLI docs page + llms.txt must cover
+`theme create`/`show` and the lorre.theme.json contract).
 
 ---
 
