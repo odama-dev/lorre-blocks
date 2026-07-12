@@ -305,6 +305,7 @@
   --animate-slide-in-right: lorre-slide-in-right var(--motion-duration-slow) var(--ease-smooth);
   --animate-caret-blink: lorre-caret-blink 1.25s ease-out infinite;
   --animate-marquee: lorre-marquee 40s linear infinite;
+  --animate-marquee-vertical: lorre-marquee-vertical 40s linear infinite;
   --animate-shimmer: lorre-shimmer 2.5s linear infinite;
   --animate-gradient: lorre-gradient 6s ease-in-out infinite;
   --animate-ripple: lorre-ripple 0.6s ease-out forwards;
@@ -350,6 +351,9 @@
   }
   @keyframes lorre-marquee {
     to { transform: translateX(-50%); }
+  }
+  @keyframes lorre-marquee-vertical {
+    to { transform: translateY(-50%); }
   }
   @keyframes lorre-shimmer {
     from { background-position: 200% 0; }

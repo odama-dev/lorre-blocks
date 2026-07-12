@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils"
 export interface FadeInProps extends React.ComponentProps<"div"> {
   /** Delay before the reveal, in ms — stagger siblings with 0/100/200… */
   delay?: number
+  /** Also sharpen out of a blur (Magic UI's blur-fade look). */
+  blur?: boolean
 }
 
 /**
@@ -15,7 +17,7 @@ export interface FadeInProps extends React.ComponentProps<"div"> {
  * the theme's `--motion-duration-slow` token, so `utilitarian` reveals faster
  * than `dreamy`; `motion-reduce` disables the transition entirely.
  */
-function FadeIn({ delay = 0, className, style, children, ...props }: FadeInProps) {
+function FadeIn({ delay = 0, blur = false, className, style, children, ...props }: FadeInProps) {
   const ref = React.useRef<HTMLDivElement>(null)
   const [visible, setVisible] = React.useState(false)
 
@@ -41,8 +43,13 @@ function FadeIn({ delay = 0, className, style, children, ...props }: FadeInProps
       data-slot="fade-in"
       data-state={visible ? "visible" : "hidden"}
       className={cn(
-        "transition-[opacity,transform] ease-out motion-reduce:transition-none motion-reduce:opacity-100 motion-reduce:transform-none",
-        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
+        "ease-out motion-reduce:transition-none motion-reduce:opacity-100 motion-reduce:transform-none",
+        blur
+          ? "transition-[opacity,transform,filter] motion-reduce:blur-none"
+          : "transition-[opacity,transform]",
+        visible
+          ? "opacity-100 translate-y-0 blur-none"
+          : cn("opacity-0 translate-y-3", blur && "blur-sm"),
         className
       )}
       style={{

@@ -177,6 +177,7 @@ export function themeToCss(theme: ResolvedTheme): string {
   // Fixed duration too: marquee speed is content pacing, not UI motion —
   // consumers override with [animation-duration:_20s] utilities when needed.
   out.push("  --animate-marquee: lorre-marquee 40s linear infinite;")
+  out.push("  --animate-marquee-vertical: lorre-marquee-vertical 40s linear infinite;")
   out.push("  --animate-shimmer: lorre-shimmer 2.5s linear infinite;")
   out.push("  --animate-gradient: lorre-gradient 6s ease-in-out infinite;")
   out.push("  --animate-ripple: lorre-ripple 0.6s ease-out forwards;")
@@ -222,6 +223,9 @@ export function themeToCss(theme: ResolvedTheme): string {
   // -50% because marquee renders its content twice for a seamless loop.
   out.push("  @keyframes lorre-marquee {")
   out.push("    to { transform: translateX(-50%); }")
+  out.push("  }")
+  out.push("  @keyframes lorre-marquee-vertical {")
+  out.push("    to { transform: translateY(-50%); }")
   out.push("  }")
   // Both sweep a 200%-wide background across the element.
   out.push("  @keyframes lorre-shimmer {")

@@ -119,6 +119,31 @@ hyperspeed, globe (cobe). Each WebGL item needs an explicit go/no-go at batch ti
 **Wrap-up.** Dedupe-ledger tag sweep, llms/docs refresh, retro on catalog coverage vs
 upstream, decide maintenance cadence (upstream libraries keep shipping).
 
+## Wrap-up — DONE 2026-07-12
+
+- **Tag sweep shipped:** every absorbed alias is now a tag on its canonical item —
+  count-up += number-ticker · animated-gradient += gradient-text, animated-gradient-text ·
+  typewriter += typing-animation, word-rotate, rotating-text, text-type · shimmer +=
+  animated-shiny-text, shiny-text · fade-in += blur-fade, fade-content · magic-card +=
+  spotlight-card (batch 15). `search` finds all of them.
+- **Prop absorptions shipped:** marquee `vertical` (new `--animate-marquee-vertical`
+  token) and fade-in `blur` — the last two open ledger actions.
+- **llms/docs:** nothing to hand-write — llms.txt, markdown twins, sidebar and search
+  all derive from the registry at prebuild, so the sweep lands with the next deploy.
+- **Coverage retro (vs 2026-07-12 upstream snapshots):** shadcn/ui 100% (batch 9 closed
+  it). Radix Themes: all interactive primitives via the shadcn set + 6 uniques; purely
+  presentational leftovers (Box/Flex/Grid/Section et al.) are Tailwind one-liners — not
+  components, intentionally skipped. Magic UI: everything except the device mocks
+  (deferred "if time", still open as a nice-to-have) and WebGL-only pieces recorded as
+  NO-GO. React Bits: all text/interaction/component/background families covered by port
+  or explicit NO-GO ruling; remaining cursor exotics fall under the splash-cursor
+  ruling. End state **126 items**, five sources, zero `motion`/GSAP/three dependencies,
+  one gated WebGL dep (cobe).
+- **Maintenance cadence (decision):** quarterly upstream sweep — diff the four catalogs
+  against the ledger, port additions that pass the same dedupe/dependency rules as one
+  batch, revisit NO-GOs only if upstream ships a CSS-achievable variant. Next sweep due
+  **2026-10** (repo owner triggers; same PR flow).
+
 Registry lands at roughly **~130–140 items**. Feasibility knowns: motion/blocks
 install paths, versioned-deps enforcement, demo-coverage gate, per-batch visual pass —
 all already in place; nothing in this phase needs new infrastructure beyond the one-line
