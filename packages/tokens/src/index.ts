@@ -2,6 +2,7 @@ import { basic } from "./themes/basic"
 import { dreamy } from "./themes/dreamy"
 import { utilitarian } from "./themes/utilitarian"
 import type {
+  ComponentTokens,
   ResolvedTheme,
   SemanticColors,
   ThemeDefinition,
@@ -10,6 +11,8 @@ import type {
 export * from "./types"
 export * from "./oklch"
 export * from "./scale"
+export * from "./icons"
+export * from "./type-scale"
 export { themeToCss } from "./build-css"
 export { themeToDtcg } from "./build-dtcg"
 
@@ -71,6 +74,14 @@ export function resolveTheme(def: ThemeDefinition): ResolvedTheme {
   const merged: Partial<ResolvedTheme> & { semantics: SemanticColors } = {
     semantics: { ...DEFAULT_SEMANTICS },
   }
+  // When a theme adds a secondary scale without saying what it means, point
+  // the `secondary` semantic at it — but only if no theme in the chain chose
+  // its own mapping (dreamy maps secondary to tinted accent surfaces).
+  const secondaryExplicit = chain.some(
+    (t) =>
+      t.semantics &&
+      ("secondary" in t.semantics || "secondary-foreground" in t.semantics)
+  )
   for (const t of chain) {
     merged.colors = { ...merged.colors, ...t.colors } as ResolvedTheme["colors"]
     merged.semantics = { ...merged.semantics, ...t.semantics }
@@ -81,6 +92,13 @@ export function resolveTheme(def: ThemeDefinition): ResolvedTheme {
     merged.radius = { ...merged.radius, ...t.radius } as ResolvedTheme["radius"]
     merged.shadows = { ...merged.shadows, ...t.shadows } as ResolvedTheme["shadows"]
     merged.motion = { ...merged.motion, ...t.motion } as ResolvedTheme["motion"]
+    if (t.spacing) merged.spacing = { ...merged.spacing, ...t.spacing } as ResolvedTheme["spacing"]
+    if (t.components) merged.components = mergeComponents(merged.components, t.components)
+    if (t.icons) merged.icons = t.icons
+  }
+  if (merged.colors?.secondary && !secondaryExplicit) {
+    merged.semantics.secondary = "secondary-9"
+    merged.semantics["secondary-foreground"] = "on-secondary"
   }
 
   const required = ["colors", "typography", "radius", "shadows", "motion"] as const
@@ -100,7 +118,24 @@ export function resolveTheme(def: ThemeDefinition): ResolvedTheme {
     radius: merged.radius!,
     shadows: merged.shadows!,
     motion: merged.motion!,
+    spacing: merged.spacing,
+    components: merged.components,
+    icons: merged.icons,
   }
+}
+
+/** Two-level merge: per component, then per token key. */
+function mergeComponents(
+  base: ComponentTokens | undefined,
+  override: ComponentTokens
+): ComponentTokens {
+  const out: Record<string, Record<string, string>> = {
+    ...(base as Record<string, Record<string, string>>),
+  }
+  for (const [component, tokens] of Object.entries(override)) {
+    out[component] = { ...out[component], ...tokens }
+  }
+  return out as ComponentTokens
 }
 
 export function getResolvedTheme(name: string): ResolvedTheme {

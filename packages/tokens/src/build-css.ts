@@ -1,8 +1,12 @@
 import { formatOklch } from "./oklch"
 import { generateScale, onSolidColor } from "./scale"
+import { computeTypeScale } from "./type-scale"
 import {
-  SCALE_NAMES,
+  KEY_COMPONENTS,
+  themeScaleNames,
   type ColorMode,
+  type ColorSeed,
+  type KeyComponent,
   type ResolvedTheme,
   type Bezier,
   type SemanticColorName,
@@ -53,19 +57,25 @@ function bezierToCss(b: Bezier): string {
   return `cubic-bezier(${b.join(", ")})`
 }
 
+function spacingValue(scaling: number): string {
+  if (scaling === 1) return "0.25rem"
+  return `${Math.round(0.25 * scaling * 10000) / 10000}rem`
+}
+
 /** Resolve one semantic ref for a mode. Scale refs stay `var()`s; the rest become literals. */
 function resolveSemantic(
   theme: ResolvedTheme,
   ref: string,
   mode: ColorMode
 ): string {
+  const scales = themeScaleNames(theme.colors) as string[]
   const scaleRef = ref.match(/^([a-z]+)-(\d{1,2})$/)
-  if (scaleRef && (SCALE_NAMES as string[]).includes(scaleRef[1])) {
+  if (scaleRef && scales.includes(scaleRef[1])) {
     return `var(--${ref})`
   }
   const onRef = ref.match(/^on-([a-z]+)$/)
-  if (onRef && (SCALE_NAMES as string[]).includes(onRef[1])) {
-    const seed = theme.colors[onRef[1] as (typeof SCALE_NAMES)[number]]
+  if (onRef && scales.includes(onRef[1])) {
+    const seed = theme.colors[onRef[1] as keyof typeof theme.colors] as ColorSeed
     return formatOklch(onSolidColor(seed, mode))
   }
   return ref // literal CSS color
@@ -73,11 +83,28 @@ function resolveSemantic(
 
 function scaleLines(theme: ResolvedTheme, mode: ColorMode): string[] {
   const lines: string[] = []
-  for (const scale of SCALE_NAMES) {
-    const steps = generateScale(theme.colors[scale], mode)
+  for (const scale of themeScaleNames(theme.colors)) {
+    const steps = generateScale(theme.colors[scale]!, mode)
     steps.forEach((color, i) => {
       lines.push(`  --${scale}-${i + 1}: ${formatOklch(color)};`)
     })
+  }
+  return lines
+}
+
+/** `--<component>-<key>` lines in KEY_COMPONENTS order, so output is deterministic. */
+function componentTokenLines(theme: ResolvedTheme): string[] {
+  if (!theme.components) return []
+  const lines: string[] = []
+  for (const component of Object.keys(KEY_COMPONENTS) as KeyComponent[]) {
+    const tokens = theme.components[component]
+    if (!tokens) continue
+    for (const key of KEY_COMPONENTS[component]) {
+      const value = (tokens as Record<string, string>)[key]
+      if (value !== undefined) {
+        lines.push(`  --${component}-${key}: ${value};`)
+      }
+    }
   }
   return lines
 }
@@ -105,6 +132,25 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push(`  --motion-duration-fast: ${theme.motion.durationFast};`)
   out.push(`  --motion-duration-normal: ${theme.motion.durationNormal};`)
   out.push(`  --motion-duration-slow: ${theme.motion.durationSlow};`)
+  if (theme.spacing) {
+    // Tailwind v4 derives every spacing utility from --spacing, so this one
+    // token rescales the whole layout (Radix-Themes-style density).
+    out.push(`  --spacing: ${spacingValue(theme.spacing.scaling)};`)
+  }
+  const typeSteps = theme.typography.typeScale
+    ? computeTypeScale(theme.typography.typeScale)
+    : []
+  if (typeSteps.length > 0) {
+    out.push("")
+    for (const step of typeSteps) {
+      out.push(`  --text-${step.name}: ${step.size};`)
+    }
+  }
+  const componentLines = componentTokenLines(theme)
+  if (componentLines.length > 0) {
+    out.push("")
+    out.push(...componentLines)
+  }
   out.push("}", "")
 
   // ---- .dark ----
@@ -123,7 +169,7 @@ export function themeToCss(theme: ResolvedTheme): string {
 
   // ---- @theme inline: Tailwind utility mapping ----
   out.push("@theme inline {")
-  for (const scale of SCALE_NAMES) {
+  for (const scale of themeScaleNames(theme.colors)) {
     for (let i = 1; i <= 12; i++) {
       out.push(`  --color-${scale}-${i}: var(--${scale}-${i});`)
     }
@@ -138,6 +184,16 @@ export function themeToCss(theme: ResolvedTheme): string {
   }
   for (const key of SHADOW_KEYS) {
     out.push(`  --shadow-${key}: var(--shadow-${key});`)
+  }
+  if (theme.spacing) {
+    out.push(`  --spacing: var(--spacing);`)
+  }
+  if (typeSteps.length > 0) {
+    out.push("")
+    for (const step of typeSteps) {
+      out.push(`  --text-${step.name}: var(--text-${step.name});`)
+      out.push(`  --text-${step.name}--line-height: ${step.lineHeight};`)
+    }
   }
   out.push("")
   out.push(`  --font-sans: ${theme.typography.fontSans.join(", ")};`)

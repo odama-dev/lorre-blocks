@@ -18,6 +18,7 @@ export const basic: ThemeDefinition = {
   typography: {
     fontSans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
     fontMono: ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
+    typeScale: { base: "1rem", ratio: 1.25 },
   },
   radius: {
     base: "0.5rem",
@@ -41,4 +42,46 @@ export const basic: ThemeDefinition = {
     easeSmooth: [0.32, 0.72, 0, 1],
     easeSnappy: [0.2, 0, 0, 1],
   },
+  spacing: { scaling: 1 },
+  // Defaults mirror the ui source exactly (button: rounded-md h-9 px-4, …) so
+  // wiring the components onto these vars (Phase 7.2) is pixel-identical.
+  components: {
+    button: {
+      radius: "var(--radius-md)",
+      height: "calc(var(--spacing) * 9)",
+      px: "calc(var(--spacing) * 4)",
+    },
+    input: {
+      radius: "var(--radius-md)",
+      height: "calc(var(--spacing) * 9)",
+      px: "calc(var(--spacing) * 3)",
+    },
+    card: {
+      radius: "var(--radius-xl)",
+      padding: "calc(var(--spacing) * 6)",
+    },
+    panel: {
+      radius: "var(--radius-lg)",
+      padding: "calc(var(--spacing) * 6)",
+    },
+    badge: {
+      radius: "var(--radius-md)",
+      px: "calc(var(--spacing) * 2.5)",
+      py: "calc(var(--spacing) * 0.5)",
+    },
+    tabs: {
+      radius: "var(--radius-lg)",
+      "trigger-radius": "var(--radius-md)",
+    },
+    control: {
+      radius: "var(--radius-sm)",
+      size: "calc(var(--spacing) * 4)",
+    },
+    tooltip: {
+      radius: "var(--radius-md)",
+      px: "calc(var(--spacing) * 3)",
+      py: "calc(var(--spacing) * 1.5)",
+    },
+  },
+  icons: { set: "lucide" },
 }
