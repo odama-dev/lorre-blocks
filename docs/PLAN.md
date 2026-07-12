@@ -96,6 +96,11 @@ sparkles-text (new `--animate-sparkle` token), morphing-text, aurora-text (reuse
 `--animate-gradient`), scroll-progress, scroll-based-velocity, hero-video-dialog
 (composes dialog), terminal, file-tree (registry **100**). `motion` dep still unused;
 device mocks deferred.
+**Batch 14 done 2026-07-13** — React Bits text animations, first `source: "reactbits"`
+items: split-text, blur-text, decrypted-text, scramble-text, circular-text,
+curved-loop, variable-proximity, glitch-text (new `--animate-glitch` token; registry
+**108**). All CSS/rAF reimplementations — `motion` dep still unused. ascii-text +
+text-trail deferred to batch 16 (three.js/WebGL upstream, gated).
 
 ## Phase 3 — Docs app (`apps/www`)
 

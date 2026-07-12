@@ -114,6 +114,16 @@ import {
   TextRevealDemo,
 } from "@www/components/demos/batch13"
 import {
+  BlurTextDemo,
+  CircularTextDemo,
+  CurvedLoopDemo,
+  DecryptedTextDemo,
+  GlitchTextDemo,
+  ScrambleTextDemo,
+  SplitTextDemo,
+  VariableProximityDemo,
+} from "@www/components/demos/batch14"
+import {
   AnimatedGradientDemo,
   CountUpDemo,
   FadeInDemo,
@@ -231,4 +241,12 @@ export const motionDemos: Record<string, React.ComponentType> = {
   "aurora-text": AuroraTextDemo,
   "scroll-progress": ScrollProgressDemo,
   "scroll-based-velocity": ScrollBasedVelocityDemo,
+  "split-text": SplitTextDemo,
+  "blur-text": BlurTextDemo,
+  "decrypted-text": DecryptedTextDemo,
+  "scramble-text": ScrambleTextDemo,
+  "circular-text": CircularTextDemo,
+  "curved-loop": CurvedLoopDemo,
+  "variable-proximity": VariableProximityDemo,
+  "glitch-text": GlitchTextDemo,
 }

@@ -311,6 +311,7 @@
   --animate-border-beam: lorre-border-beam 6s linear infinite;
   --animate-meteor: lorre-meteor 5s linear infinite;
   --animate-sparkle: lorre-sparkle 1.4s ease-in-out infinite;
+  --animate-glitch: lorre-glitch 2.8s steps(1, end) infinite;
 
   @keyframes lorre-fade-in {
     from { opacity: 0; }
@@ -368,6 +369,17 @@
   @keyframes lorre-sparkle {
     0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
     50% { transform: scale(1) rotate(120deg); opacity: 1; }
+  }
+  @keyframes lorre-glitch {
+    0%, 100% { clip-path: inset(0 0 92% 0); transform: translate(-2px, -1px); }
+    12% { clip-path: inset(44% 0 48% 0); transform: translate(2px, 1px); }
+    24% { clip-path: inset(78% 0 6% 0); transform: translate(-2px, 0); }
+    36% { clip-path: inset(12% 0 74% 0); transform: translate(2px, -1px); }
+    48% { clip-path: inset(58% 0 32% 0); transform: translate(-1px, 1px); }
+    60% { clip-path: inset(30% 0 62% 0); transform: translate(2px, 0); }
+    72% { clip-path: inset(68% 0 18% 0); transform: translate(-2px, 1px); }
+    84% { clip-path: inset(6% 0 86% 0); transform: translate(1px, -1px); }
+    92% { clip-path: inset(50% 0 42% 0); transform: translate(-1px, 0); }
   }
 }
 

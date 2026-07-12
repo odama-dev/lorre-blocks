@@ -5,6 +5,41 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-13 (4) — Batch 14: React Bits text animations — registry 108
+
+**PR #27 owner-merged (batch 13 live).** Shipped (branch `feat/batch14-reactbits-text`
+→ PR), 8 items — the **first `source: "reactbits"`** entries (schema slot from PR #22
+finally used; manifest sources now lists all five). All are CSS/rAF/IO reimplementations
+of GSAP/framer-motion upstreams per the locked dependency policy — **`motion` dep still
+unused**: **split-text** + **blur-text** (IO + staggered CSS transitions; per-unit
+spans aria-hidden, container carries aria-label), **decrypted-text** (JS timer locks
+chars left→right on first view; SSR renders the finished string), **scramble-text**
+(pointer-radius churn, 1ch-locked cells so layout never shifts), **circular-text**
+(pure CSS ring on Tailwind's built-in spin — server-renderable), **curved-loop** (SVG
+textPath marquee, one rAF slides startOffset; **jsdom guard: getComputedTextLength
+missing → bail**, caught by the render smoke suite), **variable-proximity** (per-char
+font-variation-settings 'wght'; needs a variable font, degrades to static),
+**glitch-text** (new `--animate-glitch` token — stepped clip-path slices; chromatic
+edges from danger/accent scales so it re-themes). **ascii-text + text-trail DEFERRED
+to batch 16** — both are three.js/WebGL upstream, gated per the Phase 6 dependency
+policy (each needs an explicit go/no-go at batch time).
+
+**Verified:** registry build ✓ (manifest **108**, sources +reactbits) · typecheck ✓ ·
+tests **305/305** (www 217: +8 render, +8 coverage) · www build ✓ (113 pages) · CLI
+e2e vs local registry: fresh consumer `add split-text glitch-text scramble-text
+curved-loop` → strict `tsc` PASS, `lorre-glitch` keyframes injected into consumer
+globals.css by init · Playwright: 8 pages 200 + zero console errors, scramble churns
+under a pointer sweep, variable-proximity sets 'wght' 846 mid-hover, curved-loop
+startOffset drifts, decrypted settles to the exact string, dreamy `--primary`
+oklch(0.62 0.2 292) + dark ✓, reduced-motion renders plain text at opacity 1.
+
+**Next:** Batch 15 — React Bits interactions + components (click-spark, magnet,
+star-border, spotlight-card, tilted-card, pixel-trail, cursor effects ×2–3, stack,
+stepper, infinite-scroll, masonry), then gated backgrounds (batch 16, incl. the
+deferred ascii-text/text-trail go/no-go).
+
+---
+
 ## 2026-07-13 (3) — Batch 13: Magic UI text + media — registry 100
 
 **PR #26 owner-merged (batch 12 live).** Shipped (branch `feat/batch13-magicui-text` →
