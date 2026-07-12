@@ -109,6 +109,9 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
     devDependencies:
+      '@lorre-blocks/tokens':
+        specifier: workspace:*
+        version: link:../tokens
       '@types/diff':
         specifier: ^7.0.0
         version: 7.0.2
@@ -124,6 +127,9 @@ importers:
       vitest:
         specifier: ^4.1.10
         version: 4.1.10(@types/node@22.20.0)(jsdom@29.1.1)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.27.7)(jiti@2.7.0)(tsx@4.23.0))
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
 
   packages/mcp:
     dependencies:

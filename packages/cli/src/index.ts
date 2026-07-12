@@ -7,7 +7,12 @@ import { runDiff } from "./commands/diff"
 import { runUpdate } from "./commands/update"
 import { runSearch } from "./commands/search"
 import { runInfo } from "./commands/info"
-import { runThemeApply, runThemeList } from "./commands/theme"
+import {
+  runThemeApply,
+  runThemeCreate,
+  runThemeList,
+  runThemeShow,
+} from "./commands/theme"
 import { runPlanCheck } from "./commands/plan"
 import { runApply } from "./commands/apply"
 import { setJsonMode } from "./utils/output"
@@ -17,7 +22,7 @@ const program = new Command()
 program
   .name("lorre-blocks")
   .description("Add lorre-blocks components to your project by copying their source in.")
-  .version("0.7.0")
+  .version("0.8.0")
 
 /**
  * `--json` is declared per-command (commander has no true global flag) and read
@@ -64,12 +69,64 @@ theme
 
 theme
   .command("apply")
-  .description("Apply a theme: replaces the lorre-blocks theme block in your global CSS.")
-  .argument("<name>", "theme name, e.g. dreamy")
+  .description(
+    "Apply a theme: replaces the lorre-blocks theme block in your global CSS. Omit the name to re-apply the local lorre.theme.json."
+  )
+  .argument("[name]", "registry theme name, e.g. dreamy; omit to use lorre.theme.json")
   .option("-c, --cwd <path>", "working directory", process.cwd())
   .addOption(jsonOption())
-  .action(async (name: string, opts) => {
+  .action(async (name: string | undefined, opts) => {
     await runThemeApply({ cwd: opts.cwd, name })
+  })
+
+theme
+  .command("create")
+  .description(
+    "Create a custom theme from a lorre.theme.json definition and/or flags, generate its CSS locally, and apply it."
+  )
+  .option("-c, --cwd <path>", "working directory", process.cwd())
+  .option("--from <file>", "theme definition JSON (lorre.theme.json format)")
+  .option("-n, --name <name>", "theme name (kebab-case)")
+  .option("--extends <name>", "base theme to extend (basic, dreamy, utilitarian)")
+  .option("--accent <color>", 'brand color: hex "#5B6CFF" or OKLCH "262:0.21:0.55"')
+  .option("--neutral <color>", "gray scale seed (hex or OKLCH triple)")
+  .option("--secondary <color>", "optional second brand scale (hex or OKLCH triple)")
+  .option("--radius <value>", "none|sm|md|lg|xl or a rem value like 0.75rem")
+  .option("--font-sans <family>", 'sans font family, e.g. "Geist"')
+  .option("--font-mono <family>", "mono font family")
+  .option("--type-base <rem>", 'type scale body size, e.g. "1rem"')
+  .option("--type-ratio <n>", "type scale ratio, e.g. 1.25", parseFloat)
+  .option("--scaling <n>", "layout density: 90..110 (percent) or 0.9..1.1", parseFloat)
+  .option("--icons <set[:style]>", "icon set, e.g. lucide or phosphor:duotone")
+  .option("--no-install", "skip installing the icon-set npm package")
+  .addOption(jsonOption())
+  .action(async (opts) => {
+    await runThemeCreate({
+      cwd: opts.cwd,
+      from: opts.from,
+      name: opts.name,
+      extends: opts.extends,
+      accent: opts.accent,
+      neutral: opts.neutral,
+      secondary: opts.secondary,
+      radius: opts.radius,
+      fontSans: opts.fontSans,
+      fontMono: opts.fontMono,
+      typeBase: opts.typeBase,
+      typeRatio: opts.typeRatio,
+      scaling: opts.scaling,
+      icons: opts.icons,
+      install: opts.install,
+    })
+  })
+
+theme
+  .command("show")
+  .description("Print the active theme's resolved tokens (scales, semantics, type scale…).")
+  .option("-c, --cwd <path>", "working directory", process.cwd())
+  .addOption(jsonOption())
+  .action(async (opts) => {
+    await runThemeShow({ cwd: opts.cwd })
   })
 
 program

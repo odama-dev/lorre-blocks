@@ -42,10 +42,12 @@
     "picocolors": "^1.1.1"
   },
   "devDependencies": {
+    "@lorre-blocks/tokens": "workspace:*",
     "@types/diff": "^7.0.0",
     "@types/node": "^22.10.5",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "zod": "^4.4.3"
   }
 }
