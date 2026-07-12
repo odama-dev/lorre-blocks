@@ -153,9 +153,34 @@ narrows, hover-copy puts `<svg` on the real clipboard, phosphor duotone JSX
 snippet exact, duotone renders its layered opacity SVG, Studio deep-link
 carries `{set:"phosphor",style:"duotone"}`, heroicons mini resolves 20/solid.
 
-**Next:** 7.6 docs/llms sweep — /docs/theming rewrite (custom themes + Studio +
-Icons), CLI docs page + llms.txt covering `theme create`/`show`, the
-lorre.theme.json contract, and /r/icons/index.json.
+**Also shipped same session (branch `feat/phase7-docs`, STACKED on the 7.5
+branch): Phase 7.6 — docs/llms sweep. PHASE 7 CODE-COMPLETE.**
+- `/docs/theming`: custom-themes section — annotated `lorre.theme.json` example,
+  group-by-group explanation, "two front doors, one engine" with the create/
+  apply/show commands, links to /themes and /icons.
+- `/docs/cli`: theme create/show + no-arg apply rows, inline-plan-theme note,
+  agent snippets, `/r/icons/index.json` endpoint.
+- `build-llms.ts`: THEMING_MD now carries the **full annotated contract**
+  (seeds, semantics, typeScale, spacing, all 8 component-token groups, icon
+  sets + styles, flags incl. hex|h:c:l and `--icons set:style`, inline plan
+  themes) — an agent reading llms.txt can author a valid definition without
+  the TS types; CLI_MD updated; INDEX_MD gains the custom-design-system
+  section + icons endpoint; llms.txt links /themes + /icons.
+- **Docs-contract test**: the theming page's example is exported and a www test
+  parses it, validates it against the real `themeDefinitionSchema`, and
+  generates CSS — if the schema evolves, the test fails before the docs lie.
+- `PLAN.md` Phase 7 section (sub-phases + PR trail); `lorre.md` rule #2 now
+  names `lorre.theme.json` as the contract + the byte-identical parity rule.
+
+**Verified:** www 272/272 (2 new docs-contract tests) · workspace **404/404** ·
+www prod build clean (exporting THEME_JSON_EXAMPLE from a page file is fine).
+
+**Phase 7 stack awaiting owner merges: #35 (7.2) → #36 (7.3) → #37 (7.4) →
+#38 (7.5) → #39 (7.6); retarget each to master as predecessors land. Merging
+#36 publishes CLI 0.8.0 + MCP 0.2.0 via the Version Packages PR; merging the
+www PRs deploys /themes + /icons.** Open follow-ups after the stack: none
+planned — next session picks device mocks, the 2026-10 upstream sweep, or new
+direction.
 
 ---
 

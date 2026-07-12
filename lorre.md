@@ -48,10 +48,14 @@ and `checksum` (sha256, generated at build time — never hand-written).
    `border-border`, `ring-ring`…), which resolve to 12-step OKLCH scales. This is what makes
    themes swappable. Raw scale steps (`bg-accent-9`, `text-neutral-11`) are available when a
    semantic alias genuinely doesn't fit.
-2. **Theme = token values, never component code.** A theme (`basic`, `dreamy`, `utilitarian`)
-   is a set of token value overrides. If you need to fork a component to make a theme work,
-   the component's tokens are wrong — fix the tokens. Switching a project's theme is one
-   command (`lorre-blocks theme apply <name>`) and touches zero component files.
+2. **Theme = token values, never component code.** A theme (`basic`, `dreamy`, `utilitarian`,
+   or a custom one) is a set of token value overrides. If you need to fork a component to
+   make a theme work, the component's tokens are wrong — fix the tokens. Switching a
+   project's theme is one command (`lorre-blocks theme apply <name>`) and touches zero
+   component files. **`lorre.theme.json` is the custom-theme contract** (Phase 7): the
+   Theme Studio edits it, agents write it, the CLI consumes it, plan.json embeds it —
+   one zod schema (`@lorre-blocks/tokens`) validates it everywhere, and the Studio and
+   the CLI must always emit byte-identical CSS for the same definition.
 3. **Token format:** CSS (Tailwind v4 `@theme`) for consumption, W3C DTCG JSON for tooling
    and agents. Both are generated from one source: the theme definitions in
    `packages/tokens/src/themes/`. Never hand-edit `src/styles/theme.css` or anything
