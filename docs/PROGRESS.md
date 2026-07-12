@@ -5,6 +5,47 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-12 — Phase 7 plan drafted + 7.1 tokens v2 shipped
+
+**PR #31 owner-merged (Phase 6 fully complete).** New direction from Ilyas: make the
+theme system generative à la the Radix Themes playground — humans tailor a design
+system on a www **Theme Studio** page, agents write the same `lorre.theme.json` and
+run one CLI command; **plus a dedicated `/icons` page** (multi-set browser, per-style
+variants, hover-copy SVG/JSX — Untitled UI is the UX bar but its icons are
+proprietary, so the catalog is lucide/radix/phosphor/heroicons). Plan doc:
+`docs/phase-7-theme-studio.md` → **PR #32 (plan, merge = lock)**. Parity bar for the
+whole phase: Studio-exported CSS ≡ CLI-injected CSS for the same theme JSON. Next
+concrete deliverable per Ilyas: the two www pages (7.4 + 7.5), after the engine work.
+
+**Shipped (branch `feat/phase7-tokens-v2` → PR #33): Phase 7.1 — token engine v2.**
+- **Extracted the engine** to `packages/tokens` (`@lorre-blocks/tokens`, private,
+  pure TS, zero node deps → browser-runnable for the Studio; CLI will bundle it via
+  tsup in 7.3). `@lorre-blocks/registry/tokens` re-exports for back-compat;
+  registry's `test` script moved with the suite.
+- **Schema v2** (all optional → old themes unaffected): optional `secondary`
+  ColorSeed scale (semantics auto-remap to `secondary-9`/`on-secondary` unless the
+  chain mapped it explicitly — dreamy keeps its tinted surfaces);
+  `typography.typeScale {base, ratio, fluid}` → fluid `--text-h1…h6/body/small`
+  clamp() tokens + Tailwind `--text-*` keys (utilities `text-h1`… with paired line
+  heights); `spacing.scaling` → `--spacing` (whole-layout density, Radix-style);
+  per-component tokens for the locked key set (button/input/card/panel/badge/tabs/
+  control/tooltip) emitted as `--<comp>-<key>` vars whose defaults mirror the ui
+  source exactly (7.2 wires components onto them pixel-identically); `icons
+  {set, style}` + `ICON_SETS` catalog (single source for /icons page, CLI flag,
+  `/r/icons/index.json`).
+- **`themeDefinitionSchema`** (zod, strict) — the shared `lorre.theme.json`
+  validator for CLI/plan.json/Studio; per-set icon-style refinement.
+- **`hexToSeed`/`hexToOklch`** — brand hex → OKLCH seed (inverse Ottosson).
+
+**Verified:** tokens tests 42/42 · workspace 363/363 (www 253 render smokes prove
+pixel-identity) · typecheck all ✓ · registry build deterministic, theme.css gains
+only the new token groups.
+
+**Next:** 7.2 wire component tokens into ui source → 7.3 CLI `theme create`/`show` +
+plan.json inline theme + MCP `create_theme` → 7.4 `/themes` Studio + 7.5 `/icons`.
+
+---
+
 ## 2026-07-13 (7) — Phase 6 wrap-up — PHASE 6 COMPLETE
 
 **PR #30 owner-merged (batch 16 live).** Shipped (branch `feat/phase6-wrapup` →
