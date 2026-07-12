@@ -186,6 +186,26 @@ to one canonical basic item** (no per-source twins; absorbed names become search
 ledger and batch breakdown (batches 9–16, → ~130–140 items) in
 [`phase-6-expansion.md`](./phase-6-expansion.md). Align UI stays rewrite-only.
 
+## Phase 7 — Theme Studio: custom themes for humans & agents (locked 2026-07-12)
+
+Make the theme system **generative**, Radix-playground-style: humans tailor a design
+system on the www **`/themes` Theme Studio** page, agents write the same
+**`lorre.theme.json`** and run `lorre-blocks theme create` — one pure-TS engine
+(`packages/tokens`) consumed by the registry build, the CLI (bundled) and the browser,
+so **Studio CSS ≡ CLI CSS is the phase-wide acceptance bar**. Includes a dedicated
+**`/icons`** page (multi-set browser: lucide/radix/phosphor/heroicons; Untitled UI is
+UX reference only — its icons are proprietary). Full plan in
+[`phase-7-theme-studio.md`](./phase-7-theme-studio.md).
+
+- 7.1 tokens package + schema v2 (secondary scale, fluid typeScale, spacing scaling,
+  component tokens, ICON_SETS, zod contract, hexToSeed) ✅ (2026-07-12, PR #33)
+- 7.2 component tokens wired into the ui key set, pixel-identical ✅ (PR #34/#35)
+- 7.3 CLI `theme create`/`show`, no-arg `theme apply`, inline plan themes, MCP
+  `create_theme`/`show_theme` → CLI 0.8.0 + MCP 0.2.0 ✅ (PR #36)
+- 7.4 `/themes` Theme Studio page ✅ (PR #37)
+- 7.5 `/icons` page + `/r/icons/index.json` catalog ✅ (PR #38)
+- 7.6 docs/llms sweep (this section, /docs/theming, CLI docs, llms.txt contract) ✅
+
 ## Upgrade backlog (evaluated 2026-07-11)
 
 Findings from a dependency/pattern audit. Ordered by priority.

@@ -95,6 +95,15 @@ Every command supports \`--json\` for machine-readable output:
 - \`${SITE}/r/<name>.json\` — one item incl. source files and checksum
 - \`${SITE}/r/themes/index.json\` and \`${SITE}/r/themes/<name>.json\` — themes as Tailwind v4 CSS
 - \`${SITE}/r/tokens/<name>.json\` — themes as W3C DTCG design tokens
+- \`${SITE}/r/icons/index.json\` — supported icon sets (npm package, style variants, license)
+
+## Custom design systems
+
+Write a \`lorre.theme.json\` (contract in the Theming doc) and run
+\`npx lorre-blocks theme create --from lorre.theme.json\` — colors, type scale,
+radius, spacing density, per-component tokens and the icon set, generated locally
+and injected into the global CSS. Humans get the same via the Theme Studio
+(\`${SITE}/themes\`); icons browse at \`${SITE}/icons\`.
 `
 
 const THEMING_MD = `# Theming
@@ -123,6 +132,69 @@ to a root element — every semantic variable is re-declared under \`.dark\`.
 
 Theme JSON: \`${SITE}/r/themes/<name>.json\` (Tailwind v4 CSS) and
 \`${SITE}/r/tokens/<name>.json\` (W3C DTCG).
+
+## Custom themes (lorre.theme.json)
+
+A custom theme is a JSON definition the CLI turns into injected CSS — same engine as
+the Theme Studio (${SITE}/themes), byte-identical output. Write \`lorre.theme.json\`
+in the project root and run \`npx lorre-blocks theme create --from lorre.theme.json\`.
+Later edits: re-run \`npx lorre-blocks theme apply\` (no argument). Inspect the
+resolved system anytime: \`npx lorre-blocks theme show --json\`.
+
+The contract (every group optional; unknown keys are rejected; validation problems
+come back as one flat list under \`--json\`):
+
+\`\`\`jsonc
+{
+  "name": "acme",                    // required, kebab-case
+  "description": "Acme brand theme", // required
+  "extends": "basic",                // basic | dreamy | utilitarian (default basic)
+  "colors": {
+    // seeds: hue 0-360, chroma 0-0.5, lightness 0-1 (OKLCH); each grows into a
+    // 12-step scale, light + dark. Scales: neutral, accent, danger, success,
+    // warning, secondary (optional 6th brand scale — semantics remap to it).
+    // Optional per-seed: "onSolid": "light"|"dark", "dark": {partial overrides}.
+    "accent":    { "hue": 293, "chroma": 0.25, "lightness": 0.54 },
+    "secondary": { "hue": 70,  "chroma": 0.16, "lightness": 0.77 }
+  },
+  "semantics": { "primary": "accent-9" },   // semantic -> scale-step overrides
+  "typography": {
+    "fontSans": ["Geist", "ui-sans-serif", "system-ui", "sans-serif"],
+    "fontMono": ["JetBrains Mono", "ui-monospace", "monospace"],
+    "typeScale": { "base": "1rem", "ratio": 1.2, "fluid": true }
+    // -> fluid clamp() tokens --text-h1..h6/body/small (text-h1... utilities)
+  },
+  "radius": { "base": "1rem", "sm": "0.5rem", "md": "0.75rem",
+              "lg": "1rem", "xl": "1.5rem", "2xl": "2rem" },
+  "shadows": { "md": "0 4px 6px -1px oklch(0 0 0 / 0.1)" },
+  "motion": { "durationFast": "120ms", "easeSmooth": [0.32, 0.72, 0, 1] },
+  "spacing": { "scaling": 1.05 },    // 0.75-1.5; rescales every spacing utility
+  "components": {
+    // key set only; values are CSS lengths or var() refs
+    "button":  { "radius": "9999px", "height": "calc(var(--spacing) * 9)", "px": "..." },
+    "input":   { "radius": "...", "height": "...", "px": "..." },
+    "card":    { "radius": "...", "padding": "..." },
+    "panel":   { "radius": "...", "padding": "..." },   // dialog/alert-dialog/sheet
+    "badge":   { "radius": "...", "px": "...", "py": "..." },
+    "tabs":    { "radius": "...", "trigger-radius": "..." },
+    "control": { "radius": "...", "size": "..." },      // checkbox/radio
+    "tooltip": { "radius": "...", "px": "...", "py": "..." }
+  },
+  "icons": { "set": "phosphor", "style": "duotone" }
+  // sets: lucide (no styles) | radix (no styles) |
+  //       phosphor (thin/light/regular/bold/fill/duotone) |
+  //       heroicons (outline/solid/mini) — catalog: ${SITE}/r/icons/index.json
+}
+\`\`\`
+
+Flags compose with (and override) \`--from\`:
+\`theme create --accent "#7C3AED" --neutral "#71717A" --secondary "#F59E0B"
+--radius xl --font-sans Geist --type-base 1rem --type-ratio 1.2 --scaling 105
+--icons phosphor:duotone\` (colors accept hex or an OKLCH triple \`h:c:l\`;
+\`--icons\` also installs the set's npm package).
+
+plan.json accepts the same definition inline as its \`theme\` value (any key beyond
+\`name\` marks it inline); \`apply\` generates it locally and records lorre.theme.json.
 `
 
 const CLI_MD = `# CLI reference
@@ -138,8 +210,10 @@ Package: \`lorre-blocks\` on npm. Requires Node >=22.12.
 - \`info <name>\` — metadata, install order, resolved target paths
 - \`diff [name...]\` — compare installed source against the registry; with lorre.lock present each modified file carries a \`cause\`: \`local\` (you edited), \`upstream\` (registry moved), \`both\` (diverged), \`unknown\` (pre-lock install). No-arg diff covers every locked item (ui, blocks, motion, lib).
 - \`update [name...] [--force]\` — pull registry updates; rewrites only files whose content still hashes to what an install wrote (lorre.lock). Local edits are kept when the registry is unchanged; diverged/untracked/deleted files are skipped unless \`--force\`. New registry dependencies are added automatically.
-- \`theme list\` / \`theme apply <name>\` — manage the active theme
-- \`plan check <plan.json>\` — validate a plan and resolve it against the registry (read-only; all problems in one pass)
+- \`theme list\` / \`theme apply [name]\` — manage the active theme; without a name, apply regenerates from lorre.theme.json
+- \`theme create [--from lorre.theme.json] [flags]\` — create a custom theme (see Theming doc for the JSON contract and flags); generates the CSS locally (engine is bundled — works offline) and injects it, records lorre.theme.json, installs the icon-set package
+- \`theme show\` — print the active theme's resolved design system (color seeds, semantics, type scale, spacing, component tokens, icons); use it instead of parsing CSS
+- \`plan check <plan.json>\` — validate a plan and resolve it against the registry (read-only; all problems in one pass). The plan's \`theme\` may be an inline lorre.theme.json definition
 - \`apply <plan.json>\` — execute a plan: theme + token overrides + items in one run, records lorre.plan.json
 
 ## lorre.lock
@@ -159,8 +233,9 @@ Custom registry: \`--registry <url>\` or the \`registry\` field in components.js
 ## MCP server
 
 \`lorre-blocks-mcp\` on npm (stdio): \`search_registry\`, \`get_component\`,
-\`add_component\`, \`apply_theme\`, \`list_themes\` — each tool is one CLI \`--json\`
-invocation. Setup: \`claude mcp add lorre-blocks -- npx -y lorre-blocks-mcp\`.
+\`add_component\`, \`apply_theme\`, \`create_theme\`, \`show_theme\`, \`list_themes\` —
+each tool is one CLI \`--json\` invocation. Setup:
+\`claude mcp add lorre-blocks -- npx -y lorre-blocks-mcp\`.
 `
 
 async function build() {
@@ -221,8 +296,10 @@ async function build() {
     "## Docs",
     "",
     `- [Introduction](${SITE}/docs/index.md): what Lorre Blocks is, quick start, registry endpoints`,
-    `- [Theming](${SITE}/docs/theming.md): the 3 themes, theme CLI commands, DTCG token endpoints`,
+    `- [Theming](${SITE}/docs/theming.md): the 3 preset themes + the lorre.theme.json custom-theme contract (theme create)`,
     `- [CLI reference](${SITE}/docs/cli.md): every command incl. --json agent mode`,
+    `- [Theme Studio](${SITE}/themes): tailor a design system visually; exports CSS / lorre.theme.json / the CLI command`,
+    `- [Icons](${SITE}/icons): browse the supported icon sets, copy SVG/JSX; catalog at ${SITE}/r/icons/index.json`,
     "",
     "## Blocks",
     "",
