@@ -46,7 +46,7 @@ function SheetOverlay({
 }
 
 const sheetVariants = cva(
-  "fixed z-50 gap-4 bg-background p-6 shadow-lg",
+  "fixed z-50 gap-4 bg-background p-(--panel-padding) shadow-lg",
   {
     variants: {
       side: {

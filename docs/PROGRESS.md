@@ -41,8 +41,23 @@ concrete deliverable per Ilyas: the two www pages (7.4 + 7.5), after the engine 
 pixel-identity) · typecheck all ✓ · registry build deterministic, theme.css gains
 only the new token groups.
 
-**Next:** 7.2 wire component tokens into ui source → 7.3 CLI `theme create`/`show` +
-plan.json inline theme + MCP `create_theme` → 7.4 `/themes` Studio + 7.5 `/icons`.
+**Also shipped same session (branch `feat/phase7-component-tokens`, STACKED on
+7.1 — merge #33 first): Phase 7.2 — component tokens wired into ui source.**
+Key set consumes the vars via Tailwind v4 var syntax: button
+(`rounded-(--button-radius)`, `h-(--button-height)`, `px-(--button-px)`; sm/lg drop
+their redundant rounded-md so themed radius reaches all sizes), input+textarea+select
+trigger (input tokens), card (radius + `p-(--card-padding)` on header/content/footer),
+dialog+alert-dialog+sheet (panel tokens — **boundary decision: `panel` = modal
+surfaces only; popover/dropdown/select content deliberately keep their own rounded-md**),
+badge, tabs (list + trigger radius), checkbox+radio (`control` size/radius; radio stays
+rounded-full), tooltip. lorre.md design rule #4 added (key-set var consumption,
+everything else global tokens only). Verified: 363/363 tests, typecheck ✓, and a real
+`pnpm build:www` — compiled CSS contains every `var(--<comp>-<key>)` utility and
+`:root` carries the defaults; `--spacing: var(--spacing)` @theme self-mapping follows
+the proven radius pattern (unlayered :root beats @layer theme).
+
+**Next:** 7.3 CLI `theme create`/`show` + plan.json inline theme + MCP `create_theme`
+→ 7.4 `/themes` Studio + 7.5 `/icons`.
 
 ---
 
