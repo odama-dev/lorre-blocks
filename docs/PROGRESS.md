@@ -5,6 +5,47 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-13 (5) — Batch 15: React Bits interactions + components — registry 118
+
+**PR #28 owner-merged (batch 14 live).** Shipped (branch
+`feat/batch15-reactbits-interactions` → PR), 10 items `source: "reactbits"` MIT —
+**`motion` dep still unused** (GSAP/framer-motion upstreams reimplemented on
+pointer events, rAF and CSS transitions). Motion (6): **click-spark** (new
+`--animate-click-spark` token; rotation on a wrapper span so the keyframe's
+transform can't clobber it; bursts GC on animationend), **magnet** (pointer-zone
+pull + transition ease-back), **star-border** (new `--animate-star-border` token;
+kept SEPARATE from border-beam/shine-border — three visually distinct border
+effects, noted in descriptions), **pixel-trail** (2D canvas grid fade, primary
+token color), **blob-cursor** (rAF chase with per-blob lag, loop sleeps when
+settled), **infinite-scroll** (vertical item feed ×2 wrapped at the duplicate's
+offsetTop — exact period, no seam jump; pause-on-hover; marquee stays the
+horizontal canonical). UI (4): **tilted-card** (3D perspective tilt),
+**stack** (pointer-capture drag deck, Enter cycles for keyboard/reduced-motion),
+**stepper** (recomposed on Lorre Button — registryDependencies carries button
+transitively, verified e2e), **masonry** (CSS columns, server-renderable).
+**Dedupe:** reactbits spotlight-card ABSORBED into magic-card (precedence
+magicui > reactbits; tags += spotlight-card) — ledger updated; splash-cursor/
+fluid-glass logged as WebGL-gated for the batch-16 go/no-go alongside
+ascii-text/text-trail.
+
+**Verified:** registry build ✓ (manifest **118**) · typecheck ✓ · tests
+**325/325** (www 237: +10 render, +10 coverage) · www build ✓ (123 pages) · CLI
+e2e: fresh consumer `add stepper stack click-spark star-border masonry` →
+button pulled transitively, both new tokens in consumer globals.css, strict
+`tsc` PASS · Playwright: 10 pages 200 + zero console errors, click spawns 8
+sparks, magnet translates on hover, infinite-scroll drifts (and is static under
+reduced motion), tilted-card sets rotateX, stepper advances with check mark,
+stack drag AND reduced-motion Enter both cycle basic→dreamy, utilitarian
+`--primary` oklch(0.27 0.015 240) + dark ✓.
+
+**Next:** Batch 16 (final) — backgrounds, gated: CSS-first (retro-grid, ripple,
+grid/dot patterns, aurora approximation, silk/waves evaluate), then explicit
+go/no-go per WebGL candidate (particles-3d, hyperspeed, globe/cobe, ascii-text,
+text-trail, splash-cursor). Then the wrap-up (ledger tag sweep, llms/docs
+refresh, coverage retro).
+
+---
+
 ## 2026-07-13 (4) — Batch 14: React Bits text animations — registry 108
 
 **PR #27 owner-merged (batch 13 live).** Shipped (branch `feat/batch14-reactbits-text`

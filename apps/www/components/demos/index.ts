@@ -124,6 +124,18 @@ import {
   VariableProximityDemo,
 } from "@www/components/demos/batch14"
 import {
+  BlobCursorDemo,
+  ClickSparkDemo,
+  InfiniteScrollDemo,
+  MagnetDemo,
+  MasonryDemo,
+  PixelTrailDemo,
+  StackDemo,
+  StarBorderDemo,
+  StepperDemo,
+  TiltedCardDemo,
+} from "@www/components/demos/batch15"
+import {
   AnimatedGradientDemo,
   CountUpDemo,
   FadeInDemo,
@@ -203,6 +215,10 @@ export const demos: Record<string, React.ComponentType> = {
   "hero-video-dialog": HeroVideoDialogDemo,
   terminal: TerminalDemo,
   "file-tree": FileTreeDemo,
+  "tilted-card": TiltedCardDemo,
+  stack: StackDemo,
+  stepper: StepperDemo,
+  masonry: MasonryDemo,
 }
 
 /** Registry block name → live demo rendered full-width on its docs page. */
@@ -249,4 +265,10 @@ export const motionDemos: Record<string, React.ComponentType> = {
   "curved-loop": CurvedLoopDemo,
   "variable-proximity": VariableProximityDemo,
   "glitch-text": GlitchTextDemo,
+  "click-spark": ClickSparkDemo,
+  magnet: MagnetDemo,
+  "star-border": StarBorderDemo,
+  "pixel-trail": PixelTrailDemo,
+  "blob-cursor": BlobCursorDemo,
+  "infinite-scroll": InfiniteScrollDemo,
 }
