@@ -136,6 +136,16 @@ import {
   TiltedCardDemo,
 } from "@www/components/demos/batch15"
 import {
+  AuroraDemo,
+  DotPatternDemo,
+  GlobeDemo,
+  GridPatternDemo,
+  HyperspeedDemo,
+  RetroGridDemo,
+  RippleDemo,
+  WavesDemo,
+} from "@www/components/demos/batch16"
+import {
   AnimatedGradientDemo,
   CountUpDemo,
   FadeInDemo,
@@ -219,6 +229,8 @@ export const demos: Record<string, React.ComponentType> = {
   stack: StackDemo,
   stepper: StepperDemo,
   masonry: MasonryDemo,
+  "dot-pattern": DotPatternDemo,
+  "grid-pattern": GridPatternDemo,
 }
 
 /** Registry block name → live demo rendered full-width on its docs page. */
@@ -271,4 +283,10 @@ export const motionDemos: Record<string, React.ComponentType> = {
   "pixel-trail": PixelTrailDemo,
   "blob-cursor": BlobCursorDemo,
   "infinite-scroll": InfiniteScrollDemo,
+  "retro-grid": RetroGridDemo,
+  ripple: RippleDemo,
+  aurora: AuroraDemo,
+  hyperspeed: HyperspeedDemo,
+  waves: WavesDemo,
+  globe: GlobeDemo,
 }

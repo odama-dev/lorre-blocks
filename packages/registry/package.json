@@ -52,6 +52,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "cobe": "^2.0.1",
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^1.24.0",
@@ -65,13 +66,13 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.5",
-    "zod": "^4.4.3",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "zod": "^4.4.3"
   }
 }

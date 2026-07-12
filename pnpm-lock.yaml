@@ -248,6 +248,9 @@ importers:
       cmdk:
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      cobe:
+        specifier: ^2.0.1
+        version: 2.0.1
       embla-carousel-react:
         specifier: ^8.6.0
         version: 8.6.0(react@19.2.7)
@@ -2323,6 +2326,9 @@ packages:
     peerDependencies:
       react: ^18 || ^19 || ^19.0.0-rc
       react-dom: ^18 || ^19 || ^19.0.0-rc
+
+  cobe@2.0.1:
+    resolution: {integrity: sha512-aaa6vcIlaC8C1SF50LDH0Anybo/EAXnrxqe+bwvr4+YUtZydqjeBjTTD7ziCCkbRrRGSns3I3F6cZsf3W+L+ag==}
 
   comma-separated-tokens@2.0.3:
     resolution: {integrity: sha512-Fu4hJdvzeylCfQPp9SGWidpzrMs7tTrlu6Vb8XGaRGck8QSNZJJp538Wrb60Lax4fPwR64ViY468OIUTbRlGZg==}
@@ -5584,6 +5590,8 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
       - '@types/react-dom'
+
+  cobe@2.0.1: {}
 
   comma-separated-tokens@2.0.3: {}
 

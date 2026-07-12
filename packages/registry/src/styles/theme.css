@@ -314,6 +314,9 @@
   --animate-glitch: lorre-glitch 2.8s steps(1, end) infinite;
   --animate-click-spark: lorre-click-spark 0.45s ease-out forwards;
   --animate-star-border: lorre-star-border 6s linear infinite alternate;
+  --animate-retro-grid: lorre-retro-grid 15s linear infinite;
+  --animate-ripple-wave: lorre-ripple-wave 3s ease-out infinite;
+  --animate-aurora: lorre-aurora 10s ease-in-out infinite alternate;
 
   @keyframes lorre-fade-in {
     from { opacity: 0; }
@@ -390,6 +393,19 @@
   @keyframes lorre-star-border {
     from { transform: translateX(0); }
     to { transform: translateX(30%); }
+  }
+  @keyframes lorre-retro-grid {
+    from { transform: translateY(0); }
+    to { transform: translateY(var(--retro-grid-cell, 60px)); }
+  }
+  @keyframes lorre-ripple-wave {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.06); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+  }
+  @keyframes lorre-aurora {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(12%, 10%) scale(1.15); }
   }
 }
 
