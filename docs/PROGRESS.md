@@ -56,8 +56,131 @@ everything else global tokens only). Verified: 363/363 tests, typecheck ✓, and
 `:root` carries the defaults; `--spacing: var(--spacing)` @theme self-mapping follows
 the proven radius pattern (unlayered :root beats @layer theme).
 
-**Next:** 7.3 CLI `theme create`/`show` + plan.json inline theme + MCP `create_theme`
-→ 7.4 `/themes` Studio + 7.5 `/icons`.
+**Also shipped same session (branch `feat/phase7-theme-create`, STACKED on the
+7.2 branch — merge #35 first): Phase 7.3 — the agent front door.**
+- **`theme create`** (CLI 0.8.0, changeset queued): `--from lorre.theme.json`
+  (agent mode) and/or flags — `--accent "#7C3AED"` (hex or OKLCH triple
+  `h:c:l`), `--neutral`, `--secondary`, `--radius xl|0.75rem` (preset expands to
+  the full scale with the shipped-theme ratios), `--font-sans Geist`,
+  `--type-base/--type-ratio`, `--scaling 105` (percent or factor), `--icons
+  phosphor:duotone` (+ installs the npm package unless `--no-install`). Flags win
+  over --from. Engine is **bundled** (tsup; 631 KB, tokens+zod as devDeps) so
+  generation is fully offline and byte-identical to the Studio's future output.
+  Writes global CSS + `lorre.theme.json` + components.json theme.
+- **`theme apply` (no arg)** re-applies the local `lorre.theme.json` (edit →
+  re-apply loop); **`theme show [--json]`** prints the resolved design system
+  (used by agents instead of parsing CSS).
+- **plan.json v2**: `theme` accepts an inline definition (any key beyond `name`
+  → validated against the shared zod contract, problems prefixed `theme.`);
+  `apply` generates it locally and records `lorre.theme.json`. Inline themes
+  resolve offline — no registry round-trip.
+- **MCP 0.2.0** (changeset queued): new `create_theme` (definition object →
+  temp file → `theme create --from`), `show_theme`; `apply_theme` name now
+  optional. README updated.
+- validateDefinition flattens zod issues into the agent-iterable problems list
+  and rejects unknown `extends` against the bundled base themes.
+
+**Verified:** 385/385 workspace tests (tokens 42, CLI 80, MCP 10, www 253) ·
+typecheck ✓ · e2e in a fresh fake consumer: flags mode (`--accent "#7C3AED"
+--secondary --radius xl --font-sans Geist --scaling 105` → CSS has secondary
+scale, clamp() type scale, --spacing 0.2625rem, radius-lg 1rem), `theme show`,
+no-arg `theme apply`, plan check accepts/rejects inline themes correctly, full
+`apply` of an inline-theme plan (badge installed, accent 150 in CSS,
+lorre.theme.json recorded), `--from` agent mode (pill button token override
+emitted, phosphor:duotone recorded).
+
+**Also shipped same session (branch `feat/phase7-theme-studio`, STACKED on the
+7.3 branch): Phase 7.4 — the `/themes` Theme Studio page.**
+- `apps/www/app/themes/page.tsx` + `components/studio/` (theme-studio /
+  studio-controls / studio-preview / studio-export) + `lib/studio.ts`; header
+  gains a **Themes** link. www now depends on `@lorre-blocks/tokens` directly —
+  the engine runs **in the browser**.
+- Controls: base/extends, accent + neutral + optional secondary (preset
+  swatches + live hex input via `hexToSeed`), fonts (curated Google list,
+  runtime `<link>` scoped to the Studio route — docs pages never load it),
+  type-ratio slider, radius presets (CLI ratios), scaling 90–110%, component
+  knobs (button radius/control size/card padding/panel radius), icon set +
+  style chips (ICON_SETS).
+- **Preview mechanism**: page-wide `<style id="lorre-studio-preview">` with
+  ONLY the `:root`/`.dark` custom-property blocks (never `@theme` — build-time
+  construct) + an explicit `body{font-family}` rule (**@theme inline inlines
+  font stacks into utilities at build time, so runtime font swaps need a real
+  rule — the existing switcher never actually changed fonts**). Page-wide (not
+  [data-studio]-scoped) was a deliberate pivot: Radix's playground re-themes
+  the whole page too, and **portal-rendered overlays (dialog/tooltip) escape
+  any scoped wrapper** — page-wide keeps them themed. Removed on unmount.
+- Export panel: CSS / lorre.theme.json / CLI tabs with copy; type specimen
+  renders via inline `var(--text-h*)` styles (utilities are compiled, vars are
+  live). Share URLs: debounced `?t=<base64url(json)>`, decode validates by
+  resolving.
+- **Parity test locked in**: `studioCss(def) === themeToCss(resolveTheme(def))`
+  and the preview carries every :root declaration of the export.
+
+**Verified:** www tests 262/262 (9 new: parity, share round-trip, render
+smokes) · prod build 132 pages (+/themes) · **Playwright drive 14/14, zero
+console errors**: violet swatch re-themes --primary live, pill component token
+reaches real buttons (7.2 wiring proven in-browser), scaling→--spacing 0.275rem,
+share URL restores state after reload, JSON tab parses back to the definition,
+portal dialog themed, dark mode intact, style removed on route change.
+
+**Also shipped same session (branch `feat/phase7-icons`, STACKED on the 7.4
+branch): Phase 7.5 — the `/icons` page + icon-set catalog.**
+- `apps/www/app/icons/page.tsx` + `components/icons/icon-browser.tsx` +
+  `lib/icon-sets.ts`; header gains **Icons**. www adds `@radix-ui/react-icons`,
+  `@phosphor-icons/react`, `@heroicons/react` (lucide already present).
+- Browser UX (Untitled-UI-bar, multi-set): set tabs + license badge, per-set
+  style chips (phosphor thin→duotone, heroicons outline/solid/mini), search
+  (startsWith-ranked), grid capped at 240 with a narrow hint, **hover overlay
+  copies SVG or JSX**, click → popover (import line, JSX, copy SVG, download
+  .svg), **"Use this set in the Studio"** deep-links `/themes?t=` with the
+  icon choice baked into the definition — the pages converge.
+- Adapters (one per set, dynamic import so only the active set is bundled):
+  lucide uses its `icons` map (1746); radix strips the `Icon` suffix (~300);
+  **phosphor exports every icon twice (Acorn + AcornIcon) — keep bare names —
+  and takes style as a `weight` prop baked in at wrap time (3045 exports,
+  first vitest import >20s → per-test 60s timeout)**; heroicons styles are
+  subpaths (24/outline, 24/solid, 20/solid=mini).
+- **SVG copy gotcha: `react-dom/server` is unavailable in app-router client
+  components — render synchronously into a detached `createRoot` under
+  `flushSync` and read `outerHTML` instead.**
+- `/r/icons/index.json` emitted by build-registry from ICON_SETS (agents
+  enumerate sets remotely).
+
+**Verified:** www tests 270/270 (8 new: catalog integrity incl. license guard,
+kebab/pascal round-trip, search ranking, all four adapters) · prod build 133
+pages · **Playwright drive 9/9, zero console errors**: grid renders, search
+narrows, hover-copy puts `<svg` on the real clipboard, phosphor duotone JSX
+snippet exact, duotone renders its layered opacity SVG, Studio deep-link
+carries `{set:"phosphor",style:"duotone"}`, heroicons mini resolves 20/solid.
+
+**Also shipped same session (branch `feat/phase7-docs`, STACKED on the 7.5
+branch): Phase 7.6 — docs/llms sweep. PHASE 7 CODE-COMPLETE.**
+- `/docs/theming`: custom-themes section — annotated `lorre.theme.json` example,
+  group-by-group explanation, "two front doors, one engine" with the create/
+  apply/show commands, links to /themes and /icons.
+- `/docs/cli`: theme create/show + no-arg apply rows, inline-plan-theme note,
+  agent snippets, `/r/icons/index.json` endpoint.
+- `build-llms.ts`: THEMING_MD now carries the **full annotated contract**
+  (seeds, semantics, typeScale, spacing, all 8 component-token groups, icon
+  sets + styles, flags incl. hex|h:c:l and `--icons set:style`, inline plan
+  themes) — an agent reading llms.txt can author a valid definition without
+  the TS types; CLI_MD updated; INDEX_MD gains the custom-design-system
+  section + icons endpoint; llms.txt links /themes + /icons.
+- **Docs-contract test**: the theming page's example is exported and a www test
+  parses it, validates it against the real `themeDefinitionSchema`, and
+  generates CSS — if the schema evolves, the test fails before the docs lie.
+- `PLAN.md` Phase 7 section (sub-phases + PR trail); `lorre.md` rule #2 now
+  names `lorre.theme.json` as the contract + the byte-identical parity rule.
+
+**Verified:** www 272/272 (2 new docs-contract tests) · workspace **404/404** ·
+www prod build clean (exporting THEME_JSON_EXAMPLE from a page file is fine).
+
+**Phase 7 stack awaiting owner merges: #35 (7.2) → #36 (7.3) → #37 (7.4) →
+#38 (7.5) → #39 (7.6); retarget each to master as predecessors land. Merging
+#36 publishes CLI 0.8.0 + MCP 0.2.0 via the Version Packages PR; merging the
+www PRs deploys /themes + /icons.** Open follow-ups after the stack: none
+planned — next session picks device mocks, the 2026-10 upstream sweep, or new
+direction.
 
 ---
 

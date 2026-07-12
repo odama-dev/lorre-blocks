@@ -1,3 +1,7 @@
+import { promises as fs } from "node:fs"
+import os from "node:os"
+import path from "node:path"
+
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod"
@@ -7,14 +11,16 @@ import {
   buildInfoArgs,
   buildSearchArgs,
   buildThemeApplyArgs,
+  buildThemeCreateArgs,
   buildThemeListArgs,
+  buildThemeShowArgs,
   runCli,
   type CliResult,
 } from "./cli.js"
 
 const server = new McpServer({
   name: "lorre-blocks-mcp",
-  version: "0.1.0",
+  version: "0.2.0",
 })
 
 /** Wrap a CLI run as a tool result; {ok:false} becomes an MCP tool error. */
@@ -115,14 +121,80 @@ server.registerTool(
     title: "Apply a theme to a project",
     description:
       "Swap the lorre-blocks theme block in the project's global CSS to another " +
-      "theme (basic, dreamy, utilitarian). Component files are untouched — themes " +
-      "are token data. The project must have a components.json.",
+      "theme (basic, dreamy, utilitarian). Omit the theme name to re-apply the " +
+      "project's lorre.theme.json (after editing a custom theme). Component files " +
+      "are untouched — themes are token data. The project must have a components.json.",
     inputSchema: {
-      theme: z.string().describe("Theme name, e.g. 'dreamy'"),
+      theme: z
+        .string()
+        .optional()
+        .describe("Theme name, e.g. 'dreamy'; omit to re-apply lorre.theme.json"),
       projectDir: z.string().describe("Absolute path to the consumer project root"),
     },
   },
   async ({ theme, projectDir }) => toolResult(buildThemeApplyArgs(theme, projectDir))
+)
+
+server.registerTool(
+  "create_theme",
+  {
+    title: "Create a custom theme",
+    description:
+      "Generate a tailored design system from a theme definition (lorre.theme.json " +
+      "contract): color seeds (accent/neutral/secondary as OKLCH hue-chroma-lightness), " +
+      "typography + fluid type scale, radius, shadows, spacing scaling (0.9–1.1), " +
+      "per-component tokens (button/input/card/panel/badge/tabs/control/tooltip) and " +
+      "an icon set (lucide, radix, phosphor, heroicons — phosphor/heroicons have style " +
+      "variants). The CLI validates the definition, generates the Tailwind v4 CSS " +
+      "locally, injects it into the project's global stylesheet, records " +
+      "lorre.theme.json, and installs the icon-set npm package. The project must have " +
+      "a components.json. Edit lorre.theme.json later and use apply_theme without a " +
+      "name to re-apply.",
+    inputSchema: {
+      definition: z
+        .record(z.string(), z.unknown())
+        .describe(
+          'Theme definition object, e.g. {"name":"acme","description":"…",' +
+            '"extends":"basic","colors":{"accent":{"hue":262,"chroma":0.21,' +
+            '"lightness":0.55}},"spacing":{"scaling":1.05},"icons":{"set":"phosphor",' +
+            '"style":"duotone"}}. Unknown keys are rejected; problems come back as a ' +
+            "flat list."
+        ),
+      projectDir: z.string().describe("Absolute path to the consumer project root"),
+      install: z
+        .boolean()
+        .optional()
+        .describe("Install the icon-set npm package (default true)"),
+    },
+  },
+  async ({ definition, projectDir, install }) => {
+    const tmp = path.join(
+      os.tmpdir(),
+      `lorre-theme-${Date.now()}-${Math.random().toString(36).slice(2)}.json`
+    )
+    await fs.writeFile(tmp, JSON.stringify(definition, null, 2), "utf8")
+    try {
+      return await toolResult(buildThemeCreateArgs(tmp, projectDir, install))
+    } finally {
+      await fs.rm(tmp, { force: true })
+    }
+  }
+)
+
+server.registerTool(
+  "show_theme",
+  {
+    title: "Show the active theme's resolved tokens",
+    description:
+      "Print the project's resolved design system (color scale seeds, semantics, " +
+      "radius, type scale, spacing scaling, component tokens, icon set) from " +
+      "lorre.theme.json or the built-in theme in components.json. Use it to inspect " +
+      "the design system without parsing CSS.",
+    inputSchema: {
+      projectDir: z.string().describe("Absolute path to the consumer project root"),
+    },
+  },
+  async ({ projectDir }) => toolResult(buildThemeShowArgs(projectDir))
 )
 
 server.registerTool(
