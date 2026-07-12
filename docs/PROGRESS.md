@@ -5,6 +5,29 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-13 (7) — Phase 6 wrap-up — PHASE 6 COMPLETE
+
+**PR #30 owner-merged (batch 16 live).** Shipped (branch `feat/phase6-wrapup` →
+PR #31): the closing sweep. (1) **Alias tag sweep** — every absorbed upstream name is
+now a search tag on its canonical item: count-up+number-ticker, animated-gradient+
+gradient-text/animated-gradient-text, typewriter+typing-animation/word-rotate/
+rotating-text/text-type, shimmer+animated-shiny-text/shiny-text, fade-in+blur-fade/
+fade-content, marquee+vertical. (2) **Last two ledger prop absorptions**: marquee
+`vertical` prop (new `--animate-marquee-vertical` token) and fade-in `blur` prop.
+(3) **Coverage retro** written into docs/phase-6-expansion.md — shadcn 100%, Radix
+interactive-complete (presentational Box/Flex/Grid skipped by design), Magic UI
+complete minus device mocks (open nice-to-have) and NO-GO WebGL, React Bits complete
+by port-or-ruling. End state: **126 items, 5 sources, zero motion/GSAP/three deps,
+one gated WebGL dep (cobe)**. (4) **Maintenance cadence decided: quarterly upstream
+sweep, next due 2026-10** (diff catalogs vs ledger, port additions under the same
+rules, revisit NO-GOs only on CSS-achievable upstream changes). llms/docs need no
+hand-edits — all derive from the registry at prebuild.
+
+**Verified:** registry build ✓ (126, tags in index.json) · tests **341/341** ✓.
+Item count unchanged — this PR only touches tags, two motion props, one token, docs.
+
+---
+
 ## 2026-07-13 (6) — Batch 16 (FINAL): backgrounds, gated — registry 126
 
 **PR #29 owner-merged (batch 15 live). This closes the last porting batch of

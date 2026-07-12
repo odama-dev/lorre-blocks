@@ -112,6 +112,10 @@ canvas reimplementations), globe (cobe — the one WebGL dep that passed the gat
 registry **126**). NO-GO recorded in ledger: particles-3d, silk, splash-cursor/
 fluid-glass, ascii-text, text-trail. Phase 6 porting COMPLETE — wrap-up (tag sweep,
 llms refresh, retro) remains.
+**Wrap-up done 2026-07-13 — PHASE 6 COMPLETE.** Alias tag sweep on 6 canonical items,
+marquee `vertical` + fade-in `blur` props absorbed (last open ledger actions),
+coverage retro + quarterly maintenance cadence recorded in docs/phase-6-expansion.md
+(next upstream sweep 2026-10). Registry steady at **126**.
 
 ## Phase 3 — Docs app (`apps/www`)
 
