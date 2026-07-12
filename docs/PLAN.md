@@ -101,6 +101,11 @@ items: split-text, blur-text, decrypted-text, scramble-text, circular-text,
 curved-loop, variable-proximity, glitch-text (new `--animate-glitch` token; registry
 **108**). All CSS/rAF reimplementations — `motion` dep still unused. ascii-text +
 text-trail deferred to batch 16 (three.js/WebGL upstream, gated).
+**Batch 15 done 2026-07-13** — React Bits interactions + components: click-spark,
+magnet, star-border (2 new tokens), pixel-trail, blob-cursor, infinite-scroll,
+tilted-card, stack, stepper (composes button), masonry (registry **118**).
+spotlight-card deduped into magic-card (ledger); splash-cursor/fluid-glass added to
+the batch-16 WebGL gate list. `motion` dep still unused.
 
 ## Phase 3 — Docs app (`apps/www`)
 

@@ -72,6 +72,8 @@ below are the planning snapshot (2026-07-12) and upstream catalogs move.
 | radix themes avatar/badge/card/checkbox/dialog/… | existing shadcn-ported set | no new items |
 | radix themes code | `typography` (TypographyInlineCode) | deduped; batch 10 shipped `data-list` in its slot |
 | radix themes blockquote | `typography` (TypographyBlockquote) | deduped; inline `quote` still ships (different element) |
+| reactbits spotlight-card | `magic-card` (source: magicui) | deduped batch 15 (precedence magicui > reactbits); tags += spotlight-card |
+| reactbits splash-cursor / fluid-glass | — | WebGL upstream, gated to batch 16 go/no-go (with ascii-text, text-trail from batch 14) |
 
 ## Batches (est. 6–10 items per session at proven cadence)
 
