@@ -12,7 +12,7 @@ import {
   type RegistryIndexItem,
   type RegistryManifest,
 } from "../src/schema"
-import { allResolvedThemes, themeToCss, themeToDtcg } from "@lorre-blocks/tokens"
+import { allResolvedThemes, ICON_SETS, themeToCss, themeToDtcg } from "@lorre-blocks/tokens"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const REGISTRY_ROOT = path.resolve(__dirname, "..")
@@ -223,6 +223,16 @@ async function build() {
     "utf8"
   )
   console.log(`✓ themes index -> r/themes/index.json (${resolvedThemes.length} theme(s))`)
+
+  // Icon-set catalog: lets agents enumerate supported sets remotely.
+  const iconsDir = path.join(OUTPUT_DIR, "icons")
+  await fs.mkdir(iconsDir, { recursive: true })
+  await fs.writeFile(
+    path.join(iconsDir, "index.json"),
+    JSON.stringify([...ICON_SETS], null, 2) + "\n",
+    "utf8"
+  )
+  console.log(`✓ icon sets -> r/icons/index.json (${ICON_SETS.length} set(s))`)
 
   if (!basicCss) throw new Error('Root theme "basic" was not built')
 

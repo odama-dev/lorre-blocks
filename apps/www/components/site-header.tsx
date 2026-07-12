@@ -25,6 +25,9 @@ export function SiteHeader() {
           <Link href="/themes" className="transition-colors hover:text-foreground">
             Themes
           </Link>
+          <Link href="/icons" className="transition-colors hover:text-foreground">
+            Icons
+          </Link>
         </nav>
         <div className="ml-auto flex items-center gap-2">
           <SearchCommand />
