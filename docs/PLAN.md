@@ -106,6 +106,12 @@ magnet, star-border (2 new tokens), pixel-trail, blob-cursor, infinite-scroll,
 tilted-card, stack, stepper (composes button), masonry (registry **118**).
 spotlight-card deduped into magic-card (ledger); splash-cursor/fluid-glass added to
 the batch-16 WebGL gate list. `motion` dep still unused.
+**Batch 16 done 2026-07-13 — FINAL porting batch** — backgrounds: retro-grid,
+ripple, dot-pattern, grid-pattern, aurora (3 new tokens), hyperspeed + waves (2D
+canvas reimplementations), globe (cobe — the one WebGL dep that passed the gate;
+registry **126**). NO-GO recorded in ledger: particles-3d, silk, splash-cursor/
+fluid-glass, ascii-text, text-trail. Phase 6 porting COMPLETE — wrap-up (tag sweep,
+llms refresh, retro) remains.
 
 ## Phase 3 — Docs app (`apps/www`)
 

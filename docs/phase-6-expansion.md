@@ -73,7 +73,13 @@ below are the planning snapshot (2026-07-12) and upstream catalogs move.
 | radix themes code | `typography` (TypographyInlineCode) | deduped; batch 10 shipped `data-list` in its slot |
 | radix themes blockquote | `typography` (TypographyBlockquote) | deduped; inline `quote` still ships (different element) |
 | reactbits spotlight-card | `magic-card` (source: magicui) | deduped batch 15 (precedence magicui > reactbits); tags += spotlight-card |
-| reactbits splash-cursor / fluid-glass | — | WebGL upstream, gated to batch 16 go/no-go (with ascii-text, text-trail from batch 14) |
+| reactbits splash-cursor / fluid-glass | — | **NO-GO (batch 16)**: fluid-sim shaders, no CSS approximation at fidelity |
+| reactbits ascii-text / text-trail | — | **NO-GO (batch 16)**: three.js text effects; pointer-trail niche covered by pixel-trail/blob-cursor |
+| magicui/reactbits particles (WebGL) | `particles` (2D canvas, batch 12) | **NO-GO (batch 16)**: 2D port already canonical |
+| reactbits silk | — | **NO-GO (batch 16)**: shader noise surface, no CSS approximation at fidelity |
+| reactbits hyperspeed | `hyperspeed` (2D canvas) | **GO as reimplementation (batch 16)**: starfield warp on canvas 2D, no three.js |
+| reactbits waves | `waves` (2D canvas) | **GO as reimplementation (batch 16)**: sine line field approximates the perlin upstream |
+| magicui globe (cobe) | `globe` | **GO (batch 16)**: cobe ~5 kB is the allowed purpose-built dep; bundle note in description |
 
 ## Batches (est. 6–10 items per session at proven cadence)
 

@@ -5,6 +5,46 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-07-13 (6) — Batch 16 (FINAL): backgrounds, gated — registry 126
+
+**PR #29 owner-merged (batch 15 live). This closes the last porting batch of
+Phase 6 — only the wrap-up (ledger tag sweep, llms/docs refresh, coverage retro)
+remains.** Shipped (branch `feat/batch16-backgrounds` → PR), 8 items.
+
+**WebGL gate rulings (recorded in the ledger):** GO — **globe** on `cobe`
+(~5 kB, the one purpose-built WebGL dep the policy pre-approved; bundle note in
+the description; colors resolved from live primary/muted tokens at mount via a
+1px-canvas oklch→RGB trick, drag to spin, reduced motion stops auto-rotation).
+GO as 2D reimplementations — **hyperspeed** (canvas starfield warp) and
+**waves** (two-octave sine line field). NO-GO — particles-3d (2D `particles`
+already canonical), silk + splash-cursor/fluid-glass (fluid/noise shaders, no
+CSS fidelity), ascii-text + text-trail (three.js text effects; trail niche
+covered by pixel-trail/blob-cursor).
+
+**CSS items:** **retro-grid** (perspective plane + horizon mask, new
+`--animate-retro-grid` token with a `--retro-grid-cell` var so cellSize stays
+seamless), **ripple** (new `--animate-ripple-wave` token — name avoids the
+existing button `--animate-ripple`), **aurora** (new `--animate-aurora` token;
+accent-scale blobs so it re-themes; reduced motion keeps a static wash),
+**dot-pattern** + **grid-pattern** (static SVG, currentColor = border token).
+
+**Gotcha:** cobe v2 dropped `onRender` — drive rotation with your own rAF
+calling `globe.update({ phi })` (v0.6-era snippets silently fail typecheck).
+
+**Verified:** registry build ✓ (manifest **126**) · typecheck ✓ · tests
+**341/341** (www 253: +8 render, +8 coverage) · www build ✓ (131 pages) · CLI
+e2e: fresh consumer `add globe retro-grid aurora dot-pattern` → `cobe@^2.0.1`
+emitted versioned, all 3 new tokens in consumer globals.css, strict `tsc` PASS ·
+Playwright: 8 pages 200 + zero console errors, globe PAINTS AND ROTATES in real
+WebGL (screenshot delta), hyperspeed/waves animate, both static under
+reduced-motion, dreamy `--primary` + dark ✓.
+
+**Next:** Phase 6 wrap-up — dedupe-ledger tag sweep (absorbed aliases into
+canonical items' tags), llms/docs refresh, coverage retro vs upstream catalogs,
+maintenance cadence decision.
+
+---
+
 ## 2026-07-13 (5) — Batch 15: React Bits interactions + components — registry 118
 
 **PR #28 owner-merged (batch 14 live).** Shipped (branch
