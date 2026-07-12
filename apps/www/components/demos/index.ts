@@ -102,6 +102,18 @@ import {
   ParticlesDemo,
 } from "@www/components/demos/batch12"
 import {
+  AuroraTextDemo,
+  BoxRevealDemo,
+  FileTreeDemo,
+  HeroVideoDialogDemo,
+  MorphingTextDemo,
+  ScrollBasedVelocityDemo,
+  ScrollProgressDemo,
+  SparklesTextDemo,
+  TerminalDemo,
+  TextRevealDemo,
+} from "@www/components/demos/batch13"
+import {
   AnimatedGradientDemo,
   CountUpDemo,
   FadeInDemo,
@@ -178,6 +190,9 @@ export const demos: Record<string, React.ComponentType> = {
   "bento-grid": BentoGridDemo,
   "avatar-circles": AvatarCirclesDemo,
   dock: DockDemo,
+  "hero-video-dialog": HeroVideoDialogDemo,
+  terminal: TerminalDemo,
+  "file-tree": FileTreeDemo,
 }
 
 /** Registry block name → live demo rendered full-width on its docs page. */
@@ -209,4 +224,11 @@ export const motionDemos: Record<string, React.ComponentType> = {
   particles: ParticlesDemo,
   shimmer: ShimmerDemo,
   typewriter: TypewriterDemo,
+  "text-reveal": TextRevealDemo,
+  "box-reveal": BoxRevealDemo,
+  "sparkles-text": SparklesTextDemo,
+  "morphing-text": MorphingTextDemo,
+  "aurora-text": AuroraTextDemo,
+  "scroll-progress": ScrollProgressDemo,
+  "scroll-based-velocity": ScrollBasedVelocityDemo,
 }

@@ -182,6 +182,7 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push("  --animate-ripple: lorre-ripple 0.6s ease-out forwards;")
   out.push("  --animate-border-beam: lorre-border-beam 6s linear infinite;")
   out.push("  --animate-meteor: lorre-meteor 5s linear infinite;")
+  out.push("  --animate-sparkle: lorre-sparkle 1.4s ease-in-out infinite;")
   out.push("")
   out.push("  @keyframes lorre-fade-in {")
   out.push("    from { opacity: 0; }")
@@ -237,6 +238,10 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push("    from { transform: rotate(215deg) translateX(0); opacity: 1; }")
   out.push("    70% { opacity: 1; }")
   out.push("    to { transform: rotate(215deg) translateX(-500px); opacity: 0; }")
+  out.push("  }")
+  out.push("  @keyframes lorre-sparkle {")
+  out.push("    0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }")
+  out.push("    50% { transform: scale(1) rotate(120deg); opacity: 1; }")
   out.push("  }")
   out.push("}", "")
 

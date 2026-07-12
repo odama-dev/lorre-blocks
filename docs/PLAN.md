@@ -91,6 +91,11 @@ pure CSS/React; one new token (`--animate-ripple`).
 (SVG SMIL), meteors, particles, confetti (canvas-confetti — first effect dep),
 orbiting-circles, animated-list, bento-grid, avatar-circles, dock (registry **90**).
 `motion` dep still unused; two new tokens (border-beam, meteor).
+**Batch 13 done 2026-07-13** — Magic UI text + media: text-reveal, box-reveal,
+sparkles-text (new `--animate-sparkle` token), morphing-text, aurora-text (reuses
+`--animate-gradient`), scroll-progress, scroll-based-velocity, hero-video-dialog
+(composes dialog), terminal, file-tree (registry **100**). `motion` dep still unused;
+device mocks deferred.
 
 ## Phase 3 — Docs app (`apps/www`)
 
