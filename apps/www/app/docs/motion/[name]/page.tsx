@@ -66,7 +66,7 @@ export default async function MotionPage({
         </TabsList>
         <TabsContent value="preview">
           {/* Motion pieces vary in footprint — give them the full column like blocks. */}
-          <div className="mt-2 overflow-hidden rounded-lg border bg-background p-8">
+          <div className="mt-2 overflow-hidden border border-dashed bg-background p-8">
             {Demo ? (
               <Demo />
             ) : (

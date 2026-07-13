@@ -7,13 +7,35 @@ import type { IconSetName } from "@lorre-blocks/tokens"
  * renders with `currentColor`, so icons follow the active theme + dark mode.
  */
 
+/** Customizer state baked into JSX snippets (and, in the browser, the SVG). */
+export interface IconRenderOptions {
+  size?: number
+  strokeWidth?: number
+  /** A concrete CSS color; omit / "currentColor" means inherit the theme. */
+  color?: string
+}
+
 export interface LoadedIconSet {
   /** kebab-case display name → component (style already applied where needed). */
-  icons: Record<string, React.ComponentType<{ className?: string }>>
+  icons: Record<
+    string,
+    React.ComponentType<{ className?: string; style?: React.CSSProperties }>
+  >
   /** e.g. `import { ArrowRight } from "lucide-react"` */
   importLine: (displayName: string) => string
-  /** e.g. `<ArrowRight className="size-4" />` */
-  jsxSnippet: (displayName: string) => string
+  /** e.g. `<ArrowRight size={24} strokeWidth={1.5} />` */
+  jsxSnippet: (displayName: string, opts?: IconRenderOptions) => string
+}
+
+const hasColor = (opts?: IconRenderOptions) =>
+  opts?.color && opts.color !== "currentColor"
+
+/** `style={{ width: N, height: N, color: "..." }}` for sets without a size prop. */
+function styleAttr(opts?: IconRenderOptions): string {
+  const entries: string[] = []
+  if (opts?.size) entries.push(`width: ${opts.size}`, `height: ${opts.size}`)
+  if (hasColor(opts)) entries.push(`color: "${opts!.color}"`)
+  return entries.length ? ` style={{ ${entries.join(", ")} }}` : ""
 }
 
 export async function loadIconSet(
@@ -32,7 +54,13 @@ export async function loadIconSet(
       return {
         icons,
         importLine: (name) => `import { ${pascal(name)} } from "lucide-react"`,
-        jsxSnippet: (name) => `<${pascal(name)} className="size-4" />`,
+        jsxSnippet: (name, opts) => {
+          const attrs: string[] = []
+          if (opts?.size) attrs.push(`size={${opts.size}}`)
+          if (opts?.strokeWidth) attrs.push(`strokeWidth={${opts.strokeWidth}}`)
+          if (hasColor(opts)) attrs.push(`color="${opts!.color}"`)
+          return `<${pascal(name)}${attrs.length ? " " + attrs.join(" ") : ""} />`
+        },
       }
     }
     case "radix": {
@@ -45,7 +73,7 @@ export async function loadIconSet(
       return {
         icons,
         importLine: (name) => `import { ${pascal(name)}Icon } from "@radix-ui/react-icons"`,
-        jsxSnippet: (name) => `<${pascal(name)}Icon />`,
+        jsxSnippet: (name, opts) => `<${pascal(name)}Icon${styleAttr(opts)} />`,
       }
     }
     case "phosphor": {
@@ -68,7 +96,11 @@ export async function loadIconSet(
       return {
         icons,
         importLine: (name) => `import { ${pascal(name)} } from "@phosphor-icons/react"`,
-        jsxSnippet: (name) => `<${pascal(name)} size={16} weight="${weight}" />`,
+        jsxSnippet: (name, opts) => {
+          const attrs = [`size={${opts?.size ?? 24}}`, `weight="${weight}"`]
+          if (hasColor(opts)) attrs.push(`color="${opts!.color}"`)
+          return `<${pascal(name)} ${attrs.join(" ")} />`
+        },
       }
     }
     case "heroicons": {
@@ -92,7 +124,7 @@ export async function loadIconSet(
       return {
         icons,
         importLine: (name) => `import { ${pascal(name)}Icon } from "${subpath}"`,
-        jsxSnippet: (name) => `<${pascal(name)}Icon className="size-4" />`,
+        jsxSnippet: (name, opts) => `<${pascal(name)}Icon${styleAttr(opts)} />`,
       }
     }
   }

@@ -68,7 +68,7 @@ export default async function ComponentPage({
           <TabsTrigger value="code">Code</TabsTrigger>
         </TabsList>
         <TabsContent value="preview">
-          <div className="mt-2 flex min-h-[280px] items-center justify-center rounded-lg border p-8">
+          <div className="mt-2 flex min-h-[280px] items-center justify-center border border-dashed p-8">
             {Demo ? (
               <Demo />
             ) : (

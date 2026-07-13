@@ -63,8 +63,9 @@ export function SearchCommand() {
       >
         <Search className="h-4 w-4" />
         <span className="max-sm:hidden">Search docs…</span>
-        <kbd className="pointer-events-none ml-auto rounded border bg-muted px-1.5 font-mono text-[10px] font-medium max-sm:hidden">
-          ⌘K
+        <kbd className="pointer-events-none ml-auto hidden h-5 select-none items-center gap-0.5 rounded-none border border-dashed bg-muted px-1.5 font-mono text-[10px] font-medium sm:inline-flex">
+          <span className="text-[11px] leading-none">⌘</span>
+          <span className="leading-none">K</span>
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen} title="Search docs">

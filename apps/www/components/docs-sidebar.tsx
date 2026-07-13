@@ -52,10 +52,10 @@ function SidebarLink({
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors",
+        "flex items-center gap-2 border border-dashed border-transparent px-2 py-1.5 text-sm transition-colors",
         active
-          ? "bg-accent font-medium text-accent-foreground"
-          : "text-muted-foreground hover:text-foreground"
+          ? "border-border bg-accent font-medium text-accent-foreground"
+          : "text-muted-foreground hover:border-border/60 hover:text-foreground"
       )}
     >
       {children}
@@ -69,7 +69,9 @@ export function DocsSidebar() {
   return (
     <nav className="space-y-6">
       <div>
-        <h4 className="mb-2 px-2 text-sm font-semibold">Getting started</h4>
+        <h4 className="mb-2 px-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Getting started
+        </h4>
         {GETTING_STARTED.map((link) => (
           <SidebarLink
             key={link.href}
@@ -81,7 +83,9 @@ export function DocsSidebar() {
         ))}
       </div>
       <div>
-        <h4 className="mb-2 px-2 text-sm font-semibold">Blocks</h4>
+        <h4 className="mb-2 px-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Blocks
+        </h4>
         {blockLinks.map((link) => (
           <SidebarLink
             key={link.href}
@@ -90,7 +94,7 @@ export function DocsSidebar() {
           >
             {link.title}
             {link.isNew && (
-              <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+              <span className="border border-dashed border-primary/40 bg-primary/10 px-1.5 py-0.5 font-mono text-[10px] font-medium text-primary">
                 lorre
               </span>
             )}
@@ -98,7 +102,9 @@ export function DocsSidebar() {
         ))}
       </div>
       <div>
-        <h4 className="mb-2 px-2 text-sm font-semibold">Motion</h4>
+        <h4 className="mb-2 px-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Motion
+        </h4>
         {motionLinks.map((link) => (
           <SidebarLink
             key={link.href}
@@ -107,7 +113,7 @@ export function DocsSidebar() {
           >
             {link.title}
             {link.isNew && (
-              <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+              <span className="border border-dashed border-primary/40 bg-primary/10 px-1.5 py-0.5 font-mono text-[10px] font-medium text-primary">
                 lorre
               </span>
             )}
@@ -115,7 +121,9 @@ export function DocsSidebar() {
         ))}
       </div>
       <div>
-        <h4 className="mb-2 px-2 text-sm font-semibold">Components</h4>
+        <h4 className="mb-2 px-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Components
+        </h4>
         {componentLinks.map((link) => (
           <SidebarLink
             key={link.href}
@@ -124,7 +132,7 @@ export function DocsSidebar() {
           >
             {link.title}
             {link.isNew && (
-              <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+              <span className="border border-dashed border-primary/40 bg-primary/10 px-1.5 py-0.5 font-mono text-[10px] font-medium text-primary">
                 lorre
               </span>
             )}

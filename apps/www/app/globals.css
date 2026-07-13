@@ -8,6 +8,94 @@
   --font-sans: var(--font-inter), Inter, ui-sans-serif, system-ui, sans-serif;
 }
 
+/* ------------------------------------------------------------------ *
+ * Blueprint theme
+ * A boxy, dashed-border, grid-paper aesthetic (à la nativewind.dev).
+ * All colors derive from the neutral scale so light/dark just work.
+ * ------------------------------------------------------------------ */
+:root {
+  /* Corner "plus" nodes on framed boxes. */
+  --bp-node: var(--neutral-8);
+  /* Scrollbar thumb. */
+  --bp-scroll: var(--neutral-7);
+  --bp-scroll-hover: var(--neutral-9);
+}
+
+/* Dashed "blueprint" frame. Pair with .bp-corners for the plus nodes. */
+.bp-frame {
+  border-width: 1px;
+  border-style: dashed;
+  border-color: var(--border);
+  border-radius: 0;
+}
+
+/* Plus (+) marks straddling each corner of the box. */
+.bp-corners {
+  position: relative;
+}
+.bp-corners::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  pointer-events: none;
+  z-index: 1;
+  background-repeat: no-repeat;
+  background-image:
+    /* top-left  : horizontal + vertical */
+    linear-gradient(var(--bp-node), var(--bp-node)),
+    linear-gradient(var(--bp-node), var(--bp-node)),
+    /* top-right */
+    linear-gradient(var(--bp-node), var(--bp-node)),
+    linear-gradient(var(--bp-node), var(--bp-node)),
+    /* bottom-left */
+    linear-gradient(var(--bp-node), var(--bp-node)),
+    linear-gradient(var(--bp-node), var(--bp-node)),
+    /* bottom-right */
+    linear-gradient(var(--bp-node), var(--bp-node)),
+    linear-gradient(var(--bp-node), var(--bp-node));
+  background-size:
+    9px 1px, 1px 9px,
+    9px 1px, 1px 9px,
+    9px 1px, 1px 9px,
+    9px 1px, 1px 9px;
+  background-position:
+    left 0.5px top 4.5px, left 4.5px top 0.5px,
+    right 0.5px top 4.5px, right 4.5px top 0.5px,
+    left 0.5px bottom 4.5px, left 4.5px bottom 0.5px,
+    right 0.5px bottom 4.5px, right 4.5px bottom 0.5px;
+}
+
+/* ------------------------------------------------------------------ *
+ * Custom scrollbar — thin and boxy to match the blueprint frames.
+ * ------------------------------------------------------------------ */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bp-scroll) transparent;
+}
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-left: 1px dashed var(--border);
+}
+::-webkit-scrollbar-track:horizontal {
+  border-left: 0;
+  border-top: 1px dashed var(--border);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bp-scroll);
+  border: 3px solid var(--background);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bp-scroll-hover);
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 /* Keep long code lines scrollable instead of stretching the page. */
 pre {
   overflow-x: auto;

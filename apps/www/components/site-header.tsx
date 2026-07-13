@@ -6,8 +6,8 @@ import { ThemeControls } from "@www/components/theme-controls"
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-7xl items-center gap-6 px-6">
+    <header className="sticky top-0 z-40 border-b border-dashed bg-background/80 backdrop-blur">
+      <div className="mx-auto flex h-14 max-w-7xl items-center gap-6 border-x border-dashed px-6">
         <Link href="/" className="flex items-center gap-2 font-semibold">
           <Blocks className="h-5 w-5 text-primary" />
           Lorre Blocks
