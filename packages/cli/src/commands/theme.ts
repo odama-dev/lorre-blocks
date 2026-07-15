@@ -12,7 +12,7 @@ import {
   type ThemeDefinition,
 } from "@lorre-blocks/tokens"
 
-import { readConfig, writeConfig } from "../utils/config"
+import { readConfig, writeConfig, ROOT_THEME } from "../utils/config"
 import { injectThemeBlock } from "../utils/css"
 import { readIfExists, resolveGlobalCss } from "../utils/global-css"
 import {
@@ -270,7 +270,7 @@ export async function runThemeShow(options: ThemeShowOptions): Promise<void> {
     resolved = resolveTheme(def as ThemeDefinition)
     source = THEME_FILE
   } else {
-    const name = config.theme ?? "basic"
+    const name = config.theme ?? ROOT_THEME
     try {
       resolved = getResolvedTheme(name)
     } catch {

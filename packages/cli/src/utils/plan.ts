@@ -1,4 +1,5 @@
 import type { RegistryItem } from "../registry/schema"
+import { ROOT_THEME } from "./config"
 import { fetchRegistryItem, fetchThemesIndex, resolveTree } from "./registry"
 import { validateDefinition } from "./theme-def"
 
@@ -171,9 +172,11 @@ export async function resolvePlan(
         )
       }
     } catch {
-      // Registry predates named themes: only "basic" can work.
-      if (plan.theme.name !== "basic") {
-        problems.push(`registry has no themes index; only "basic" is supported`)
+      // Registry predates named themes: only the root theme can work.
+      if (plan.theme.name !== ROOT_THEME) {
+        problems.push(
+          `registry has no themes index; only "${ROOT_THEME}" is supported`
+        )
       }
     }
   }

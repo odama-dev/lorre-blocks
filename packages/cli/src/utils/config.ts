@@ -17,12 +17,28 @@ export interface Config {
   $schema?: string
   registry: string
   tsx: boolean
-  /** Active Lorre theme name (e.g. "basic"). Set by init / theme apply. */
+  /** Active Lorre theme name (e.g. "odama"). Set by init / theme apply. */
   theme?: string
   aliases: Aliases
 }
 
-export const DEFAULT_THEME = "basic"
+/**
+ * The theme `init` starts a new project on — the house theme.
+ *
+ * Distinct from ROOT_THEME on purpose: this is a *preference* and may change
+ * again, whereas ROOT_THEME is a fact about the registry's shape.
+ */
+export const DEFAULT_THEME = "odama"
+
+/**
+ * Root of the `extends` chain, and the only theme a registry without a themes
+ * index can serve (it answers on the legacy /r/theme.json endpoint).
+ *
+ * Also what a config predating the `theme` field means: those projects were
+ * themed basic, so resolving them to anything else would silently re-theme
+ * them on the next command.
+ */
+export const ROOT_THEME = "basic"
 
 export const DEFAULT_ALIASES: Aliases = {
   components: "@/components",

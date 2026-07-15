@@ -117,9 +117,18 @@
   --button-radius: var(--radius-md);
   --button-height: calc(var(--spacing) * 9);
   --button-px: calc(var(--spacing) * 4);
+  --button-font-size: var(--text-sm);
+  --button-font-weight: var(--font-weight-medium);
+  --button-height-sm: calc(var(--spacing) * 8);
+  --button-px-sm: calc(var(--spacing) * 3);
+  --button-font-size-sm: var(--text-xs);
+  --button-height-lg: calc(var(--spacing) * 10);
+  --button-px-lg: calc(var(--spacing) * 8);
+  --button-font-size-lg: var(--text-sm);
   --input-radius: var(--radius-md);
   --input-height: calc(var(--spacing) * 9);
   --input-px: calc(var(--spacing) * 3);
+  --input-font-size: var(--text-sm);
   --card-radius: var(--radius-xl);
   --card-padding: calc(var(--spacing) * 6);
   --panel-radius: var(--radius-lg);

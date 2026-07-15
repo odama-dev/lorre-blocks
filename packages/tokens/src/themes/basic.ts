@@ -46,15 +46,27 @@ export const basic: ThemeDefinition = {
   // Defaults mirror the ui source exactly (button: rounded-md h-9 px-4, …) so
   // wiring the components onto these vars (Phase 7.2) is pixel-identical.
   components: {
+    // Values are what button.tsx spelled out before it was tokenized, so the
+    // rendered button is unchanged: h-9/px-4/text-sm, h-8/px-3/text-xs (sm),
+    // h-10/px-8 (lg, which inherited text-sm from the base class).
     button: {
       radius: "var(--radius-md)",
       height: "calc(var(--spacing) * 9)",
       px: "calc(var(--spacing) * 4)",
+      "font-size": "var(--text-sm)",
+      "font-weight": "var(--font-weight-medium)",
+      "height-sm": "calc(var(--spacing) * 8)",
+      "px-sm": "calc(var(--spacing) * 3)",
+      "font-size-sm": "var(--text-xs)",
+      "height-lg": "calc(var(--spacing) * 10)",
+      "px-lg": "calc(var(--spacing) * 8)",
+      "font-size-lg": "var(--text-sm)",
     },
     input: {
       radius: "var(--radius-md)",
       height: "calc(var(--spacing) * 9)",
       px: "calc(var(--spacing) * 3)",
+      "font-size": "var(--text-sm)",
     },
     card: {
       radius: "var(--radius-xl)",
