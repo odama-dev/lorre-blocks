@@ -149,6 +149,24 @@ export const ICON_CATEGORIES: { label: string; keywords: string[] }[] = [
 ]
 
 const ALL = "All"
+const OTHER = "Other"
+
+/**
+ * Only a handful of high-cohesion buckets that designers and developers reach
+ * for most get their own pill; everything else collapses into "Other" (and even
+ * that hides when it would just swallow most of the set — see OTHER_MAX).
+ */
+export const FEATURED_CATEGORIES = [
+  "Arrows",
+  "Files & Folders",
+  "Communication",
+  "Media",
+  "Layout & UI",
+  "Development",
+]
+
+// A catch-all bigger than this is no more useful than "All", so we drop it.
+const OTHER_MAX = 60
 
 /** Bucket a single kebab-case icon name; falls back to "Other". */
 export function categorize(name: string): string {
@@ -157,7 +175,14 @@ export function categorize(name: string): string {
       if (name.includes(keyword)) return group.label
     }
   }
-  return "Other"
+  return OTHER
+}
+
+/** Whether an icon belongs to the selected filter (handles All + Other). */
+export function matchesCategory(name: string, selected: string): boolean {
+  if (selected === ALL) return true
+  if (selected === OTHER) return !FEATURED_CATEGORIES.includes(categorize(name))
+  return categorize(name) === selected
 }
 
 export interface CategoryCount {
@@ -166,23 +191,29 @@ export interface CategoryCount {
 }
 
 /**
- * Category options for the current set, ordered by the canonical list, only
- * including non-empty buckets. Always leads with an "All" pseudo-category.
+ * Filter options for a set: "All", the featured buckets that actually have
+ * icons, and "Other" only when it stays small enough to be a real filter.
  */
 export function categoryOptions(names: string[]): CategoryCount[] {
-  const counts = new Map<string, number>()
+  const featuredCounts = new Map<string, number>()
+  let inFeatured = 0
   for (const name of names) {
     const c = categorize(name)
-    counts.set(c, (counts.get(c) ?? 0) + 1)
+    if (FEATURED_CATEGORIES.includes(c)) {
+      featuredCounts.set(c, (featuredCounts.get(c) ?? 0) + 1)
+      inFeatured++
+    }
   }
-  const ordered: CategoryCount[] = [{ label: ALL, count: names.length }]
-  for (const group of ICON_CATEGORIES) {
-    const count = counts.get(group.label)
-    if (count) ordered.push({ label: group.label, count })
+  const options: CategoryCount[] = [{ label: ALL, count: names.length }]
+  for (const label of FEATURED_CATEGORIES) {
+    const count = featuredCounts.get(label)
+    if (count) options.push({ label, count })
   }
-  const other = counts.get("Other")
-  if (other) ordered.push({ label: "Other", count: other })
-  return ordered
+  const otherCount = names.length - inFeatured
+  if (otherCount > 0 && otherCount <= OTHER_MAX) {
+    options.push({ label: OTHER, count: otherCount })
+  }
+  return options
 }
 
 export const ALL_CATEGORIES = ALL

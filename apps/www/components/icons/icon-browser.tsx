@@ -4,7 +4,14 @@ import * as React from "react"
 import Link from "next/link"
 import { flushSync } from "react-dom"
 import { createRoot } from "react-dom/client"
-import { Check, Copy, Download, RotateCcw, Search } from "lucide-react"
+import {
+  Check,
+  Copy,
+  Download,
+  RotateCcw,
+  Search,
+  SlidersHorizontal,
+} from "lucide-react"
 import { ICON_SETS, type IconSetName } from "@lorre-blocks/tokens"
 
 import { cn } from "@lorre-blocks/registry/lib/utils"
@@ -152,8 +159,8 @@ export function IconBrowser() {
 
   return (
     <div className="space-y-4">
-      {/* Set switcher */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+      {/* Toolbar — set + search come first; appearance is tucked away */}
+      <div className="flex flex-wrap items-center gap-2">
         <ToggleGroup
           type="single"
           value={setName}
@@ -171,154 +178,175 @@ export function IconBrowser() {
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
-        <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-          {setInfo.license} licensed
-        </span>
+
+        <div className="relative min-w-[12rem] flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={`Search ${allNames.length || "…"} icons`}
+            className="rounded-none border-dashed pl-9"
+            aria-label="Search icons"
+          />
+        </div>
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2 rounded-none border-dashed"
+            >
+              <SlidersHorizontal className="h-3.5 w-3.5" />
+              Customize
+              <span className="font-mono text-[10px] text-muted-foreground">
+                {size}px
+              </span>
+              <span
+                aria-hidden
+                className="h-3.5 w-3.5 border border-border"
+                style={
+                  color === "currentColor"
+                    ? undefined
+                    : { backgroundColor: color }
+                }
+              />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent
+            align="end"
+            className="w-72 space-y-4 rounded-none border-dashed"
+          >
+            {setInfo.styles.length > 0 && (
+              <Field label="Style">
+                <ToggleGroup
+                  type="single"
+                  value={activeStyle}
+                  onValueChange={(value) => value && setStyle(value)}
+                  className="flex-wrap justify-start gap-1"
+                >
+                  {setInfo.styles.map((s) => (
+                    <ToggleGroupItem
+                      key={s}
+                      value={s}
+                      size="sm"
+                      variant="outline"
+                      className="rounded-none border-dashed text-xs capitalize data-[state=on]:border-solid"
+                    >
+                      {s}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              </Field>
+            )}
+            <Field label={`Size — ${size}px`}>
+              <Slider
+                value={[size]}
+                min={16}
+                max={48}
+                step={2}
+                onValueChange={([v]) => setSize(v)}
+                className="w-full"
+              />
+            </Field>
+            {supportsStroke && (
+              <Field label={`Stroke — ${strokeWidth}`}>
+                <Slider
+                  value={[strokeWidth]}
+                  min={0.5}
+                  max={3}
+                  step={0.25}
+                  onValueChange={([v]) => setStrokeWidth(v)}
+                  className="w-full"
+                />
+              </Field>
+            )}
+            <Field label="Color">
+              <div className="space-y-2">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {SWATCHES.map((s) => (
+                    <button
+                      key={s.value}
+                      type="button"
+                      title={s.label}
+                      aria-label={s.label}
+                      onClick={() => pickColor(s.value)}
+                      className={cn(
+                        "flex h-6 w-6 items-center justify-center border",
+                        color === s.value
+                          ? "border-solid border-foreground ring-2 ring-ring ring-offset-1 ring-offset-background"
+                          : "border-dashed border-border"
+                      )}
+                      style={
+                        s.value === "currentColor"
+                          ? undefined
+                          : { backgroundColor: s.value, borderStyle: "solid" }
+                      }
+                    >
+                      {s.value === "currentColor" && (
+                        <span className="text-[10px] font-semibold">A</span>
+                      )}
+                    </button>
+                  ))}
+                  <label className="relative flex h-6 w-6 cursor-pointer items-center justify-center border border-dashed border-border hover:border-foreground">
+                    <span className="text-[10px]">+</span>
+                    <input
+                      type="color"
+                      aria-label="Custom color"
+                      className="absolute inset-0 cursor-pointer opacity-0"
+                      onChange={(e) => commitColor(e.target.value)}
+                    />
+                  </label>
+                </div>
+                <input
+                  type="text"
+                  value={hexText}
+                  spellCheck={false}
+                  placeholder="#hex or theme"
+                  aria-label="Hex color"
+                  onChange={(e) => {
+                    const text = e.target.value.trim()
+                    setHexText(text)
+                    if (HEX_RE.test(text)) commitColor(text)
+                  }}
+                  className="h-7 w-full border border-dashed border-border bg-background px-2 font-mono text-xs outline-none focus:border-foreground"
+                />
+              </div>
+            </Field>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={reset}
+              className="w-full justify-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+            >
+              <RotateCcw className="h-3.5 w-3.5" /> Reset all
+            </Button>
+          </PopoverContent>
+        </Popover>
+
         <Button
           asChild
-          variant="outline"
-          size="sm"
-          className="ml-auto rounded-none border-dashed"
-        >
-          <Link href={studioHref}>Use this set in the Studio</Link>
-        </Button>
-      </div>
-
-      {/* Customizer */}
-      <div className="flex flex-wrap items-end gap-x-6 gap-y-4 border border-dashed bg-muted/30 p-4">
-        {setInfo.styles.length > 0 && (
-          <Field label="Style">
-            <ToggleGroup
-              type="single"
-              value={activeStyle}
-              onValueChange={(value) => value && setStyle(value)}
-              className="justify-start gap-1"
-            >
-              {setInfo.styles.map((s) => (
-                <ToggleGroupItem
-                  key={s}
-                  value={s}
-                  size="sm"
-                  variant="outline"
-                  className="rounded-none border-dashed text-xs capitalize data-[state=on]:border-solid"
-                >
-                  {s}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
-          </Field>
-        )}
-
-        <Field label={`Size — ${size}px`}>
-          <Slider
-            value={[size]}
-            min={16}
-            max={48}
-            step={2}
-            onValueChange={([v]) => setSize(v)}
-            className="w-28"
-          />
-        </Field>
-
-        {supportsStroke && (
-          <Field label={`Stroke — ${strokeWidth}`}>
-            <Slider
-              value={[strokeWidth]}
-              min={0.5}
-              max={3}
-              step={0.25}
-              onValueChange={([v]) => setStrokeWidth(v)}
-              className="w-28"
-            />
-          </Field>
-        )}
-
-        <Field label="Color">
-          <div className="space-y-2">
-            <div className="flex items-center gap-1.5">
-              {SWATCHES.map((s) => (
-                <button
-                  key={s.value}
-                  type="button"
-                  title={s.label}
-                  aria-label={s.label}
-                  onClick={() => pickColor(s.value)}
-                  className={cn(
-                    "flex h-6 w-6 items-center justify-center border",
-                    color === s.value
-                      ? "border-solid border-foreground ring-2 ring-ring ring-offset-1 ring-offset-background"
-                      : "border-dashed border-border"
-                  )}
-                  style={
-                    s.value === "currentColor"
-                      ? undefined
-                      : { backgroundColor: s.value, borderStyle: "solid" }
-                  }
-                >
-                  {s.value === "currentColor" && (
-                    <span className="text-[10px] font-semibold">A</span>
-                  )}
-                </button>
-              ))}
-              <label className="relative flex h-6 w-6 cursor-pointer items-center justify-center border border-dashed border-border hover:border-foreground">
-                <span className="text-[10px]">+</span>
-                <input
-                  type="color"
-                  aria-label="Custom color"
-                  className="absolute inset-0 cursor-pointer opacity-0"
-                  onChange={(e) => commitColor(e.target.value)}
-                />
-              </label>
-            </div>
-            <input
-              type="text"
-              value={hexText}
-              spellCheck={false}
-              placeholder="#000000 or theme"
-              aria-label="Hex color"
-              onChange={(e) => {
-                const text = e.target.value.trim()
-                setHexText(text)
-                if (HEX_RE.test(text)) commitColor(text)
-              }}
-              className="h-7 w-32 border border-dashed border-border bg-background px-2 font-mono text-xs outline-none focus:border-foreground"
-            />
-          </div>
-        </Field>
-
-        <Button
           variant="ghost"
           size="sm"
-          onClick={reset}
-          className="ml-auto gap-1.5 self-end text-xs text-muted-foreground hover:text-foreground"
+          className="rounded-none text-muted-foreground hover:text-foreground"
         >
-          <RotateCcw className="h-3.5 w-3.5" /> Reset
+          <Link href={studioHref}>Open in Studio</Link>
         </Button>
       </div>
 
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={`Search ${allNames.length || "…"} icons`}
-          className="rounded-none border-dashed pl-9"
-          aria-label="Search icons"
-        />
-      </div>
-
-      {/* Categories on mobile (the sidebar list is hidden there) */}
-      <div className="-mx-1 flex gap-1 overflow-x-auto px-1 pb-1 md:hidden">
-        {categories.map((c) => (
-          <MobileCategory
-            key={c.label}
-            category={c}
-            active={category === c.label}
-            onSelect={setCategory}
-          />
-        ))}
-      </div>
+      {/* Category filter — secondary, light-weight pills */}
+      {categories.length > 1 && (
+        <div className="flex flex-wrap gap-1">
+          {categories.map((c) => (
+            <CategoryPill
+              key={c.label}
+              category={c}
+              active={category === c.label}
+              onSelect={setCategory}
+            />
+          ))}
+        </div>
+      )}
 
       {loading ? (
         <p className="py-16 text-center text-sm text-muted-foreground">
@@ -327,8 +355,10 @@ export function IconBrowser() {
       ) : (
         <>
           <p className="text-xs text-muted-foreground">
-            {matches.length} icon{matches.length === 1 ? "" : "s"}
-            {category !== ALL_CATEGORIES ? ` in ${category}` : ""}
+            {matches.length} {setInfo.label} icon
+            {matches.length === 1 ? "" : "s"}
+            {category !== ALL_CATEGORIES ? ` in ${category}` : ""} ·{" "}
+            {setInfo.license}
             {matches.length > GRID_CAP
               ? ` — showing ${GRID_CAP}, search to narrow`
               : ""}
@@ -340,7 +370,7 @@ export function IconBrowser() {
           ) : (
             <div
               ref={gridRef}
-              className="grid grid-cols-[repeat(auto-fill,minmax(5.5rem,1fr))] border-l border-t border-dashed"
+              className="grid grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] border-l border-t border-dashed"
               style={color === "currentColor" ? undefined : { color }}
             >
               {visible.map((name) => (
@@ -360,7 +390,7 @@ export function IconBrowser() {
   )
 }
 
-function MobileCategory({
+function CategoryPill({
   category,
   active,
   onSelect,
@@ -374,16 +404,14 @@ function MobileCategory({
       type="button"
       onClick={() => onSelect(category.label)}
       className={cn(
-        "flex shrink-0 items-center gap-1.5 whitespace-nowrap border border-dashed px-2 py-1 text-sm transition-colors",
+        "flex items-center gap-1.5 whitespace-nowrap px-2.5 py-1 text-xs transition-colors",
         active
-          ? "border-border bg-accent font-medium text-accent-foreground"
-          : "border-transparent text-muted-foreground hover:text-foreground"
+          ? "bg-foreground font-medium text-background"
+          : "text-muted-foreground hover:bg-muted hover:text-foreground"
       )}
     >
       {category.label}
-      <span className="font-mono text-[10px] text-muted-foreground">
-        {category.count}
-      </span>
+      <span className="font-mono text-[10px] opacity-60">{category.count}</span>
     </button>
   )
 }
@@ -438,7 +466,7 @@ const IconCell = React.memo(function IconCell({
 
   return (
     <Popover>
-      <div className="group relative flex aspect-square items-center justify-center border-b border-r border-dashed hover:bg-accent/40">
+      <div className="group relative flex aspect-square items-center justify-center border-b border-r border-dashed transition-colors duration-200 ease-out hover:bg-accent/40">
         <PopoverTrigger
           className="flex h-full w-full items-center justify-center outline-none"
           title={name}
@@ -446,10 +474,10 @@ const IconCell = React.memo(function IconCell({
         >
           <Icon style={renderStyle} />
         </PopoverTrigger>
-        <span className="pointer-events-none absolute inset-x-0 bottom-0 truncate px-1 pb-0.5 text-center font-mono text-[9px] text-muted-foreground opacity-0 group-hover:opacity-100">
+        <span className="pointer-events-none absolute inset-x-0 top-0 truncate px-2 pt-1.5 text-center font-mono text-[9px] text-muted-foreground opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
           {name}
         </span>
-        <div className="absolute right-1 top-1 hidden gap-0.5 group-hover:flex">
+        <div className="pointer-events-none absolute inset-x-1 bottom-1 flex gap-1 opacity-0 transition-opacity duration-200 ease-out group-hover:pointer-events-auto group-hover:opacity-100">
           <HoverCopy
             label="SVG"
             active={copied === "svg"}
@@ -520,16 +548,20 @@ function HoverCopy({
   return (
     <button
       type="button"
+      title={`Copy ${label}`}
       onClick={(e) => {
         e.stopPropagation()
         onClick()
       }}
       className={cn(
-        "border border-dashed bg-background/90 px-1 py-px text-[9px] font-medium text-muted-foreground hover:text-foreground",
-        active && "border-success bg-success text-success-foreground"
+        "flex flex-1 items-center justify-center gap-1 border px-1.5 py-1 text-[10px] font-medium shadow-sm backdrop-blur-sm transition-colors",
+        active
+          ? "border-success bg-success text-success-foreground"
+          : "border-border bg-background/95 text-muted-foreground hover:border-foreground hover:bg-background hover:text-foreground"
       )}
     >
-      {active ? "✓" : label}
+      {active ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+      {label}
     </button>
   )
 }

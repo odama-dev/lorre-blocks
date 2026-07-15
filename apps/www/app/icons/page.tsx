@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 
 import { IconBrowser } from "@www/components/icons/icon-browser"
-import { IconCategoryNav } from "@www/components/icons/icon-category-nav"
 import { IconsProvider } from "@www/components/icons/icons-context"
 import { ResourcesShell } from "@www/components/resources-shell"
 
@@ -20,7 +19,6 @@ export default function IconsPage() {
           { label: "Resources" },
           { label: "Icons" },
         ]}
-        sidebarExtra={<IconCategoryNav />}
       >
         <div className="mt-4">
           <h1 className="text-3xl font-bold tracking-tight">Icons</h1>

@@ -38,6 +38,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      ldrs:
+        specifier: ^1.1.9
+        version: 1.1.9
       lucide-react:
         specifier: ^1.24.0
         version: 1.24.0(react@19.2.7)
@@ -59,6 +62,9 @@ importers:
       recharts:
         specifier: ^2.15.4
         version: 2.15.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      simple-icons:
+        specifier: ^16.26.0
+        version: 16.26.0
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -2916,6 +2922,9 @@ packages:
   jsonfile@4.0.0:
     resolution: {integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==}
 
+  ldrs@1.1.9:
+    resolution: {integrity: sha512-JKVdzboxeZrKecA8ovi5iIDgs59wUrtJ+LDrHCgZecNrR0AJi2cJ3ZANJ+UCNS/sHRol73/jlypNCAMCXS+Ung==}
+
   libtess@1.2.2:
     resolution: {integrity: sha512-Nps8HPeVVcsmJxUvFLKVJcCgcz+1ajPTXDVAVPs6+giOQP4AHV31uZFFkh+CKow/bkB7GbZWKmwmit7myaqDSw==}
 
@@ -3507,6 +3516,10 @@ packages:
   signal-exit@4.1.0:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
+
+  simple-icons@16.26.0:
+    resolution: {integrity: sha512-T9rNJtyOshULM8heLlvrZY346g9zOgZILQ3vxP+FWcX13RhaOLez7YM/hNCEx3b5gJckSCNDoNsjZuDncSMYSQ==}
+    engines: {node: '>=0.12.18'}
 
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
@@ -6282,6 +6295,8 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
+  ldrs@1.1.9: {}
+
   libtess@1.2.2: {}
 
   lightningcss-android-arm64@1.32.0:
@@ -6916,6 +6931,8 @@ snapshots:
   siginfo@2.0.0: {}
 
   signal-exit@4.1.0: {}
+
+  simple-icons@16.26.0: {}
 
   sisteransi@1.0.5: {}
 
