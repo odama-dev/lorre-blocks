@@ -71,7 +71,7 @@ export default async function BlockPage({
         </TabsList>
         <TabsContent value="preview">
           {/* Blocks are full page sections — render them full-width, not centered. */}
-          <div className="mt-2 overflow-hidden rounded-lg border bg-background">
+          <div className="mt-2 overflow-hidden border border-dashed bg-background">
             {Demo ? (
               <Demo />
             ) : (

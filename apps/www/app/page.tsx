@@ -8,8 +8,8 @@ import { registry } from "@lorre-blocks/registry/registry"
 import { Badge } from "@lorre-blocks/registry/ui/badge"
 import { Button } from "@lorre-blocks/registry/ui/button"
 import { CommandSnippet } from "@www/components/code-block"
+import { HeroParticles } from "@www/components/hero-particles"
 import { Showcase } from "@www/components/showcase"
-import { ThemeCarousel } from "@www/components/theme-carousel"
 
 const FEATURES = [
   {
@@ -49,9 +49,13 @@ export default function HomePage() {
     .map((item) => item.name)
 
   return (
-    <main>
-      <section className="mx-auto max-w-7xl px-6 pb-12 pt-24 text-center">
-        <Badge variant="secondary" className="mb-6">
+    <main className="mx-auto max-w-7xl border-x border-dashed">
+      <section className="relative isolate overflow-hidden border-b border-dashed px-6 pb-12 pt-24 text-center">
+        <HeroParticles className="-z-10" />
+        <Badge
+          variant="secondary"
+          className="mb-6 rounded-none border border-dashed border-border font-mono text-xs uppercase tracking-wider"
+        >
           {componentCount} components · {blockCount} blocks · {motionCount}{" "}
           motion · 3 themes
         </Badge>
@@ -64,13 +68,18 @@ export default function HomePage() {
           enterprise dashboards to award-bait creative sites.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <Button size="lg" asChild>
+          <Button size="lg" className="rounded-none" asChild>
             <Link href="/docs">
               Get started
               <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
-          <Button size="lg" variant="outline" asChild>
+          <Button
+            size="lg"
+            variant="outline"
+            className="rounded-none border-dashed"
+            asChild
+          >
             <Link href="/docs/components/accordion">Browse components</Link>
           </Button>
         </div>
@@ -80,15 +89,12 @@ export default function HomePage() {
         />
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-20">
-        <ThemeCarousel />
-        <div className="mt-8">
-          <Showcase />
-        </div>
+      <section className="border-b border-dashed px-6 py-12">
+        <Showcase />
       </section>
 
-      <section className="border-t py-6">
-        <Marquee className="mx-auto max-w-7xl px-6 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+      <section className="border-b border-dashed py-6">
+        <Marquee className="px-6 [&>div]:[animation-duration:80s] [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
           {itemNames.map((name) => (
             <span
               key={name}
@@ -100,9 +106,9 @@ export default function HomePage() {
         </Marquee>
       </section>
 
-      <section className="border-t bg-muted/40">
-        <div className="mx-auto grid max-w-7xl gap-8 px-6 py-14 text-center sm:grid-cols-3">
-          <div>
+      <section className="border-b border-dashed bg-muted/30">
+        <div className="grid gap-8 px-6 py-14 text-center sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-dashed sm:divide-border">
+          <div className="sm:px-6">
             <div className="text-4xl font-bold tracking-tight">
               <CountUp value={registry.length} />
             </div>
@@ -110,7 +116,7 @@ export default function HomePage() {
               registry items, source included
             </p>
           </div>
-          <div>
+          <div className="sm:px-6">
             <div className="text-4xl font-bold tracking-tight">
               <CountUp value={3} />
             </div>
@@ -118,7 +124,7 @@ export default function HomePage() {
               themes from one token source
             </p>
           </div>
-          <div>
+          <div className="sm:px-6">
             <div className="text-4xl font-bold tracking-tight">
               <CountUp value={1} />
             </div>
@@ -129,22 +135,24 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-t">
-        <div className="mx-auto grid max-w-7xl gap-8 px-6 py-20 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="px-6 py-20">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {FEATURES.map((feature, index) => (
             <FadeIn key={feature.title} delay={index * 100}>
-              <feature.icon className="h-5 w-5 text-primary" />
-              <h2 className="mt-3 font-semibold">{feature.title}</h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                {feature.body}
-              </p>
+              <div className="bp-frame bp-corners h-full bg-card/50 p-6">
+                <feature.icon className="h-5 w-5 text-primary" />
+                <h2 className="mt-3 font-semibold">{feature.title}</h2>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {feature.body}
+                </p>
+              </div>
             </FadeIn>
           ))}
         </div>
       </section>
 
-      <footer className="border-t">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-8 text-sm text-muted-foreground">
+      <footer className="border-t border-dashed">
+        <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-8 text-sm text-muted-foreground">
           <p>Lorre Blocks — internal design system, alpha.</p>
           <div className="flex gap-4">
             <Link href="/docs" className="hover:text-foreground">

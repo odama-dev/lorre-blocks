@@ -27,15 +27,14 @@ import {
 
 /**
  * Live component sampler on the landing page. Everything below is rendered
- * from registry source and restyles instantly when the header theme picker
- * swaps the token block — no component code involved.
+ * straight from registry source, so it always reflects the real components.
  */
 export function Showcase() {
   const [usage, setUsage] = React.useState(64)
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <Card>
+      <Card className="rounded-none border-dashed shadow-none">
         <CardHeader>
           <CardTitle>Create project</CardTitle>
           <CardDescription>
@@ -47,7 +46,7 @@ export function Showcase() {
             <Label htmlFor="name">Name</Label>
             <Input id="name" placeholder="acme-dashboard" />
           </div>
-          <div className="flex items-center justify-between rounded-lg border p-3">
+          <div className="flex items-center justify-between border border-dashed p-3">
             <div className="space-y-0.5">
               <Label htmlFor="tokens">Semantic tokens</Label>
               <p className="text-xs text-muted-foreground">
@@ -60,7 +59,7 @@ export function Showcase() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="rounded-none border-dashed shadow-none">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             Storage
@@ -106,7 +105,7 @@ export function Showcase() {
         </CardContent>
       </Card>
 
-      <Card className="max-lg:hidden">
+      <Card className="rounded-none border-dashed shadow-none max-lg:hidden">
         <CardHeader>
           <CardTitle>Pick a date</CardTitle>
           <CardDescription>react-day-picker on Lorre tokens.</CardDescription>

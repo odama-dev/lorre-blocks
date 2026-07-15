@@ -21,9 +21,9 @@ const FONTS_LINK_ID = "lorre-studio-fonts"
 
 /**
  * The Theme Studio: tweak a ThemeDefinition on the left, watch the whole page
- * re-theme live (the same page-wide mechanism the header theme picker uses —
- * portal-rendered overlays stay themed too), copy the result as CSS / JSON /
- * a CLI command. State round-trips through the `?t=` share param.
+ * re-theme live via a page-wide injected <style> (portal-rendered overlays stay
+ * themed too), copy the result as CSS / JSON / a CLI command. State round-trips
+ * through the `?t=` share param.
  */
 export function ThemeStudio() {
   const [def, setDef] = React.useState<ThemeDefinition>(EMPTY_DEFINITION)
@@ -97,8 +97,8 @@ export function ThemeStudio() {
   }, [])
 
   return (
-    <div className="mx-auto grid max-w-7xl gap-8 px-6 py-8 lg:grid-cols-[300px_1fr]">
-      <aside className="lg:sticky lg:top-20 lg:h-[calc(100vh-6rem)] lg:overflow-y-auto lg:pr-2">
+    <div className="grid gap-8 px-6 py-8 lg:grid-cols-[300px_1fr]">
+      <aside className="lg:sticky lg:top-20 lg:h-[calc(100vh-6rem)] lg:overflow-y-auto lg:border-r lg:border-dashed lg:pr-4">
         <StudioControls def={def} patch={patch} reset={reset} />
       </aside>
       <div className="min-w-0 space-y-8">
