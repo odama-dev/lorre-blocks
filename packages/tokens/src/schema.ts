@@ -56,6 +56,33 @@ const colorSeedSchema = z
   })
   .strict()
 
+/** Steps 1–12, hex only — the ramp is pinned, so there is nothing to compute. */
+const rampStepsSchema = z
+  .array(z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, "must be a hex color"))
+  .length(12, "a ramp must pin all 12 steps")
+
+const colorRampSchema = z
+  .object({
+    steps: rampStepsSchema,
+    // Required, unlike a seed's: there is no curve to fall back on, and a
+    // hand-tuned dark mode cannot be derived from its light mode.
+    dark: z.object({ steps: rampStepsSchema }).strict(),
+    onSolid: z.enum(["light", "dark"]).optional(),
+  })
+  .strict()
+
+const colorSpecSchema = z.union([colorRampSchema, colorSeedSchema])
+
+const semanticRefSchema = z.string().min(1)
+
+/** One ref for both modes, or a ref per mode when the two are unrelated. */
+const semanticValueSchema = z.union([
+  semanticRefSchema,
+  z
+    .object({ light: semanticRefSchema, dark: semanticRefSchema })
+    .strict(),
+])
+
 const dimensionSchema = z
   .string()
   .regex(
@@ -71,7 +98,7 @@ const durationSchema = z
   .string()
   .regex(/^\d*\.?\d+m?s$/, "expected a CSS duration like \"200ms\"")
 
-const typeScaleSchema = z
+const modularTypeScaleSchema = z
   .object({
     base: z
       .string()
@@ -80,6 +107,27 @@ const typeScaleSchema = z
     fluid: z.boolean().optional(),
   })
   .strict()
+
+const typeStepSchema = z
+  .object({
+    size: cssValueSchema,
+    lineHeight: z.union([z.number().positive(), cssValueSchema]),
+    letterSpacing: cssValueSchema.optional(),
+    weight: z.number().int().min(1).max(1000).optional(),
+    family: z.enum(["sans", "mono", "display"]).optional(),
+  })
+  .strict()
+
+/** Every step measured — for scales no single ratio can reach. */
+const explicitTypeScaleSchema = z
+  .object({
+    steps: z
+      .record(z.string().regex(/^[a-z0-9][a-z0-9-]*$/, "step name must be kebab-case"), typeStepSchema)
+      .refine((s) => Object.keys(s).length > 0, "an explicit scale needs at least one step"),
+  })
+  .strict()
+
+const typeScaleSchema = z.union([explicitTypeScaleSchema, modularTypeScaleSchema])
 
 const componentsSchema = z
   .object(
@@ -126,19 +174,19 @@ export const themeDefinitionSchema = z
     extends: z.string().optional(),
     colors: z
       .object({
-        neutral: colorSeedSchema.optional(),
-        accent: colorSeedSchema.optional(),
-        secondary: colorSeedSchema.optional(),
-        danger: colorSeedSchema.optional(),
-        success: colorSeedSchema.optional(),
-        warning: colorSeedSchema.optional(),
+        neutral: colorSpecSchema.optional(),
+        accent: colorSpecSchema.optional(),
+        secondary: colorSpecSchema.optional(),
+        danger: colorSpecSchema.optional(),
+        success: colorSpecSchema.optional(),
+        warning: colorSpecSchema.optional(),
       })
       .strict()
       .optional(),
     semantics: z
       .object(
         Object.fromEntries(
-          SEMANTIC_NAMES.map((name) => [name, z.string().min(1)])
+          SEMANTIC_NAMES.map((name) => [name, semanticValueSchema])
         )
       )
       .partial()

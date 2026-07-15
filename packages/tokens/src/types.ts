@@ -26,8 +26,8 @@ export const SCALE_NAMES: CoreScaleName[] = [
 ]
 
 /** Color scales carried by a resolved theme; `secondary` is opt-in. */
-export type ThemeColors = Record<CoreScaleName, ColorSeed> & {
-  secondary?: ColorSeed
+export type ThemeColors = Record<CoreScaleName, ColorSpec> & {
+  secondary?: ColorSpec
 }
 
 /** Scales a theme actually carries, in emission order (secondary follows accent). */
@@ -49,6 +49,38 @@ export interface ColorSeed {
   onSolid?: "light" | "dark"
   /** Overrides applied in dark mode (e.g. monochrome accents flip to light solids). */
   dark?: Partial<Pick<ColorSeed, "hue" | "chroma" | "lightness" | "onSolid">>
+}
+
+/** A ramp carries one hex per step, in step order 1 → 12. */
+export type RampSteps = readonly [
+  string, string, string, string, string, string,
+  string, string, string, string, string, string,
+]
+
+/**
+ * A scale pinned step by step, for palettes that were tuned by hand and so
+ * cannot be reached from a seed — the generator walks a fixed lightness/chroma
+ * curve at one hue, which is the wrong shape for a ramp whose chroma peaks
+ * mid-scale or whose steps carry no Radix role.
+ *
+ * `dark` is required, unlike `ColorSeed.dark`: a seed without it still yields a
+ * real dark scale from DARK_STEPS, but a ramp has no curve to fall back on, and
+ * a hand-tuned dark mode is not a function of its light mode — measured against
+ * AlignUI, 9 of 20 semantic tokens break the naive `1000 - step` inversion.
+ */
+export interface ColorRamp {
+  /** Steps 1–12 as hex (`#rgb` or `#rrggbb`). */
+  steps: RampSteps
+  dark: { steps: RampSteps }
+  /** Text color on top of steps 9–10. Derived from step 9 when omitted. */
+  onSolid?: "light" | "dark"
+}
+
+/** How a theme spells one scale: generated from a seed, or pinned step by step. */
+export type ColorSpec = ColorSeed | ColorRamp
+
+export function isRamp(spec: ColorSpec): spec is ColorRamp {
+  return "steps" in spec
 }
 
 export type SemanticColorName =
@@ -84,7 +116,33 @@ export type SemanticColorName =
  */
 export type SemanticRef = string
 
-export type SemanticColors = Record<SemanticColorName, SemanticRef>
+/**
+ * A semantic is either one ref for both modes, or a ref per mode.
+ *
+ * A single ref only tracks the mode when it points at a scale: `--neutral-1` is
+ * re-declared under `.dark`, so "neutral-1" follows. A *literal* has nothing to
+ * re-declare, so one literal is frozen across both modes — which is why pinning
+ * exact colors needs the split form.
+ *
+ * Splitting is also the only way to say what a hand-tuned dark mode does: it is
+ * not a function of the light mode. Against AlignUI, 9 of 20 semantics break the
+ * naive inversion — `bg-weak-50` goes 50 → 800 where the rule predicts 950, and
+ * `text-soft-400` goes 400 → 500 where it predicts 600. Dark consistently
+ * compresses the range rather than mirroring it.
+ */
+export type SemanticValue =
+  | SemanticRef
+  | { light: SemanticRef; dark: SemanticRef }
+
+export type SemanticColors = Record<SemanticColorName, SemanticValue>
+
+/** The ref a semantic resolves to in one mode. */
+export function semanticRefFor(
+  value: SemanticValue,
+  mode: ColorMode
+): SemanticRef {
+  return typeof value === "string" ? value : value[mode]
+}
 
 export interface Typography {
   /** Font stacks as arrays (DTCG fontFamily format); joined for CSS. */
@@ -95,18 +153,59 @@ export interface Typography {
   typeScale?: TypeScale
 }
 
+/** Which font stack a text style renders in. */
+export type FontRole = "sans" | "mono" | "display"
+
+/** One text style, measured rather than derived. */
+export interface TypeStepSpec {
+  /** CSS font-size — a rem literal, or any length/clamp(). */
+  size: string
+  /** Unitless ratio, or any CSS line-height. */
+  lineHeight: number | string
+  /** CSS letter-spacing, e.g. "-1%" or "-0.01em". */
+  letterSpacing?: string
+  weight?: number
+  /** Defaults to `sans`. */
+  family?: FontRole
+}
+
 /**
  * Modular type scale: `base` is the body size, each heading step multiplies
  * by `ratio` (h6 = base·ratio¹ … h1 = base·ratio⁶, small = base/ratio).
  * `fluid` (default true) renders headings as viewport-interpolated `clamp()`
  * values so they shrink on small screens with zero media queries.
  */
-export interface TypeScale {
+export interface ModularTypeScale {
   /** Body font size in rem, e.g. "1rem". */
   base: string
   /** Step multiplier, e.g. 1.25. */
   ratio: number
   fluid?: boolean
+}
+
+/**
+ * Every step named and measured, for a scale that was tuned by hand rather
+ * than derived — the type-side twin of `ColorRamp`.
+ *
+ * A ratio cannot reach such a scale. Measured against AlignUI: its steps run
+ * 56 → 48 → 40 → 32 → 24 → 20, whose ratios are 1.17, 1.20, 1.25, 1.33, 1.20 —
+ * no single multiplier produces them. Worse, size alone stops identifying a
+ * style: Label/Small and Paragraph/Small are both 14/20 and differ only in
+ * weight (500 vs 400), while Subheading/Small is *also* 14/20 at weight 500 and
+ * differs from Label/Small only in letter-spacing (+6% vs -0.6%) — a property
+ * the modular form cannot express at all.
+ */
+export interface ExplicitTypeScale {
+  /** Token name → style. `--text-<name>` follows insertion order. */
+  steps: Record<string, TypeStepSpec>
+}
+
+export type TypeScale = ModularTypeScale | ExplicitTypeScale
+
+export function isExplicitTypeScale(
+  scale: TypeScale
+): scale is ExplicitTypeScale {
+  return "steps" in scale
 }
 
 export interface RadiusScale {
@@ -180,7 +279,7 @@ export interface ThemeDefinition {
   description: string
   /** Name of the theme this one extends. Unset = root theme. */
   extends?: string
-  colors?: Partial<Record<ScaleName, ColorSeed>>
+  colors?: Partial<Record<ScaleName, ColorSpec>>
   semantics?: Partial<SemanticColors>
   typography?: Partial<Typography>
   radius?: Partial<RadiusScale>

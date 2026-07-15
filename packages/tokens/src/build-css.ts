@@ -3,9 +3,10 @@ import { generateScale, onSolidColor } from "./scale"
 import { computeTypeScale } from "./type-scale"
 import {
   KEY_COMPONENTS,
+  semanticRefFor,
   themeScaleNames,
   type ColorMode,
-  type ColorSeed,
+  type ColorSpec,
   type KeyComponent,
   type ResolvedTheme,
   type Bezier,
@@ -75,8 +76,8 @@ function resolveSemantic(
   }
   const onRef = ref.match(/^on-([a-z]+)$/)
   if (onRef && scales.includes(onRef[1])) {
-    const seed = theme.colors[onRef[1] as keyof typeof theme.colors] as ColorSeed
-    return formatOklch(onSolidColor(seed, mode))
+    const spec = theme.colors[onRef[1] as keyof typeof theme.colors] as ColorSpec
+    return formatOklch(onSolidColor(spec, mode))
   }
   return ref // literal CSS color
 }
@@ -119,7 +120,7 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push(...scaleLines(theme, "light"))
   out.push("")
   for (const name of SEMANTIC_ORDER) {
-    out.push(`  --${name}: ${resolveSemantic(theme, theme.semantics[name], "light")};`)
+    out.push(`  --${name}: ${resolveSemantic(theme, semanticRefFor(theme.semantics[name], "light"), "light")};`)
   }
   out.push("")
   out.push(`  --radius: ${theme.radius.base};`)
@@ -163,7 +164,7 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push(...scaleLines(theme, "dark"))
   out.push("")
   for (const name of SEMANTIC_ORDER) {
-    out.push(`  --${name}: ${resolveSemantic(theme, theme.semantics[name], "dark")};`)
+    out.push(`  --${name}: ${resolveSemantic(theme, semanticRefFor(theme.semantics[name], "dark"), "dark")};`)
   }
   out.push("}", "")
 
@@ -193,6 +194,16 @@ export function themeToCss(theme: ResolvedTheme): string {
     for (const step of typeSteps) {
       out.push(`  --text-${step.name}: var(--text-${step.name});`)
       out.push(`  --text-${step.name}--line-height: ${step.lineHeight};`)
+      // Only explicit scales carry these; a ratio has nothing to say about them.
+      if (step.letterSpacing !== undefined) {
+        out.push(`  --text-${step.name}--letter-spacing: ${step.letterSpacing};`)
+      }
+      if (step.weight !== undefined) {
+        out.push(`  --text-${step.name}--font-weight: ${step.weight};`)
+      }
+      if (step.family !== undefined) {
+        out.push(`  --text-${step.name}--font-family: var(--font-${step.family});`)
+      }
     }
   }
   out.push("")

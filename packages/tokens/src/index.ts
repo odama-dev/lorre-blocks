@@ -11,6 +11,7 @@ import type {
 export * from "./types"
 export * from "./oklch"
 export * from "./scale"
+export * from "./contrast"
 export * from "./icons"
 export * from "./type-scale"
 export * from "./schema"

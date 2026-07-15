@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest"
 import { themeToCss } from "./build-css"
 import { themeToDtcg } from "./build-dtcg"
 import { formatOklch, hexToOklch, hexToSeed, oklchToHex } from "./oklch"
+import { checkContrast, contrastRatio, resolveSemanticColor } from "./contrast"
 import { generateScale, onSolidColor } from "./scale"
 import { themeDefinitionSchema } from "./schema"
 import { computeTypeScale } from "./type-scale"
@@ -381,5 +382,384 @@ describe("dtcg v2 groups (7.1)", () => {
     ) as any
     expect(branded.color.light.secondary["9"].$value).toMatch(/^#/)
     expect(branded.color.semantic.secondary.$value).toBe("{color.light.secondary.9}")
+  })
+})
+
+describe("explicit ramps (R1)", () => {
+  /**
+   * A fixture shaped like a hand-tuned palette — chroma peaking mid-scale
+   * rather than falling away from the solid, which is the shape a seed cannot
+   * reach. Ten of the twelve steps are AlignUI blue; steps 1 and 12 are
+   * invented, because AlignUI ships 11 shades and a Lorre ramp takes 12, and
+   * how those two vocabularies line up is still an open question (see the
+   * odama theme work) — not something to quietly settle inside a fixture.
+   */
+  const BLUE_LIGHT = [
+    "#F5F8FF", "#EBF1FF", "#D5E2FF", "#C0D5FF", "#97BAFF", "#6895FF",
+    "#335CFF", "#3559E9", "#2547D0", "#1F3BAD", "#182F8B", "#122368",
+  ] as const
+  const BLUE_DARK = [
+    "#0E1B4E", "#122368", "#182F8B", "#1F3BAD", "#2547D0", "#3559E9",
+    "#335CFF", "#6895FF", "#97BAFF", "#C0D5FF", "#D5E2FF", "#EBF1FF",
+  ] as const
+  const ramp = { steps: BLUE_LIGHT, dark: { steps: BLUE_DARK } }
+
+  it("emits the pinned steps verbatim, not a generated curve", () => {
+    const light = generateScale(ramp, "light")
+    expect(light).toHaveLength(12)
+    expect(light.map(oklchToHex)).toEqual(BLUE_LIGHT.map((h) => h.toLowerCase()))
+  })
+
+  it("reads dark from its own ramp — dark is not derived from light", () => {
+    const dark = generateScale(ramp, "dark")
+    expect(dark.map(oklchToHex)).toEqual(BLUE_DARK.map((h) => h.toLowerCase()))
+    expect(dark.map(oklchToHex)).not.toEqual(
+      generateScale(ramp, "light").map(oklchToHex)
+    )
+  })
+
+  it("keeps the chroma peak a seed cannot reach", () => {
+    // The generator multiplies one chroma by a fixed per-step factor, so chroma
+    // can only fall away from the solid. This ramp peaks mid-scale and drops on
+    // both sides — the shape that makes the pinned form necessary.
+    const c = generateScale(ramp, "light").map((s) => s.c)
+    const peak = c.indexOf(Math.max(...c))
+    expect(peak).toBeGreaterThan(0)
+    expect(peak).toBeLessThan(11)
+    expect(c[peak]).toBeGreaterThan(c[peak - 1])
+    expect(c[peak]).toBeGreaterThan(c[peak + 1])
+  })
+
+  it("derives on-solid from step 9 when not declared", () => {
+    // Step 9 light is #2547D0 — dark, so text on it must be light.
+    expect(onSolidColor(ramp, "light").l).toBeGreaterThan(0.9)
+    // Step 9 dark is #97BAFF — light, so the text color flips.
+    expect(onSolidColor(ramp, "dark").l).toBeLessThan(0.3)
+  })
+
+  it("honours an explicit onSolid over the derived one", () => {
+    const forced = { ...ramp, onSolid: "dark" as const }
+    expect(onSolidColor(forced, "light").l).toBeLessThan(0.3)
+  })
+
+  it("schema rejects a ramp that does not pin all 12 steps", () => {
+    const short = themeDefinitionSchema.safeParse({
+      name: "x", description: "d",
+      colors: { accent: { steps: BLUE_LIGHT.slice(0, 11), dark: { steps: BLUE_DARK } } },
+    })
+    expect(short.success).toBe(false)
+  })
+
+  it("schema rejects a ramp with no dark mode", () => {
+    const noDark = themeDefinitionSchema.safeParse({
+      name: "x", description: "d",
+      colors: { accent: { steps: BLUE_LIGHT } },
+    })
+    expect(noDark.success).toBe(false)
+  })
+
+  it("schema accepts a well-formed ramp, and still accepts a seed", () => {
+    expect(
+      themeDefinitionSchema.safeParse({
+        name: "x", description: "d",
+        colors: {
+          accent: { steps: BLUE_LIGHT, dark: { steps: BLUE_DARK } },
+          danger: { hue: 27, chroma: 0.22, lightness: 0.58 },
+        },
+      }).success
+    ).toBe(true)
+  })
+
+  it("a ramped theme resolves and reaches the CSS in both modes", () => {
+    const theme = resolveTheme({
+      name: "ramped", description: "d", extends: "basic",
+      colors: { accent: { steps: BLUE_LIGHT, dark: { steps: BLUE_DARK } } },
+    })
+    const css = themeToCss(theme)
+    // Step 9 is pinned, so :root and .dark each carry their own --accent-9.
+    expect(css).toContain(`--accent-9: ${formatOklch(hexToOklch("#2547D0"))};`)
+    expect(css).toContain(`--accent-9: ${formatOklch(hexToOklch("#97BAFF"))};`)
+  })
+
+  it("leaves seeded scales in the same theme untouched", () => {
+    const ramped = resolveTheme({
+      name: "ramped", description: "d", extends: "basic",
+      colors: { accent: { steps: BLUE_LIGHT, dark: { steps: BLUE_DARK } } },
+    })
+    const basic = getResolvedTheme("basic")!
+    // danger is still a seed here; pinning accent must not disturb it.
+    expect(generateScale(ramped.colors.danger, "light")).toEqual(
+      generateScale(basic.colors.danger, "light")
+    )
+  })
+})
+
+describe("mode-aware semantics (R2)", () => {
+  it("a single literal is frozen across modes — the hole R2 exists to close", () => {
+    const theme = resolveTheme({
+      name: "lit", description: "d", extends: "basic",
+      semantics: { background: "#ffffff" },
+    })
+    const css = themeToCss(theme)
+    const root = css.slice(css.indexOf(":root {"), css.indexOf(".dark {"))
+    const dark = css.slice(css.indexOf(".dark {"), css.indexOf("@theme inline"))
+    expect(root).toContain("--background: #ffffff;")
+    expect(dark).toContain("--background: #ffffff;")
+  })
+
+  it("a split literal resolves per mode", () => {
+    const theme = resolveTheme({
+      name: "split", description: "d", extends: "basic",
+      semantics: { background: { light: "#ffffff", dark: "#171717" } },
+    })
+    const css = themeToCss(theme)
+    const root = css.slice(css.indexOf(":root {"), css.indexOf(".dark {"))
+    const dark = css.slice(css.indexOf(".dark {"), css.indexOf("@theme inline"))
+    expect(root).toContain("--background: #ffffff;")
+    expect(root).not.toContain("--background: #171717;")
+    expect(dark).toContain("--background: #171717;")
+  })
+
+  it("carries a dark mode that no inversion rule predicts", () => {
+    // AlignUI's bg-weak-50 goes 50 → 800, not the 950 an inversion implies.
+    const theme = resolveTheme({
+      name: "compressed", description: "d", extends: "basic",
+      semantics: { muted: { light: "neutral-2", dark: "neutral-9" } },
+    })
+    const css = themeToCss(theme)
+    const dark = css.slice(css.indexOf(".dark {"), css.indexOf("@theme inline"))
+    expect(dark).toContain("--muted: var(--neutral-9);")
+  })
+
+  it("splits scale refs per mode too, not just literals", () => {
+    const theme = resolveTheme({
+      name: "split-scale", description: "d", extends: "basic",
+      semantics: { border: { light: "neutral-6", dark: "neutral-8" } },
+    })
+    const css = themeToCss(theme)
+    const root = css.slice(css.indexOf(":root {"), css.indexOf(".dark {"))
+    const dark = css.slice(css.indexOf(".dark {"), css.indexOf("@theme inline"))
+    expect(root).toContain("--border: var(--neutral-6);")
+    expect(dark).toContain("--border: var(--neutral-8);")
+  })
+
+  it("DTCG keeps the two modes distinct", () => {
+    const theme = resolveTheme({
+      name: "dtcg-split", description: "d", extends: "basic",
+      semantics: {
+        border: { light: "neutral-6", dark: "neutral-8" },
+        background: { light: "#ffffff", dark: "#171717" },
+      },
+    })
+    const doc = themeToDtcg(theme) as any
+    expect(doc.color.semantic.border.$value).toBe("{color.light.neutral.6}")
+    expect(doc.color.semantic.border.$extensions["io.lorre.dark"]).toBe(
+      "{color.dark.neutral.8}"
+    )
+    expect(doc.color.semantic.background.$value).toBe("#ffffff")
+    expect(doc.color.semantic.background.$extensions["io.lorre.dark-value"]).toBe(
+      "#171717"
+    )
+  })
+
+  it("schema takes both forms and rejects a half-split", () => {
+    const base = { name: "x", description: "d" }
+    expect(
+      themeDefinitionSchema.safeParse({
+        ...base, semantics: { background: "neutral-1" },
+      }).success
+    ).toBe(true)
+    expect(
+      themeDefinitionSchema.safeParse({
+        ...base, semantics: { background: { light: "neutral-1", dark: "neutral-12" } },
+      }).success
+    ).toBe(true)
+    expect(
+      themeDefinitionSchema.safeParse({
+        ...base, semantics: { background: { light: "neutral-1" } },
+      }).success
+    ).toBe(false)
+  })
+})
+
+describe("explicit type scale (R4)", () => {
+  // AlignUI's three 14/20 styles, verbatim. Same size, same line-height —
+  // they are only told apart by weight and letter-spacing.
+  const steps = {
+    "label-sm": { size: "0.875rem", lineHeight: 1.4286, weight: 500, letterSpacing: "-0.6%" },
+    "paragraph-sm": { size: "0.875rem", lineHeight: 1.4286, weight: 400, letterSpacing: "-0.6%" },
+    "subheading-sm": { size: "0.875rem", lineHeight: 1.4286, weight: 500, letterSpacing: "6%" },
+    "title-h1": { size: "3.5rem", lineHeight: 1.1429, weight: 500, letterSpacing: "-1%", family: "display" as const },
+  }
+
+  it("passes measured steps through instead of deriving them", () => {
+    const out = computeTypeScale({ steps })
+    expect(out.map((s) => s.name)).toEqual([
+      "label-sm", "paragraph-sm", "subheading-sm", "title-h1",
+    ])
+    expect(out[0].size).toBe("0.875rem")
+    expect(out[3].family).toBe("display")
+  })
+
+  it("tells apart styles a modular scale would collapse", () => {
+    const out = computeTypeScale({ steps })
+    const [label, paragraph, subheading] = out
+    // Identical size — so size alone cannot identify the style.
+    expect(label.size).toBe(paragraph.size)
+    expect(label.size).toBe(subheading.size)
+    // Weight separates label from paragraph...
+    expect(label.weight).not.toBe(paragraph.weight)
+    // ...and letter-spacing separates label from subheading, at equal weight.
+    expect(label.weight).toBe(subheading.weight)
+    expect(label.letterSpacing).not.toBe(subheading.letterSpacing)
+  })
+
+  it("emits the Tailwind modifiers for each measured property", () => {
+    const theme = resolveTheme({
+      name: "typed", description: "d", extends: "basic",
+      typography: { typeScale: { steps } },
+    })
+    const css = themeToCss(theme)
+    expect(css).toContain("--text-subheading-sm: 0.875rem;")
+    expect(css).toContain("--text-subheading-sm--letter-spacing: 6%;")
+    expect(css).toContain("--text-subheading-sm--font-weight: 500;")
+    expect(css).toContain("--text-title-h1--font-family: var(--font-display);")
+  })
+
+  it("a modular scale still emits no letter-spacing or weight", () => {
+    const css = themeToCss(getResolvedTheme("basic"))
+    expect(css).toContain("--text-h1--line-height:")
+    expect(css).not.toContain("--text-h1--letter-spacing:")
+    expect(css).not.toContain("--text-h1--font-weight:")
+  })
+
+  it("DTCG carries the measured properties", () => {
+    const theme = resolveTheme({
+      name: "typed-dtcg", description: "d", extends: "basic",
+      typography: { typeScale: { steps } },
+    })
+    const doc = themeToDtcg(theme) as any
+    const sub = doc.typography["type-scale"]["subheading-sm"]
+    expect(sub.$value).toBe("0.875rem")
+    expect(sub.$extensions["io.lorre.letter-spacing"]).toBe("6%")
+    expect(sub.$extensions["io.lorre.font-weight"]).toBe(500)
+  })
+
+  it("schema takes both forms and rejects a step with no size", () => {
+    const base = { name: "x", description: "d" }
+    expect(
+      themeDefinitionSchema.safeParse({
+        ...base, typography: { typeScale: { base: "1rem", ratio: 1.25 } },
+      }).success
+    ).toBe(true)
+    expect(
+      themeDefinitionSchema.safeParse({
+        ...base, typography: { typeScale: { steps } },
+      }).success
+    ).toBe(true)
+    expect(
+      themeDefinitionSchema.safeParse({
+        ...base,
+        typography: { typeScale: { steps: { bad: { lineHeight: 1.5 } } } },
+      }).success
+    ).toBe(false)
+  })
+})
+
+describe("contrast (7.7)", () => {
+  it("computes WCAG ratios against known anchors", () => {
+    expect(contrastRatio("#ffffff", "#000000")).toBeCloseTo(21, 1)
+    expect(contrastRatio("#ffffff", "#ffffff")).toBeCloseTo(1, 5)
+    // Order must not matter.
+    expect(contrastRatio("#171717", "#ffffff")).toBeCloseTo(
+      contrastRatio("#ffffff", "#171717"),
+      10
+    )
+  })
+
+  it("resolves a semantic to the same color the CSS lands on", () => {
+    const theme = getResolvedTheme("basic")
+    // --background is neutral-1; both paths must agree.
+    expect(oklchToHex(resolveSemanticColor(theme, "background", "light"))).toBe(
+      oklchToHex(generateScale(theme.colors.neutral, "light")[0])
+    )
+  })
+
+  it("follows a split semantic into the right mode", () => {
+    const theme = resolveTheme({
+      name: "c-split", description: "d", extends: "basic",
+      semantics: { background: { light: "#ffffff", dark: "#171717" } },
+    })
+    expect(oklchToHex(resolveSemanticColor(theme, "background", "light"))).toBe("#ffffff")
+    expect(oklchToHex(resolveSemanticColor(theme, "background", "dark"))).toBe("#171717")
+  })
+
+  /**
+   * Measured shortfalls in the shipped themes, recorded rather than hidden.
+   *
+   * `on-<scale>` picks its text color from one lightness threshold, which is a
+   * heuristic, not a guarantee — these pairs are what it misses. The list may
+   * only shrink: anything not on it must clear AA, and anything on it must
+   * still fail, so fixing a theme forces the entry out.
+   */
+  const KNOWN_BELOW_AA: Record<string, string[]> = {
+    basic: ["success/success-foreground"],
+    dreamy: [
+      "success/success-foreground",
+      "destructive/destructive-foreground",
+      "primary/primary-foreground",
+    ],
+    utilitarian: ["success/success-foreground"],
+  }
+
+  for (const theme of allResolvedThemes()) {
+    const allowed = KNOWN_BELOW_AA[theme.name] ?? []
+
+    it(`${theme.name}: every unlisted pair clears AA 4.5, both modes`, () => {
+      for (const { surface, text, mode, ratio } of checkContrast(theme)) {
+        if (allowed.includes(`${surface}/${text}`)) continue
+        expect(
+          ratio,
+          `${theme.name} ${surface}/${text} (${mode}) is ${ratio.toFixed(2)}`
+        ).toBeGreaterThanOrEqual(4.5)
+      }
+    })
+
+    it(`${theme.name}: even listed pairs stay above 3.0`, () => {
+      for (const { surface, text, mode, ratio } of checkContrast(theme)) {
+        expect(
+          ratio,
+          `${theme.name} ${surface}/${text} (${mode}) is ${ratio.toFixed(2)}`
+        ).toBeGreaterThanOrEqual(3)
+      }
+    })
+
+    it(`${theme.name}: the shortfall list has no stale entries`, () => {
+      const failing = new Set(
+        checkContrast(theme)
+          .filter((r) => r.ratio < 4.5)
+          .map((r) => `${r.surface}/${r.text}`)
+      )
+      for (const entry of allowed) {
+        expect(
+          failing.has(entry),
+          `${theme.name} "${entry}" now clears AA — drop it from KNOWN_BELOW_AA`
+        ).toBe(true)
+      }
+    })
+  }
+
+  it("catches a pinned theme that matches its reference but cannot be read", () => {
+    // Grey-on-grey: exactly the failure a hand-pinned palette invites, and the
+    // one the seed generator's on-solid step used to make unreachable.
+    const unreadable = resolveTheme({
+      name: "unreadable", description: "d", extends: "basic",
+      semantics: {
+        background: { light: "#777777", dark: "#777777" },
+        foreground: { light: "#888888", dark: "#888888" },
+      },
+    })
+    const pair = checkContrast(unreadable).find((r) => r.surface === "background")!
+    expect(pair.ratio).toBeLessThan(3)
   })
 })

@@ -1,7 +1,11 @@
 "use client"
 
 import * as React from "react"
-import type { ThemeDefinition } from "@lorre-blocks/tokens"
+import {
+  computeTypeScale,
+  isExplicitTypeScale,
+  type ThemeDefinition,
+} from "@lorre-blocks/tokens"
 
 import {
   AlertDialog,
@@ -145,12 +149,22 @@ function PreviewHeading({ children }: { children: React.ReactNode }) {
  * compiled at build time.
  */
 function TypeSpecimen({ def }: { def: ThemeDefinition }) {
-  const ratio = def.typography?.typeScale?.ratio ?? 1.25
+  const scale = def.typography?.typeScale
+  // A measured scale names its own steps, so the specimen has to read them
+  // rather than assume h1…h4. For a modular scale these are h1…h4 anyway.
+  const steps = scale ? computeTypeScale(scale) : []
+  const explicit = scale !== undefined && isExplicitTypeScale(scale)
+  const levels =
+    steps.length > 0 ? steps.slice(0, 4).map((s) => s.name) : ["h1", "h2", "h3", "h4"]
+
   return (
     <section className="space-y-3">
-      <PreviewHeading>Type scale · ratio {ratio}</PreviewHeading>
+      <PreviewHeading>
+        Type scale ·{" "}
+        {explicit ? `${steps.length} measured steps` : `ratio ${scale?.ratio ?? 1.25}`}
+      </PreviewHeading>
       <div className="space-y-1 rounded-lg border p-4">
-        {(["h1", "h2", "h3", "h4"] as const).map((level) => (
+        {levels.map((level) => (
           <p
             key={level}
             className="truncate font-semibold"

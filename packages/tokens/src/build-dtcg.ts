@@ -3,9 +3,10 @@ import { generateScale, onSolidColor } from "./scale"
 import { computeTypeScale } from "./type-scale"
 import {
   KEY_COMPONENTS,
+  semanticRefFor,
   themeScaleNames,
   type ColorMode,
-  type ColorSeed,
+  type ColorSpec,
   type KeyComponent,
   type ResolvedTheme,
   type SemanticColorName,
@@ -45,34 +46,49 @@ function scaleGroup(theme: ResolvedTheme, mode: ColorMode): Dtcg {
   return group
 }
 
+/**
+ * One semantic, in one mode, as DTCG. A scale ref becomes an alias into that
+ * mode's color group; anything else resolves to a concrete value.
+ */
+function resolveDtcg(
+  theme: ResolvedTheme,
+  ref: string,
+  mode: ColorMode
+): { alias?: string; hex?: string; oklch?: string } {
+  const scales = themeScaleNames(theme.colors) as string[]
+  const scaleRef = ref.match(/^([a-z]+)-(\d{1,2})$/)
+  if (scaleRef && scales.includes(scaleRef[1])) {
+    return { alias: `{color.${mode}.${scaleRef[1]}.${scaleRef[2]}}` }
+  }
+  const onRef = ref.match(/^on-([a-z]+)$/)
+  if (onRef && scales.includes(onRef[1])) {
+    const spec = theme.colors[onRef[1] as keyof typeof theme.colors] as ColorSpec
+    return {
+      hex: oklchToHex(onSolidColor(spec, mode)),
+      oklch: formatOklch(onSolidColor(spec, mode)),
+    }
+  }
+  return { hex: ref } // literal CSS color, passed through
+}
+
 function semanticGroup(theme: ResolvedTheme): Dtcg {
   const group: Dtcg = {}
-  const scales = themeScaleNames(theme.colors) as string[]
   for (const name of Object.keys(theme.semantics) as SemanticColorName[]) {
-    const ref = theme.semantics[name]
-    const scaleRef = ref.match(/^([a-z]+)-(\d{1,2})$/)
-    const onRef = ref.match(/^on-([a-z]+)$/)
+    const value = theme.semantics[name]
+    const light = resolveDtcg(theme, semanticRefFor(value, "light"), "light")
+    const dark = resolveDtcg(theme, semanticRefFor(value, "dark"), "dark")
 
-    if (scaleRef && scales.includes(scaleRef[1])) {
-      group[name] = {
-        $type: "color",
-        $value: `{color.light.${scaleRef[1]}.${scaleRef[2]}}`,
-        $extensions: {
-          "io.lorre.dark": `{color.dark.${scaleRef[1]}.${scaleRef[2]}}`,
-        },
-      }
-    } else if (onRef && scales.includes(onRef[1])) {
-      const seed = theme.colors[onRef[1] as keyof typeof theme.colors] as ColorSeed
-      group[name] = {
-        $type: "color",
-        $value: oklchToHex(onSolidColor(seed, "light")),
-        $extensions: {
-          "io.lorre.oklch": formatOklch(onSolidColor(seed, "light")),
-          "io.lorre.dark-value": oklchToHex(onSolidColor(seed, "dark")),
-        },
-      }
-    } else {
-      group[name] = { $type: "color", $value: ref }
+    const ext: Record<string, string> = {}
+    if (light.oklch) ext["io.lorre.oklch"] = light.oklch
+    // Aliases and values land under different keys: a consumer can follow the
+    // former into the dark color group, but has to take the latter as given.
+    if (dark.alias) ext["io.lorre.dark"] = dark.alias
+    else if (dark.hex !== light.hex) ext["io.lorre.dark-value"] = dark.hex!
+
+    group[name] = {
+      $type: "color",
+      $value: light.alias ?? light.hex,
+      ...(Object.keys(ext).length > 0 ? { $extensions: ext } : {}),
     }
   }
   return group
@@ -166,7 +182,14 @@ export function themeToDtcg(theme: ResolvedTheme): Dtcg {
       typeScale[step.name] = {
         $type: "dimension",
         $value: step.size,
-        $extensions: { "io.lorre.line-height": step.lineHeight },
+        $extensions: {
+          "io.lorre.line-height": step.lineHeight,
+          ...(step.letterSpacing !== undefined
+            ? { "io.lorre.letter-spacing": step.letterSpacing }
+            : {}),
+          ...(step.weight !== undefined ? { "io.lorre.font-weight": step.weight } : {}),
+          ...(step.family !== undefined ? { "io.lorre.font-family": step.family } : {}),
+        },
       }
     }
   }

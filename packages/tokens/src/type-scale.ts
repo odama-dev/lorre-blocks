@@ -1,4 +1,4 @@
-import type { TypeScale } from "./types"
+import { isExplicitTypeScale, type FontRole, type TypeScale } from "./types"
 
 /**
  * Modular type-scale generator. Sizes are pure powers of the ratio
@@ -6,6 +6,9 @@ import type { TypeScale } from "./types"
  * interpolate between 75% of the target size (floored at the body size) on a
  * 24rem viewport and the full size on an 80rem viewport, emitted as a single
  * `clamp()` so headings are responsive without media queries.
+ *
+ * An explicit scale skips all of that and passes its steps through. Both forms
+ * land on the same `TypeStep[]`, so the emitters stay unaware of which was used.
  */
 
 export interface TypeStep {
@@ -13,7 +16,11 @@ export interface TypeStep {
   name: string
   /** CSS font-size value (rem literal, or clamp() when fluid). */
   size: string
-  lineHeight: number
+  lineHeight: number | string
+  /** Only set by explicit scales; a ratio has nothing to say about these. */
+  letterSpacing?: string
+  weight?: number
+  family?: FontRole
 }
 
 const VIEWPORT_MIN_REM = 24
@@ -31,6 +38,13 @@ const HEADING_LINE_HEIGHTS: Record<string, number> = {
 }
 
 export function computeTypeScale(scale: TypeScale): TypeStep[] {
+  if (isExplicitTypeScale(scale)) {
+    return Object.entries(scale.steps).map(([name, spec]) => ({
+      name,
+      ...spec,
+    }))
+  }
+
   const base = parseRem(scale.base)
   const fluid = scale.fluid !== false
   const steps: TypeStep[] = []
