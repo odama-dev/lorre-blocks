@@ -153,18 +153,59 @@ export interface Typography {
   typeScale?: TypeScale
 }
 
+/** Which font stack a text style renders in. */
+export type FontRole = "sans" | "mono" | "display"
+
+/** One text style, measured rather than derived. */
+export interface TypeStepSpec {
+  /** CSS font-size — a rem literal, or any length/clamp(). */
+  size: string
+  /** Unitless ratio, or any CSS line-height. */
+  lineHeight: number | string
+  /** CSS letter-spacing, e.g. "-1%" or "-0.01em". */
+  letterSpacing?: string
+  weight?: number
+  /** Defaults to `sans`. */
+  family?: FontRole
+}
+
 /**
  * Modular type scale: `base` is the body size, each heading step multiplies
  * by `ratio` (h6 = base·ratio¹ … h1 = base·ratio⁶, small = base/ratio).
  * `fluid` (default true) renders headings as viewport-interpolated `clamp()`
  * values so they shrink on small screens with zero media queries.
  */
-export interface TypeScale {
+export interface ModularTypeScale {
   /** Body font size in rem, e.g. "1rem". */
   base: string
   /** Step multiplier, e.g. 1.25. */
   ratio: number
   fluid?: boolean
+}
+
+/**
+ * Every step named and measured, for a scale that was tuned by hand rather
+ * than derived — the type-side twin of `ColorRamp`.
+ *
+ * A ratio cannot reach such a scale. Measured against AlignUI: its steps run
+ * 56 → 48 → 40 → 32 → 24 → 20, whose ratios are 1.17, 1.20, 1.25, 1.33, 1.20 —
+ * no single multiplier produces them. Worse, size alone stops identifying a
+ * style: Label/Small and Paragraph/Small are both 14/20 and differ only in
+ * weight (500 vs 400), while Subheading/Small is *also* 14/20 at weight 500 and
+ * differs from Label/Small only in letter-spacing (+6% vs -0.6%) — a property
+ * the modular form cannot express at all.
+ */
+export interface ExplicitTypeScale {
+  /** Token name → style. `--text-<name>` follows insertion order. */
+  steps: Record<string, TypeStepSpec>
+}
+
+export type TypeScale = ModularTypeScale | ExplicitTypeScale
+
+export function isExplicitTypeScale(
+  scale: TypeScale
+): scale is ExplicitTypeScale {
+  return "steps" in scale
 }
 
 export interface RadiusScale {

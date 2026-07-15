@@ -580,3 +580,87 @@ describe("mode-aware semantics (R2)", () => {
     ).toBe(false)
   })
 })
+
+describe("explicit type scale (R4)", () => {
+  // AlignUI's three 14/20 styles, verbatim. Same size, same line-height —
+  // they are only told apart by weight and letter-spacing.
+  const steps = {
+    "label-sm": { size: "0.875rem", lineHeight: 1.4286, weight: 500, letterSpacing: "-0.6%" },
+    "paragraph-sm": { size: "0.875rem", lineHeight: 1.4286, weight: 400, letterSpacing: "-0.6%" },
+    "subheading-sm": { size: "0.875rem", lineHeight: 1.4286, weight: 500, letterSpacing: "6%" },
+    "title-h1": { size: "3.5rem", lineHeight: 1.1429, weight: 500, letterSpacing: "-1%", family: "display" as const },
+  }
+
+  it("passes measured steps through instead of deriving them", () => {
+    const out = computeTypeScale({ steps })
+    expect(out.map((s) => s.name)).toEqual([
+      "label-sm", "paragraph-sm", "subheading-sm", "title-h1",
+    ])
+    expect(out[0].size).toBe("0.875rem")
+    expect(out[3].family).toBe("display")
+  })
+
+  it("tells apart styles a modular scale would collapse", () => {
+    const out = computeTypeScale({ steps })
+    const [label, paragraph, subheading] = out
+    // Identical size — so size alone cannot identify the style.
+    expect(label.size).toBe(paragraph.size)
+    expect(label.size).toBe(subheading.size)
+    // Weight separates label from paragraph...
+    expect(label.weight).not.toBe(paragraph.weight)
+    // ...and letter-spacing separates label from subheading, at equal weight.
+    expect(label.weight).toBe(subheading.weight)
+    expect(label.letterSpacing).not.toBe(subheading.letterSpacing)
+  })
+
+  it("emits the Tailwind modifiers for each measured property", () => {
+    const theme = resolveTheme({
+      name: "typed", description: "d", extends: "basic",
+      typography: { typeScale: { steps } },
+    })
+    const css = themeToCss(theme)
+    expect(css).toContain("--text-subheading-sm: 0.875rem;")
+    expect(css).toContain("--text-subheading-sm--letter-spacing: 6%;")
+    expect(css).toContain("--text-subheading-sm--font-weight: 500;")
+    expect(css).toContain("--text-title-h1--font-family: var(--font-display);")
+  })
+
+  it("a modular scale still emits no letter-spacing or weight", () => {
+    const css = themeToCss(getResolvedTheme("basic"))
+    expect(css).toContain("--text-h1--line-height:")
+    expect(css).not.toContain("--text-h1--letter-spacing:")
+    expect(css).not.toContain("--text-h1--font-weight:")
+  })
+
+  it("DTCG carries the measured properties", () => {
+    const theme = resolveTheme({
+      name: "typed-dtcg", description: "d", extends: "basic",
+      typography: { typeScale: { steps } },
+    })
+    const doc = themeToDtcg(theme) as any
+    const sub = doc.typography["type-scale"]["subheading-sm"]
+    expect(sub.$value).toBe("0.875rem")
+    expect(sub.$extensions["io.lorre.letter-spacing"]).toBe("6%")
+    expect(sub.$extensions["io.lorre.font-weight"]).toBe(500)
+  })
+
+  it("schema takes both forms and rejects a step with no size", () => {
+    const base = { name: "x", description: "d" }
+    expect(
+      themeDefinitionSchema.safeParse({
+        ...base, typography: { typeScale: { base: "1rem", ratio: 1.25 } },
+      }).success
+    ).toBe(true)
+    expect(
+      themeDefinitionSchema.safeParse({
+        ...base, typography: { typeScale: { steps } },
+      }).success
+    ).toBe(true)
+    expect(
+      themeDefinitionSchema.safeParse({
+        ...base,
+        typography: { typeScale: { steps: { bad: { lineHeight: 1.5 } } } },
+      }).success
+    ).toBe(false)
+  })
+})

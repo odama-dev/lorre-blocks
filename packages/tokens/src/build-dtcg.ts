@@ -182,7 +182,14 @@ export function themeToDtcg(theme: ResolvedTheme): Dtcg {
       typeScale[step.name] = {
         $type: "dimension",
         $value: step.size,
-        $extensions: { "io.lorre.line-height": step.lineHeight },
+        $extensions: {
+          "io.lorre.line-height": step.lineHeight,
+          ...(step.letterSpacing !== undefined
+            ? { "io.lorre.letter-spacing": step.letterSpacing }
+            : {}),
+          ...(step.weight !== undefined ? { "io.lorre.font-weight": step.weight } : {}),
+          ...(step.family !== undefined ? { "io.lorre.font-family": step.family } : {}),
+        },
       }
     }
   }

@@ -98,7 +98,7 @@ const durationSchema = z
   .string()
   .regex(/^\d*\.?\d+m?s$/, "expected a CSS duration like \"200ms\"")
 
-const typeScaleSchema = z
+const modularTypeScaleSchema = z
   .object({
     base: z
       .string()
@@ -107,6 +107,27 @@ const typeScaleSchema = z
     fluid: z.boolean().optional(),
   })
   .strict()
+
+const typeStepSchema = z
+  .object({
+    size: cssValueSchema,
+    lineHeight: z.union([z.number().positive(), cssValueSchema]),
+    letterSpacing: cssValueSchema.optional(),
+    weight: z.number().int().min(1).max(1000).optional(),
+    family: z.enum(["sans", "mono", "display"]).optional(),
+  })
+  .strict()
+
+/** Every step measured — for scales no single ratio can reach. */
+const explicitTypeScaleSchema = z
+  .object({
+    steps: z
+      .record(z.string().regex(/^[a-z0-9][a-z0-9-]*$/, "step name must be kebab-case"), typeStepSchema)
+      .refine((s) => Object.keys(s).length > 0, "an explicit scale needs at least one step"),
+  })
+  .strict()
+
+const typeScaleSchema = z.union([explicitTypeScaleSchema, modularTypeScaleSchema])
 
 const componentsSchema = z
   .object(
