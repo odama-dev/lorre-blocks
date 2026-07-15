@@ -73,6 +73,16 @@ const colorRampSchema = z
 
 const colorSpecSchema = z.union([colorRampSchema, colorSeedSchema])
 
+const semanticRefSchema = z.string().min(1)
+
+/** One ref for both modes, or a ref per mode when the two are unrelated. */
+const semanticValueSchema = z.union([
+  semanticRefSchema,
+  z
+    .object({ light: semanticRefSchema, dark: semanticRefSchema })
+    .strict(),
+])
+
 const dimensionSchema = z
   .string()
   .regex(
@@ -155,7 +165,7 @@ export const themeDefinitionSchema = z
     semantics: z
       .object(
         Object.fromEntries(
-          SEMANTIC_NAMES.map((name) => [name, z.string().min(1)])
+          SEMANTIC_NAMES.map((name) => [name, semanticValueSchema])
         )
       )
       .partial()

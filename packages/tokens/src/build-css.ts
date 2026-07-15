@@ -3,9 +3,10 @@ import { generateScale, onSolidColor } from "./scale"
 import { computeTypeScale } from "./type-scale"
 import {
   KEY_COMPONENTS,
+  semanticRefFor,
   themeScaleNames,
   type ColorMode,
-  type ColorSeed,
+  type ColorSpec,
   type KeyComponent,
   type ResolvedTheme,
   type Bezier,
@@ -119,7 +120,7 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push(...scaleLines(theme, "light"))
   out.push("")
   for (const name of SEMANTIC_ORDER) {
-    out.push(`  --${name}: ${resolveSemantic(theme, theme.semantics[name], "light")};`)
+    out.push(`  --${name}: ${resolveSemantic(theme, semanticRefFor(theme.semantics[name], "light"), "light")};`)
   }
   out.push("")
   out.push(`  --radius: ${theme.radius.base};`)
@@ -163,7 +164,7 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push(...scaleLines(theme, "dark"))
   out.push("")
   for (const name of SEMANTIC_ORDER) {
-    out.push(`  --${name}: ${resolveSemantic(theme, theme.semantics[name], "dark")};`)
+    out.push(`  --${name}: ${resolveSemantic(theme, semanticRefFor(theme.semantics[name], "dark"), "dark")};`)
   }
   out.push("}", "")
 

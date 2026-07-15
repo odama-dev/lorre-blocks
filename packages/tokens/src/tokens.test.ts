@@ -492,3 +492,91 @@ describe("explicit ramps (R1)", () => {
     )
   })
 })
+
+describe("mode-aware semantics (R2)", () => {
+  it("a single literal is frozen across modes — the hole R2 exists to close", () => {
+    const theme = resolveTheme({
+      name: "lit", description: "d", extends: "basic",
+      semantics: { background: "#ffffff" },
+    })
+    const css = themeToCss(theme)
+    const root = css.slice(css.indexOf(":root {"), css.indexOf(".dark {"))
+    const dark = css.slice(css.indexOf(".dark {"), css.indexOf("@theme inline"))
+    expect(root).toContain("--background: #ffffff;")
+    expect(dark).toContain("--background: #ffffff;")
+  })
+
+  it("a split literal resolves per mode", () => {
+    const theme = resolveTheme({
+      name: "split", description: "d", extends: "basic",
+      semantics: { background: { light: "#ffffff", dark: "#171717" } },
+    })
+    const css = themeToCss(theme)
+    const root = css.slice(css.indexOf(":root {"), css.indexOf(".dark {"))
+    const dark = css.slice(css.indexOf(".dark {"), css.indexOf("@theme inline"))
+    expect(root).toContain("--background: #ffffff;")
+    expect(root).not.toContain("--background: #171717;")
+    expect(dark).toContain("--background: #171717;")
+  })
+
+  it("carries a dark mode that no inversion rule predicts", () => {
+    // AlignUI's bg-weak-50 goes 50 → 800, not the 950 an inversion implies.
+    const theme = resolveTheme({
+      name: "compressed", description: "d", extends: "basic",
+      semantics: { muted: { light: "neutral-2", dark: "neutral-9" } },
+    })
+    const css = themeToCss(theme)
+    const dark = css.slice(css.indexOf(".dark {"), css.indexOf("@theme inline"))
+    expect(dark).toContain("--muted: var(--neutral-9);")
+  })
+
+  it("splits scale refs per mode too, not just literals", () => {
+    const theme = resolveTheme({
+      name: "split-scale", description: "d", extends: "basic",
+      semantics: { border: { light: "neutral-6", dark: "neutral-8" } },
+    })
+    const css = themeToCss(theme)
+    const root = css.slice(css.indexOf(":root {"), css.indexOf(".dark {"))
+    const dark = css.slice(css.indexOf(".dark {"), css.indexOf("@theme inline"))
+    expect(root).toContain("--border: var(--neutral-6);")
+    expect(dark).toContain("--border: var(--neutral-8);")
+  })
+
+  it("DTCG keeps the two modes distinct", () => {
+    const theme = resolveTheme({
+      name: "dtcg-split", description: "d", extends: "basic",
+      semantics: {
+        border: { light: "neutral-6", dark: "neutral-8" },
+        background: { light: "#ffffff", dark: "#171717" },
+      },
+    })
+    const doc = themeToDtcg(theme) as any
+    expect(doc.color.semantic.border.$value).toBe("{color.light.neutral.6}")
+    expect(doc.color.semantic.border.$extensions["io.lorre.dark"]).toBe(
+      "{color.dark.neutral.8}"
+    )
+    expect(doc.color.semantic.background.$value).toBe("#ffffff")
+    expect(doc.color.semantic.background.$extensions["io.lorre.dark-value"]).toBe(
+      "#171717"
+    )
+  })
+
+  it("schema takes both forms and rejects a half-split", () => {
+    const base = { name: "x", description: "d" }
+    expect(
+      themeDefinitionSchema.safeParse({
+        ...base, semantics: { background: "neutral-1" },
+      }).success
+    ).toBe(true)
+    expect(
+      themeDefinitionSchema.safeParse({
+        ...base, semantics: { background: { light: "neutral-1", dark: "neutral-12" } },
+      }).success
+    ).toBe(true)
+    expect(
+      themeDefinitionSchema.safeParse({
+        ...base, semantics: { background: { light: "neutral-1" } },
+      }).success
+    ).toBe(false)
+  })
+})

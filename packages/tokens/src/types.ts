@@ -116,7 +116,33 @@ export type SemanticColorName =
  */
 export type SemanticRef = string
 
-export type SemanticColors = Record<SemanticColorName, SemanticRef>
+/**
+ * A semantic is either one ref for both modes, or a ref per mode.
+ *
+ * A single ref only tracks the mode when it points at a scale: `--neutral-1` is
+ * re-declared under `.dark`, so "neutral-1" follows. A *literal* has nothing to
+ * re-declare, so one literal is frozen across both modes — which is why pinning
+ * exact colors needs the split form.
+ *
+ * Splitting is also the only way to say what a hand-tuned dark mode does: it is
+ * not a function of the light mode. Against AlignUI, 9 of 20 semantics break the
+ * naive inversion — `bg-weak-50` goes 50 → 800 where the rule predicts 950, and
+ * `text-soft-400` goes 400 → 500 where it predicts 600. Dark consistently
+ * compresses the range rather than mirroring it.
+ */
+export type SemanticValue =
+  | SemanticRef
+  | { light: SemanticRef; dark: SemanticRef }
+
+export type SemanticColors = Record<SemanticColorName, SemanticValue>
+
+/** The ref a semantic resolves to in one mode. */
+export function semanticRefFor(
+  value: SemanticValue,
+  mode: ColorMode
+): SemanticRef {
+  return typeof value === "string" ? value : value[mode]
+}
 
 export interface Typography {
   /** Font stacks as arrays (DTCG fontFamily format); joined for CSS. */
