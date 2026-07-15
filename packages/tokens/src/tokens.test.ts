@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest"
 import { themeToCss } from "./build-css"
 import { themeToDtcg } from "./build-dtcg"
 import { formatOklch, hexToOklch, hexToSeed, oklchToHex } from "./oklch"
+import { checkContrast, contrastRatio, resolveSemanticColor } from "./contrast"
 import { generateScale, onSolidColor } from "./scale"
 import { themeDefinitionSchema } from "./schema"
 import { computeTypeScale } from "./type-scale"
@@ -662,5 +663,103 @@ describe("explicit type scale (R4)", () => {
         typography: { typeScale: { steps: { bad: { lineHeight: 1.5 } } } },
       }).success
     ).toBe(false)
+  })
+})
+
+describe("contrast (7.7)", () => {
+  it("computes WCAG ratios against known anchors", () => {
+    expect(contrastRatio("#ffffff", "#000000")).toBeCloseTo(21, 1)
+    expect(contrastRatio("#ffffff", "#ffffff")).toBeCloseTo(1, 5)
+    // Order must not matter.
+    expect(contrastRatio("#171717", "#ffffff")).toBeCloseTo(
+      contrastRatio("#ffffff", "#171717"),
+      10
+    )
+  })
+
+  it("resolves a semantic to the same color the CSS lands on", () => {
+    const theme = getResolvedTheme("basic")
+    // --background is neutral-1; both paths must agree.
+    expect(oklchToHex(resolveSemanticColor(theme, "background", "light"))).toBe(
+      oklchToHex(generateScale(theme.colors.neutral, "light")[0])
+    )
+  })
+
+  it("follows a split semantic into the right mode", () => {
+    const theme = resolveTheme({
+      name: "c-split", description: "d", extends: "basic",
+      semantics: { background: { light: "#ffffff", dark: "#171717" } },
+    })
+    expect(oklchToHex(resolveSemanticColor(theme, "background", "light"))).toBe("#ffffff")
+    expect(oklchToHex(resolveSemanticColor(theme, "background", "dark"))).toBe("#171717")
+  })
+
+  /**
+   * Measured shortfalls in the shipped themes, recorded rather than hidden.
+   *
+   * `on-<scale>` picks its text color from one lightness threshold, which is a
+   * heuristic, not a guarantee — these pairs are what it misses. The list may
+   * only shrink: anything not on it must clear AA, and anything on it must
+   * still fail, so fixing a theme forces the entry out.
+   */
+  const KNOWN_BELOW_AA: Record<string, string[]> = {
+    basic: ["success/success-foreground"],
+    dreamy: [
+      "success/success-foreground",
+      "destructive/destructive-foreground",
+      "primary/primary-foreground",
+    ],
+    utilitarian: ["success/success-foreground"],
+  }
+
+  for (const theme of allResolvedThemes()) {
+    const allowed = KNOWN_BELOW_AA[theme.name] ?? []
+
+    it(`${theme.name}: every unlisted pair clears AA 4.5, both modes`, () => {
+      for (const { surface, text, mode, ratio } of checkContrast(theme)) {
+        if (allowed.includes(`${surface}/${text}`)) continue
+        expect(
+          ratio,
+          `${theme.name} ${surface}/${text} (${mode}) is ${ratio.toFixed(2)}`
+        ).toBeGreaterThanOrEqual(4.5)
+      }
+    })
+
+    it(`${theme.name}: even listed pairs stay above 3.0`, () => {
+      for (const { surface, text, mode, ratio } of checkContrast(theme)) {
+        expect(
+          ratio,
+          `${theme.name} ${surface}/${text} (${mode}) is ${ratio.toFixed(2)}`
+        ).toBeGreaterThanOrEqual(3)
+      }
+    })
+
+    it(`${theme.name}: the shortfall list has no stale entries`, () => {
+      const failing = new Set(
+        checkContrast(theme)
+          .filter((r) => r.ratio < 4.5)
+          .map((r) => `${r.surface}/${r.text}`)
+      )
+      for (const entry of allowed) {
+        expect(
+          failing.has(entry),
+          `${theme.name} "${entry}" now clears AA — drop it from KNOWN_BELOW_AA`
+        ).toBe(true)
+      }
+    })
+  }
+
+  it("catches a pinned theme that matches its reference but cannot be read", () => {
+    // Grey-on-grey: exactly the failure a hand-pinned palette invites, and the
+    // one the seed generator's on-solid step used to make unreachable.
+    const unreadable = resolveTheme({
+      name: "unreadable", description: "d", extends: "basic",
+      semantics: {
+        background: { light: "#777777", dark: "#777777" },
+        foreground: { light: "#888888", dark: "#888888" },
+      },
+    })
+    const pair = checkContrast(unreadable).find((r) => r.surface === "background")!
+    expect(pair.ratio).toBeLessThan(3)
   })
 })
