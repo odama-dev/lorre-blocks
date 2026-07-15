@@ -56,6 +56,23 @@ const colorSeedSchema = z
   })
   .strict()
 
+/** Steps 1–12, hex only — the ramp is pinned, so there is nothing to compute. */
+const rampStepsSchema = z
+  .array(z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, "must be a hex color"))
+  .length(12, "a ramp must pin all 12 steps")
+
+const colorRampSchema = z
+  .object({
+    steps: rampStepsSchema,
+    // Required, unlike a seed's: there is no curve to fall back on, and a
+    // hand-tuned dark mode cannot be derived from its light mode.
+    dark: z.object({ steps: rampStepsSchema }).strict(),
+    onSolid: z.enum(["light", "dark"]).optional(),
+  })
+  .strict()
+
+const colorSpecSchema = z.union([colorRampSchema, colorSeedSchema])
+
 const dimensionSchema = z
   .string()
   .regex(
@@ -126,12 +143,12 @@ export const themeDefinitionSchema = z
     extends: z.string().optional(),
     colors: z
       .object({
-        neutral: colorSeedSchema.optional(),
-        accent: colorSeedSchema.optional(),
-        secondary: colorSeedSchema.optional(),
-        danger: colorSeedSchema.optional(),
-        success: colorSeedSchema.optional(),
-        warning: colorSeedSchema.optional(),
+        neutral: colorSpecSchema.optional(),
+        accent: colorSpecSchema.optional(),
+        secondary: colorSpecSchema.optional(),
+        danger: colorSpecSchema.optional(),
+        success: colorSpecSchema.optional(),
+        warning: colorSpecSchema.optional(),
       })
       .strict()
       .optional(),

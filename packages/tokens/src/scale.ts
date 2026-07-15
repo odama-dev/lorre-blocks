@@ -1,5 +1,11 @@
-import { type Oklch } from "./oklch"
-import type { ColorMode, ColorSeed } from "./types"
+import { hexToOklch, type Oklch } from "./oklch"
+import {
+  isRamp,
+  type ColorMode,
+  type ColorRamp,
+  type ColorSeed,
+  type ColorSpec,
+} from "./types"
 
 /**
  * 12-step scale generator, following Radix step semantics:
@@ -9,6 +15,10 @@ import type { ColorMode, ColorSeed } from "./types"
  *
  * Steps 9–10 come from the seed; every other step follows a fixed
  * lightness/chroma curve so all scales in a theme feel consistent.
+ *
+ * A scale can also be pinned step by step (`ColorRamp`), which skips the curve
+ * entirely. Both forms resolve to the same 12 Oklch values here, so everything
+ * downstream — CSS, DTCG, semantic refs — stays unaware of which was used.
  */
 
 interface Step {
@@ -52,8 +62,13 @@ export function effectiveSeed(seed: ColorSeed, mode: ColorMode): ColorSeed {
   return mode === "dark" ? { ...seed, ...seed.dark } : seed
 }
 
-export function generateScale(seed: ColorSeed, mode: ColorMode): Oklch[] {
-  const s = effectiveSeed(seed, mode)
+export function generateScale(spec: ColorSpec, mode: ColorMode): Oklch[] {
+  if (isRamp(spec)) {
+    const steps = mode === "dark" ? spec.dark.steps : spec.steps
+    return steps.map(hexToOklch)
+  }
+
+  const s = effectiveSeed(spec, mode)
   const steps = mode === "dark" ? DARK_STEPS : LIGHT_STEPS
 
   return steps.map((step, i) => {
@@ -67,12 +82,24 @@ export function generateScale(seed: ColorSeed, mode: ColorMode): Oklch[] {
 }
 
 /** Text color that sits on the scale's solid steps (9–10). */
-export function onSolidColor(seed: ColorSeed, mode: ColorMode): Oklch {
-  const s = effectiveSeed(seed, mode)
-  const tone = s.onSolid ?? (s.lightness >= 0.68 ? "dark" : "light")
+export function onSolidColor(spec: ColorSpec, mode: ColorMode): Oklch {
+  // A ramp has no seed to read, so step 9 — the solid itself — stands in for it.
+  const { lightness, hue, onSolid } = isRamp(spec)
+    ? { ...hexToSolid(spec, mode), onSolid: spec.onSolid }
+    : effectiveSeed(spec, mode)
+
+  const tone = onSolid ?? (lightness >= 0.68 ? "dark" : "light")
   return tone === "light"
-    ? { l: 0.985, c: 0.005, h: s.hue }
-    : { l: 0.235, c: 0.012, h: s.hue }
+    ? { l: 0.985, c: 0.005, h: hue }
+    : { l: 0.235, c: 0.012, h: hue }
+}
+
+function hexToSolid(
+  ramp: ColorRamp,
+  mode: ColorMode
+): { lightness: number; hue: number } {
+  const { l, h } = hexToOklch((mode === "dark" ? ramp.dark.steps : ramp.steps)[8])
+  return { lightness: l, hue: h }
 }
 
 function clamp01(n: number): number {

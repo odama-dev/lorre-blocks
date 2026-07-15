@@ -383,3 +383,112 @@ describe("dtcg v2 groups (7.1)", () => {
     expect(branded.color.semantic.secondary.$value).toBe("{color.light.secondary.9}")
   })
 })
+
+describe("explicit ramps (R1)", () => {
+  /**
+   * A fixture shaped like a hand-tuned palette — chroma peaking mid-scale
+   * rather than falling away from the solid, which is the shape a seed cannot
+   * reach. Ten of the twelve steps are AlignUI blue; steps 1 and 12 are
+   * invented, because AlignUI ships 11 shades and a Lorre ramp takes 12, and
+   * how those two vocabularies line up is still an open question (see the
+   * odama theme work) — not something to quietly settle inside a fixture.
+   */
+  const BLUE_LIGHT = [
+    "#F5F8FF", "#EBF1FF", "#D5E2FF", "#C0D5FF", "#97BAFF", "#6895FF",
+    "#335CFF", "#3559E9", "#2547D0", "#1F3BAD", "#182F8B", "#122368",
+  ] as const
+  const BLUE_DARK = [
+    "#0E1B4E", "#122368", "#182F8B", "#1F3BAD", "#2547D0", "#3559E9",
+    "#335CFF", "#6895FF", "#97BAFF", "#C0D5FF", "#D5E2FF", "#EBF1FF",
+  ] as const
+  const ramp = { steps: BLUE_LIGHT, dark: { steps: BLUE_DARK } }
+
+  it("emits the pinned steps verbatim, not a generated curve", () => {
+    const light = generateScale(ramp, "light")
+    expect(light).toHaveLength(12)
+    expect(light.map(oklchToHex)).toEqual(BLUE_LIGHT.map((h) => h.toLowerCase()))
+  })
+
+  it("reads dark from its own ramp — dark is not derived from light", () => {
+    const dark = generateScale(ramp, "dark")
+    expect(dark.map(oklchToHex)).toEqual(BLUE_DARK.map((h) => h.toLowerCase()))
+    expect(dark.map(oklchToHex)).not.toEqual(
+      generateScale(ramp, "light").map(oklchToHex)
+    )
+  })
+
+  it("keeps the chroma peak a seed cannot reach", () => {
+    // The generator multiplies one chroma by a fixed per-step factor, so chroma
+    // can only fall away from the solid. This ramp peaks mid-scale and drops on
+    // both sides — the shape that makes the pinned form necessary.
+    const c = generateScale(ramp, "light").map((s) => s.c)
+    const peak = c.indexOf(Math.max(...c))
+    expect(peak).toBeGreaterThan(0)
+    expect(peak).toBeLessThan(11)
+    expect(c[peak]).toBeGreaterThan(c[peak - 1])
+    expect(c[peak]).toBeGreaterThan(c[peak + 1])
+  })
+
+  it("derives on-solid from step 9 when not declared", () => {
+    // Step 9 light is #2547D0 — dark, so text on it must be light.
+    expect(onSolidColor(ramp, "light").l).toBeGreaterThan(0.9)
+    // Step 9 dark is #97BAFF — light, so the text color flips.
+    expect(onSolidColor(ramp, "dark").l).toBeLessThan(0.3)
+  })
+
+  it("honours an explicit onSolid over the derived one", () => {
+    const forced = { ...ramp, onSolid: "dark" as const }
+    expect(onSolidColor(forced, "light").l).toBeLessThan(0.3)
+  })
+
+  it("schema rejects a ramp that does not pin all 12 steps", () => {
+    const short = themeDefinitionSchema.safeParse({
+      name: "x", description: "d",
+      colors: { accent: { steps: BLUE_LIGHT.slice(0, 11), dark: { steps: BLUE_DARK } } },
+    })
+    expect(short.success).toBe(false)
+  })
+
+  it("schema rejects a ramp with no dark mode", () => {
+    const noDark = themeDefinitionSchema.safeParse({
+      name: "x", description: "d",
+      colors: { accent: { steps: BLUE_LIGHT } },
+    })
+    expect(noDark.success).toBe(false)
+  })
+
+  it("schema accepts a well-formed ramp, and still accepts a seed", () => {
+    expect(
+      themeDefinitionSchema.safeParse({
+        name: "x", description: "d",
+        colors: {
+          accent: { steps: BLUE_LIGHT, dark: { steps: BLUE_DARK } },
+          danger: { hue: 27, chroma: 0.22, lightness: 0.58 },
+        },
+      }).success
+    ).toBe(true)
+  })
+
+  it("a ramped theme resolves and reaches the CSS in both modes", () => {
+    const theme = resolveTheme({
+      name: "ramped", description: "d", extends: "basic",
+      colors: { accent: { steps: BLUE_LIGHT, dark: { steps: BLUE_DARK } } },
+    })
+    const css = themeToCss(theme)
+    // Step 9 is pinned, so :root and .dark each carry their own --accent-9.
+    expect(css).toContain(`--accent-9: ${formatOklch(hexToOklch("#2547D0"))};`)
+    expect(css).toContain(`--accent-9: ${formatOklch(hexToOklch("#97BAFF"))};`)
+  })
+
+  it("leaves seeded scales in the same theme untouched", () => {
+    const ramped = resolveTheme({
+      name: "ramped", description: "d", extends: "basic",
+      colors: { accent: { steps: BLUE_LIGHT, dark: { steps: BLUE_DARK } } },
+    })
+    const basic = getResolvedTheme("basic")!
+    // danger is still a seed here; pinning accent must not disturb it.
+    expect(generateScale(ramped.colors.danger, "light")).toEqual(
+      generateScale(basic.colors.danger, "light")
+    )
+  })
+})

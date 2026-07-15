@@ -75,8 +75,8 @@ function resolveSemantic(
   }
   const onRef = ref.match(/^on-([a-z]+)$/)
   if (onRef && scales.includes(onRef[1])) {
-    const seed = theme.colors[onRef[1] as keyof typeof theme.colors] as ColorSeed
-    return formatOklch(onSolidColor(seed, mode))
+    const spec = theme.colors[onRef[1] as keyof typeof theme.colors] as ColorSpec
+    return formatOklch(onSolidColor(spec, mode))
   }
   return ref // literal CSS color
 }

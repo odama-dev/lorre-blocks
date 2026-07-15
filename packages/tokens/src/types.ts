@@ -26,8 +26,8 @@ export const SCALE_NAMES: CoreScaleName[] = [
 ]
 
 /** Color scales carried by a resolved theme; `secondary` is opt-in. */
-export type ThemeColors = Record<CoreScaleName, ColorSeed> & {
-  secondary?: ColorSeed
+export type ThemeColors = Record<CoreScaleName, ColorSpec> & {
+  secondary?: ColorSpec
 }
 
 /** Scales a theme actually carries, in emission order (secondary follows accent). */
@@ -49,6 +49,38 @@ export interface ColorSeed {
   onSolid?: "light" | "dark"
   /** Overrides applied in dark mode (e.g. monochrome accents flip to light solids). */
   dark?: Partial<Pick<ColorSeed, "hue" | "chroma" | "lightness" | "onSolid">>
+}
+
+/** A ramp carries one hex per step, in step order 1 → 12. */
+export type RampSteps = readonly [
+  string, string, string, string, string, string,
+  string, string, string, string, string, string,
+]
+
+/**
+ * A scale pinned step by step, for palettes that were tuned by hand and so
+ * cannot be reached from a seed — the generator walks a fixed lightness/chroma
+ * curve at one hue, which is the wrong shape for a ramp whose chroma peaks
+ * mid-scale or whose steps carry no Radix role.
+ *
+ * `dark` is required, unlike `ColorSeed.dark`: a seed without it still yields a
+ * real dark scale from DARK_STEPS, but a ramp has no curve to fall back on, and
+ * a hand-tuned dark mode is not a function of its light mode — measured against
+ * AlignUI, 9 of 20 semantic tokens break the naive `1000 - step` inversion.
+ */
+export interface ColorRamp {
+  /** Steps 1–12 as hex (`#rgb` or `#rrggbb`). */
+  steps: RampSteps
+  dark: { steps: RampSteps }
+  /** Text color on top of steps 9–10. Derived from step 9 when omitted. */
+  onSolid?: "light" | "dark"
+}
+
+/** How a theme spells one scale: generated from a seed, or pinned step by step. */
+export type ColorSpec = ColorSeed | ColorRamp
+
+export function isRamp(spec: ColorSpec): spec is ColorRamp {
+  return "steps" in spec
 }
 
 export type SemanticColorName =
@@ -180,7 +212,7 @@ export interface ThemeDefinition {
   description: string
   /** Name of the theme this one extends. Unset = root theme. */
   extends?: string
-  colors?: Partial<Record<ScaleName, ColorSeed>>
+  colors?: Partial<Record<ScaleName, ColorSpec>>
   semantics?: Partial<SemanticColors>
   typography?: Partial<Typography>
   radius?: Partial<RadiusScale>

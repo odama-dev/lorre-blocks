@@ -62,13 +62,13 @@ function semanticGroup(theme: ResolvedTheme): Dtcg {
         },
       }
     } else if (onRef && scales.includes(onRef[1])) {
-      const seed = theme.colors[onRef[1] as keyof typeof theme.colors] as ColorSeed
+      const spec = theme.colors[onRef[1] as keyof typeof theme.colors] as ColorSpec
       group[name] = {
         $type: "color",
-        $value: oklchToHex(onSolidColor(seed, "light")),
+        $value: oklchToHex(onSolidColor(spec, "light")),
         $extensions: {
-          "io.lorre.oklch": formatOklch(onSolidColor(seed, "light")),
-          "io.lorre.dark-value": oklchToHex(onSolidColor(seed, "dark")),
+          "io.lorre.oklch": formatOklch(onSolidColor(spec, "light")),
+          "io.lorre.dark-value": oklchToHex(onSolidColor(spec, "dark")),
         },
       }
     } else {
