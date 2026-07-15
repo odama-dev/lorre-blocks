@@ -4,7 +4,10 @@ import * as React from "react"
 import { RotateCcw } from "lucide-react"
 import {
   ICON_SETS,
+  isExplicitTypeScale,
+  isRamp,
   type ColorSeed,
+  type ColorSpec,
   type ComponentTokens,
   type ThemeDefinition,
 } from "@lorre-blocks/tokens"
@@ -87,7 +90,7 @@ export function StudioControls({ def, patch, reset }: ControlsProps) {
       <Section title="Accent">
         <ColorControl
           presets={ACCENT_PRESETS}
-          seed={def.colors?.accent}
+          spec={def.colors?.accent}
           onSeed={(seed) => patchColor(def, patch, "accent", seed)}
         />
       </Section>
@@ -95,7 +98,7 @@ export function StudioControls({ def, patch, reset }: ControlsProps) {
       <Section title="Neutral">
         <ColorControl
           presets={NEUTRAL_PRESETS}
-          seed={def.colors?.neutral}
+          spec={def.colors?.neutral}
           onSeed={(seed) => patchColor(def, patch, "neutral", seed)}
         />
       </Section>
@@ -121,7 +124,7 @@ export function StudioControls({ def, patch, reset }: ControlsProps) {
         {def.colors?.secondary ? (
           <ColorControl
             presets={ACCENT_PRESETS}
-            seed={def.colors.secondary}
+            spec={def.colors?.secondary}
             onSeed={(seed) => patchColor(def, patch, "secondary", seed)}
           />
         ) : null}
@@ -144,31 +147,7 @@ export function StudioControls({ def, patch, reset }: ControlsProps) {
             patch({ typography: { ...def.typography, fontMono: monoStack(family) } })
           }
         />
-        <div className="grid gap-2">
-          <div className="flex items-center justify-between">
-            <Label className="text-xs">Type ratio</Label>
-            <span className="text-xs tabular-nums text-muted-foreground">
-              {def.typography?.typeScale?.ratio ?? 1.25}
-            </span>
-          </div>
-          <Slider
-            min={1.1}
-            max={1.4}
-            step={0.05}
-            value={[def.typography?.typeScale?.ratio ?? 1.25]}
-            onValueChange={([ratio]) =>
-              patch({
-                typography: {
-                  ...def.typography,
-                  typeScale: {
-                    base: def.typography?.typeScale?.base ?? "1rem",
-                    ratio,
-                  },
-                },
-              })
-            }
-          />
-        </div>
+        <TypeRatioControl def={def} patch={patch} />
       </Section>
 
       <Section title="Radius">
@@ -304,15 +283,75 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   )
 }
 
+/**
+ * The ratio slider only means something for a modular scale. A measured scale
+ * names every step, so there is no single multiplier to drag.
+ */
+function TypeRatioControl({
+  def,
+  patch,
+}: {
+  def: ThemeDefinition
+  patch: (update: Partial<ThemeDefinition>) => void
+}) {
+  const scale = def.typography?.typeScale
+
+  if (scale && isExplicitTypeScale(scale)) {
+    return (
+      <p className="text-xs text-muted-foreground">
+        {Object.keys(scale.steps).length} measured steps — edit them in the
+        theme&apos;s <code className="font-mono">lorre.theme.json</code>.
+      </p>
+    )
+  }
+
+  const ratio = scale?.ratio ?? 1.25
+  return (
+    <div className="grid gap-2">
+      <div className="flex items-center justify-between">
+        <Label className="text-xs">Type ratio</Label>
+        <span className="text-xs tabular-nums text-muted-foreground">{ratio}</span>
+      </div>
+      <Slider
+        min={1.1}
+        max={1.4}
+        step={0.05}
+        value={[ratio]}
+        onValueChange={([next]) =>
+          patch({
+            typography: {
+              ...def.typography,
+              typeScale: { base: scale?.base ?? "1rem", ratio: next },
+            },
+          })
+        }
+      />
+    </div>
+  )
+}
+
 function ColorControl({
   presets,
-  seed,
+  spec,
   onSeed,
 }: {
   presets: ColorPreset[]
-  seed: ColorSeed | undefined
+  spec: ColorSpec | undefined
   onSeed: (seed: ColorSeed) => void
 }) {
+  // The Studio drives a scale from three numbers. A pinned ramp has no hue,
+  // chroma or lightness to drive them with — which is the whole reason the
+  // ramp form exists. Say so rather than showing sliders that mean nothing.
+  if (spec && isRamp(spec)) {
+    return (
+      <p className="text-xs text-muted-foreground">
+        Pinned step by step — edit this scale in its{" "}
+        <code className="font-mono">lorre.theme.json</code>.
+      </p>
+    )
+  }
+
+  const seed = spec
   const activeHex = seed ? seedToHex(seed) : null
   const [hexDraft, setHexDraft] = React.useState("")
 

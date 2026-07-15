@@ -4,6 +4,8 @@ import color from "picocolors"
 
 import {
   getResolvedTheme,
+  isExplicitTypeScale,
+  isRamp,
   resolveTheme,
   themeDefinitions,
   type ResolvedTheme,
@@ -286,17 +288,22 @@ export async function runThemeShow(options: ThemeShowOptions): Promise<void> {
 
   console.log(`${color.bold(resolved.name)} ${color.dim(`(${source})`)}`)
   console.log(color.dim(resolved.description))
-  for (const [scale, seed] of Object.entries(resolved.colors)) {
-    if (!seed) continue
-    console.log(
-      `  ${scale.padEnd(10)} hue ${seed.hue}  chroma ${seed.chroma}  lightness ${seed.lightness}`
-    )
+  for (const [scale, spec] of Object.entries(resolved.colors)) {
+    if (!spec) continue
+    // A pinned scale has no seed to report, so show its solid step instead.
+    const detail = isRamp(spec)
+      ? `pinned  solid ${spec.steps[8]}  dark ${spec.dark.steps[8]}`
+      : `hue ${spec.hue}  chroma ${spec.chroma}  lightness ${spec.lightness}`
+    console.log(`  ${scale.padEnd(10)} ${detail}`)
   }
   console.log(`  ${"radius".padEnd(10)} base ${resolved.radius.base}`)
   console.log(`  ${"font-sans".padEnd(10)} ${resolved.typography.fontSans[0]}`)
   if (resolved.typography.typeScale) {
     const ts = resolved.typography.typeScale
-    console.log(`  ${"type".padEnd(10)} base ${ts.base}  ratio ${ts.ratio}`)
+    const detail = isExplicitTypeScale(ts)
+      ? `${Object.keys(ts.steps).length} measured steps`
+      : `base ${ts.base}  ratio ${ts.ratio}`
+    console.log(`  ${"type".padEnd(10)} ${detail}`)
   }
   if (resolved.spacing) {
     console.log(`  ${"spacing".padEnd(10)} scaling ${resolved.spacing.scaling}`)
