@@ -6,6 +6,7 @@ import {
   BookOpen,
   Blocks,
   CircleUser,
+  LoaderCircle,
   Palette,
   Shapes,
   Sparkles,
@@ -36,8 +37,9 @@ const SECTIONS: { heading: string; items: Item[] }[] = [
     heading: "Resources",
     items: [
       { title: "Icons", href: "/icons", icon: Shapes },
-      { title: "Logos", href: "/logos", icon: Sparkles, soon: true },
-      { title: "Avatars", href: "/avatars", icon: CircleUser, soon: true },
+      { title: "Loaders", href: "/loaders", icon: LoaderCircle },
+      { title: "Logos", href: "/logos", icon: Sparkles },
+      { title: "Avatars", href: "/avatars", icon: CircleUser },
     ],
   },
   {

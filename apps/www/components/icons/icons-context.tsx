@@ -5,8 +5,8 @@ import { type IconSetName } from "@lorre-blocks/tokens"
 
 import {
   ALL_CATEGORIES,
-  categorize,
   categoryOptions,
+  matchesCategory,
   type CategoryCount,
 } from "@www/lib/icon-categories"
 import {
@@ -87,7 +87,7 @@ export function IconsProvider({ children }: { children: React.ReactNode }) {
     const searched = searchIcons(allNames, query)
     return category === ALL_CATEGORIES
       ? searched
-      : searched.filter((name) => categorize(name) === category)
+      : searched.filter((name) => matchesCategory(name, category))
   }, [allNames, query, category])
 
   const changeSet = React.useCallback((next: IconSetName) => {
