@@ -38,7 +38,7 @@ export default function CliPage() {
         no prompts, ever.
       </p>
 
-      <div className="mt-8 rounded-lg border">
+      <div className="mt-8 border border-dashed">
         <Table>
           <TableHeader>
             <TableRow>

@@ -23,7 +23,12 @@ export async function CodeBlock({
   })
 
   return (
-    <div className={cn("group relative rounded-lg border bg-card", className)}>
+    <div
+      className={cn(
+        "group relative border border-dashed bg-card",
+        className
+      )}
+    >
       <CopyButton
         text={code.trimEnd()}
         className="absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100"
@@ -47,7 +52,7 @@ export function CommandSnippet({
   return (
     <div
       className={cn(
-        "flex items-center justify-between gap-4 rounded-lg border bg-muted px-4 py-2.5",
+        "flex items-center justify-between gap-4 border border-dashed bg-muted px-4 py-2.5",
         className
       )}
     >
