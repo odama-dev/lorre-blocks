@@ -49,7 +49,19 @@ describe("set adapters", () => {
     expect(set.importLine("arrow-right")).toBe(
       'import { ArrowRight } from "lucide-react"'
     )
-    expect(set.jsxSnippet("arrow-right")).toBe('<ArrowRight className="size-4" />')
+    // Snippets carry only what the customizer set; bare means lucide's own defaults.
+    expect(set.jsxSnippet("arrow-right")).toBe("<ArrowRight />")
+    expect(
+      set.jsxSnippet("arrow-right", {
+        size: 16,
+        strokeWidth: 1.5,
+        color: "#ff0000",
+      })
+    ).toBe('<ArrowRight size={16} strokeWidth={1.5} color="#ff0000" />')
+    // "currentColor" is the inherit-the-theme default, so it never gets baked in.
+    expect(set.jsxSnippet("arrow-right", { size: 16, color: "currentColor" })).toBe(
+      "<ArrowRight size={16} />"
+    )
   })
 
   it("radix strips the Icon suffix for display names", async () => {
@@ -67,7 +79,11 @@ describe("set adapters", () => {
     const names = Object.keys(set.icons)
     expect(names.length).toBeGreaterThan(1000)
     expect(names.some((n) => n.endsWith("-icon"))).toBe(false)
-    expect(set.jsxSnippet("acorn")).toBe('<Acorn size={16} weight="duotone" />')
+    // Phosphor always emits a size — 24 is its own default when the customizer is bare.
+    expect(set.jsxSnippet("acorn")).toBe('<Acorn size={24} weight="duotone" />')
+    expect(set.jsxSnippet("acorn", { size: 16 })).toBe(
+      '<Acorn size={16} weight="duotone" />'
+    )
   })
 
   it("heroicons resolves the style subpath", async () => {
