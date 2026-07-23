@@ -1,4 +1,5 @@
 import type { RegistryIndexItem, RegistryItem } from "../registry/schema"
+import { ROOT_THEME } from "./config"
 
 export async function fetchRegistryItem(
   registry: string,
@@ -92,7 +93,7 @@ export async function fetchThemeCss(
   const res = await fetch(url)
 
   if (res.status === 404) {
-    if (name === "basic") return fetchTheme(registry)
+    if (name === ROOT_THEME) return fetchTheme(registry)
     let available = ""
     try {
       const themes = await fetchThemesIndex(registry)
