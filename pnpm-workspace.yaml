@@ -4,3 +4,12 @@ packages:
 allowBuilds:
   esbuild: true
   sharp: true
+
+# Transitive deps pinned past high-severity advisories. Both are pulled in by
+# upstream packages that still range onto vulnerable versions:
+#   sharp    <0.35.0  — via next (declares ^0.34.5)   GHSA-f88m-g3jw-g9cj
+#   fast-uri <3.1.4   — via @modelcontextprotocol/sdk>ajv (declares ^3.0.1)
+# Drop each entry once the upstream range moves past it.
+overrides:
+  sharp: "^0.35.0"
+  fast-uri: "^3.1.4"
