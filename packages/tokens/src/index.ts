@@ -1,4 +1,5 @@
 import { basic } from "./themes/basic"
+import { odama } from "./themes/odama"
 import { dreamy } from "./themes/dreamy"
 import { utilitarian } from "./themes/utilitarian"
 import type {
@@ -46,7 +47,7 @@ export const DEFAULT_SEMANTICS: SemanticColors = {
 }
 
 /** All theme definitions, in display order. */
-export const themeDefinitions: ThemeDefinition[] = [basic, dreamy, utilitarian]
+export const themeDefinitions: ThemeDefinition[] = [basic, dreamy, utilitarian, odama]
 
 const byName = new Map(themeDefinitions.map((t) => [t.name, t]))
 

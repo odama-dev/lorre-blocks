@@ -72,9 +72,9 @@ describe("scale generator", () => {
 })
 
 describe("theme resolution", () => {
-  it("resolves all three shipped themes", () => {
+  it("resolves every shipped theme", () => {
     const names = allResolvedThemes().map((t) => t.name)
-    expect(names).toEqual(["basic", "dreamy", "utilitarian"])
+    expect(names).toEqual(["basic", "dreamy", "utilitarian", "odama"])
   })
 
   it("inherits unset groups from the parent theme", () => {
@@ -710,6 +710,12 @@ describe("contrast (7.7)", () => {
       "primary/primary-foreground",
     ],
     utilitarian: ["success/success-foreground"],
+    // AlignUI's own error-base (#FB3748) under white text lands at 3.50 — over
+    // the 3.0 bar WCAG sets for UI components and large text, under the 4.5 it
+    // sets for body copy. Left at AlignUI's value rather than nudged: matching
+    // the reference is the whole point of this theme, and trading that away is
+    // a call for a designer, not a silent edit here.
+    odama: ["destructive/destructive-foreground"],
   }
 
   for (const theme of allResolvedThemes()) {
@@ -761,5 +767,69 @@ describe("contrast (7.7)", () => {
     })
     const pair = checkContrast(unreadable).find((r) => r.surface === "background")!
     expect(pair.ratio).toBeLessThan(3)
+  })
+})
+
+describe("odama theme", () => {
+  const odama = getResolvedTheme("odama")
+
+  it("lands AlignUI's exact values on the semantic layer, per mode", () => {
+    const at = (name: Parameters<typeof resolveSemanticColor>[1], mode: "light" | "dark") =>
+      oklchToHex(resolveSemanticColor(odama, name, mode))
+
+    // bg-white-0 / text-strong-950
+    expect(at("background", "light")).toBe("#ffffff")
+    expect(at("background", "dark")).toBe("#171717")
+    expect(at("foreground", "light")).toBe("#171717")
+    expect(at("foreground", "dark")).toBe("#ffffff")
+    // bg-weak-50 / text-sub-600
+    expect(at("muted", "light")).toBe("#f7f7f7")
+    expect(at("muted", "dark")).toBe("#262626")
+    expect(at("muted-foreground", "light")).toBe("#5c5c5c")
+    expect(at("muted-foreground", "dark")).toBe("#a3a3a3")
+    // stroke-soft-200 / stroke-sub-300
+    expect(at("border", "light")).toBe("#ebebeb")
+    expect(at("input", "light")).toBe("#d1d1d1")
+  })
+
+  it("carries a dark mode no inversion rule would produce", () => {
+    // bg-weak-50 goes 50 -> 800. An inversion says 950 (#171717).
+    expect(oklchToHex(resolveSemanticColor(odama, "muted", "dark"))).toBe("#262626")
+    expect(oklchToHex(resolveSemanticColor(odama, "muted", "dark"))).not.toBe("#171717")
+    // text-sub-600 goes 600 -> 400. An inversion says 400... by luck. But
+    // text-soft-400 -> 500 is the one that breaks the rule, and muted-foreground
+    // resolving to #a3a3a3 rather than #5c5c5c proves the split is live.
+    expect(oklchToHex(resolveSemanticColor(odama, "muted-foreground", "dark"))).toBe("#a3a3a3")
+  })
+
+  it("anchors primary on AlignUI's blue-500 exactly", () => {
+    // A seed's step 9 is the seed, so accent-9 is #335cff to the byte.
+    expect(oklchToHex(resolveSemanticColor(odama, "primary", "light"))).toBe("#335cff")
+  })
+
+  it("measures all 22 AlignUI text styles, including the ones size alone cannot tell apart", () => {
+    const steps = computeTypeScale(odama.typography.typeScale!)
+    expect(steps).toHaveLength(22)
+
+    const by = (n: string) => steps.find((s) => s.name === n)!
+    // Same size and line-height; only weight separates them.
+    expect(by("label-sm").size).toBe(by("paragraph-sm").size)
+    expect(by("label-sm").weight).toBe(500)
+    expect(by("paragraph-sm").weight).toBe(400)
+    // Same size and weight; only letter-spacing separates them.
+    expect(by("subheading-sm").weight).toBe(by("label-sm").weight)
+    expect(by("subheading-sm").letterSpacing).toBe("6%")
+    expect(by("label-sm").letterSpacing).toBe("-0.6%")
+    // Titles are the only styles on Inter Display.
+    expect(by("title-h1").family).toBe("display")
+    expect(by("paragraph-md").family).toBeUndefined()
+  })
+
+  it("reaches the CSS with its modifiers intact", () => {
+    const css = themeToCss(odama)
+    expect(css).toContain("--background: #FFFFFF;")
+    expect(css).toContain("--text-subheading-sm--letter-spacing: 6%;")
+    expect(css).toContain("--text-title-h1--font-family: var(--font-display);")
+    expect(css).toContain("--font-display: Inter Display, Inter")
   })
 })
