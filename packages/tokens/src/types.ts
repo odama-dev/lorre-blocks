@@ -256,8 +256,23 @@ export interface SpacingTokens {
  * checkbox/radio (radio stays rounded-full).
  */
 export const KEY_COMPONENTS = {
-  button: ["radius", "height", "px"],
-  input: ["radius", "height", "px"],
+  // Every size a theme can reach, not just the default: `sm` and `lg` used to
+  // hardcode their height/padding/font-size, which meant a theme could restyle
+  // the default button and silently not touch the other two.
+  button: [
+    "radius",
+    "height",
+    "px",
+    "font-size",
+    "font-weight",
+    "height-sm",
+    "px-sm",
+    "font-size-sm",
+    "height-lg",
+    "px-lg",
+    "font-size-lg",
+  ],
+  input: ["radius", "height", "px", "font-size"],
   card: ["radius", "padding"],
   panel: ["radius", "padding"],
   badge: ["radius", "px", "py"],

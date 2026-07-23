@@ -8,6 +8,7 @@ import {
   DEFAULT_ALIASES,
   DEFAULT_REGISTRY,
   DEFAULT_THEME,
+  ROOT_THEME,
   configExists,
   writeConfig,
 } from "../utils/config"
@@ -163,10 +164,10 @@ async function promptTheme(registry: string): Promise<string> {
       hint: t.description,
     }))
   } catch {
-    // Registry predates named themes — only the default exists.
-    return DEFAULT_THEME
+    // Registry predates named themes — basic is the only one it can serve.
+    return ROOT_THEME
   }
-  if (options.length === 0) return DEFAULT_THEME
+  if (options.length === 0) return ROOT_THEME
 
   const choice = await p.select({
     message: "Which theme do you want to start with?",
