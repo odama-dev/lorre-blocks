@@ -12,6 +12,14 @@ const GETTING_STARTED = [
   { title: "CLI reference", href: "/docs/cli" },
 ]
 
+// The primitives every component is built out of. Icons already had a home at
+// /icons before this group existed; it is linked rather than duplicated.
+const CORE_ELEMENTS = [
+  { title: "Colors", href: "/docs/core/colors" },
+  { title: "Typography", href: "/docs/core/typography" },
+  { title: "Icons", href: "/icons" },
+]
+
 const componentLinks = registry
   .filter((item) => item.type === "registry:ui")
   .sort((a, b) => a.name.localeCompare(b.name))
@@ -73,6 +81,20 @@ export function DocsSidebar() {
           Getting started
         </h4>
         {GETTING_STARTED.map((link) => (
+          <SidebarLink
+            key={link.href}
+            href={link.href}
+            active={pathname === link.href}
+          >
+            {link.title}
+          </SidebarLink>
+        ))}
+      </div>
+      <div>
+        <h4 className="mb-2 px-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Core elements
+        </h4>
+        {CORE_ELEMENTS.map((link) => (
           <SidebarLink
             key={link.href}
             href={link.href}
