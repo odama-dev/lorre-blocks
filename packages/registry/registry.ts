@@ -1567,4 +1567,26 @@ export const registry: RegistryItem[] = [
     registryDependencies: ["utils"],
     files: [{ path: "motion/globe.tsx", type: "registry:motion" }],
   },
+  {
+    name: "kanban-board",
+    type: "registry:ui",
+    description:
+      "Kanban board set — KanbanBoard, KanbanColumn, KanbanCard, KanbanCardGhost. Cards carry state variants (default/hover/dragging), columns handle default/empty/dragging-over with a ghost drop slot; columns fill height and scroll internally. Rendering only — wire your own drag logic (states are props).",
+    source: "lorre",
+    category: "component",
+    license: "MIT",
+    tags: [
+      "kanban",
+      "board",
+      "kanban-view",
+      "pipeline",
+      "task",
+      "drag-and-drop",
+      "column",
+      "project-management",
+    ],
+    dependencies: ["class-variance-authority"],
+    registryDependencies: ["utils", "badge", "avatar"],
+    files: [{ path: "ui/kanban-board.tsx", type: "registry:ui" }],
+  },
 ]
