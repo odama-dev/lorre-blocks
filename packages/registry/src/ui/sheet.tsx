@@ -3,8 +3,7 @@
 import * as React from "react"
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { cva, type VariantProps } from "class-variance-authority"
-import { X } from "lucide-react"
-
+import { XClose as X } from "@untitledui/icons"
 import { cn } from "@/lib/utils"
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
@@ -50,11 +49,11 @@ const sheetVariants = cva(
   {
     variants: {
       side: {
-        top: "inset-x-0 top-0 border-b animate-slide-in-top",
-        bottom: "inset-x-0 bottom-0 border-t animate-slide-in-bottom",
-        left: "inset-y-0 left-0 h-full w-3/4 border-r animate-slide-in-left sm:max-w-sm",
+        top: "inset-x-0 top-0 border-b animate-slide-in-top motion-reduce:animate-none",
+        bottom: "inset-x-0 bottom-0 border-t animate-slide-in-bottom motion-reduce:animate-none",
+        left: "inset-y-0 left-0 h-full w-3/4 border-r animate-slide-in-left motion-reduce:animate-none sm:max-w-sm",
         right:
-          "inset-y-0 right-0 h-full w-3/4 border-l animate-slide-in-right sm:max-w-sm",
+          "inset-y-0 right-0 h-full w-3/4 border-l animate-slide-in-right motion-reduce:animate-none sm:max-w-sm",
       },
     },
     defaultVariants: {

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { GripVerticalIcon } from "lucide-react"
+import { DotsGrid as GripVerticalIcon } from "@untitledui/icons"
 import * as ResizablePrimitive from "react-resizable-panels"
 
 import { cn } from "@/lib/utils"
@@ -46,7 +46,9 @@ function ResizableHandle({
     >
       {withHandle && (
         <div className="z-10 flex h-4 w-3 items-center justify-center rounded-xs border bg-border">
-          <GripVerticalIcon className="size-2.5" />
+          {/* DotsGrid 3x3 menggumpal di 10px (glyph lucide lama 2x3 lebih renggang),
+            jadi handle dinaikkan ke 12px — lihat DL-DS-017. */}
+          <GripVerticalIcon className="size-3" />
         </div>
       )}
     </ResizablePrimitive.PanelResizeHandle>

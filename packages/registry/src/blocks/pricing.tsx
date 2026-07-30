@@ -1,6 +1,5 @@
 import * as React from "react"
-import { Check } from "lucide-react"
-
+import { Check } from "@untitledui/icons"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"

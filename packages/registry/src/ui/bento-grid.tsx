@@ -1,6 +1,5 @@
 import * as React from "react"
-import { ArrowRightIcon } from "lucide-react"
-
+import { ArrowRight as ArrowRightIcon } from "@untitledui/icons"
 import { cn } from "@/lib/utils"
 
 /**
@@ -53,7 +52,7 @@ function BentoCard({
         <p className="text-sm text-muted-foreground">{description}</p>
       </div>
       {href && (
-        <div className="absolute inset-x-6 bottom-4 z-10 translate-y-8 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
+        <div className="absolute inset-x-6 bottom-4 z-10 translate-y-8 opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none">
           <a
             href={href}
             className="pointer-events-auto inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"

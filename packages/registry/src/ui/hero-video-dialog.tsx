@@ -1,8 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { PlayIcon } from "lucide-react"
-
+import { Play as PlayIcon } from "@untitledui/icons"
 import { cn } from "@/lib/utils"
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 

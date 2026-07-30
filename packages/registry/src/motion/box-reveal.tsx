@@ -65,7 +65,7 @@ function BoxReveal({
       <div
         aria-hidden
         className={cn(
-          "absolute inset-0 z-10 transition-transform ease-[var(--ease-smooth)] motion-reduce:hidden",
+          "absolute inset-0 z-10 transition-transform motion-reduce:transition-none ease-[var(--ease-smooth)] motion-reduce:hidden",
           visible ? "translate-x-full" : "translate-x-0"
         )}
         style={{

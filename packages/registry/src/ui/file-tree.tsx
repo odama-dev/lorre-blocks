@@ -1,8 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ChevronRightIcon, FileIcon, FolderIcon, FolderOpenIcon } from "lucide-react"
-
+import { ChevronRight as ChevronRightIcon, File02 as FileIcon, Folder as FolderIcon } from "@untitledui/icons"
 import { cn } from "@/lib/utils"
 
 /**
@@ -45,11 +44,9 @@ function Folder({ element, defaultOpen = false, className, children, ...props }:
             open && "rotate-90"
           )}
         />
-        {open ? (
-          <FolderOpenIcon className="size-4 shrink-0 text-primary" />
-        ) : (
-          <FolderIcon className="size-4 shrink-0 text-primary" />
-        )}
+        {/* Untitled UI tidak punya glyph folder-terbuka; state buka/tutup
+            sudah dibawa chevron di sebelah kiri (lihat DL-DS-017). */}
+        <FolderIcon className="size-4 shrink-0 text-primary" />
         <span className="truncate">{element}</span>
       </button>
       {open && (

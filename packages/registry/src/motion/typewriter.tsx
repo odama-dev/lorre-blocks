@@ -73,7 +73,7 @@ function Typewriter({
         aria-hidden
         className={cn(
           "ml-0.5 inline-block h-[1em] w-px translate-y-[0.15em] bg-current",
-          !reduced && "animate-caret-blink"
+          !reduced && "animate-caret-blink motion-reduce:animate-none"
         )}
       />
     </span>

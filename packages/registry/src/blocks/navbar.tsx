@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Menu, X } from "lucide-react"
+import { Menu01 as Menu, XClose as X } from "@untitledui/icons"
 import type { VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"

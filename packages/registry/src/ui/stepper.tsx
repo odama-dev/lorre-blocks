@@ -1,8 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { CheckIcon } from "lucide-react"
-
+import { Check as CheckIcon } from "@untitledui/icons"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
@@ -49,9 +48,13 @@ function Stepper({
             <React.Fragment key={index}>
               {index > 0 && (
                 <li aria-hidden className="h-px flex-1 bg-border">
+                  {/* Digerakkan scaleX, bukan width: menganimasikan width memicu
+                      layout tiap frame. Lebar tetap 100%, isian lewat transform. */}
                   <div
-                    className="h-px bg-primary transition-[width] duration-300 motion-reduce:transition-none"
-                    style={{ width: done || index === active ? "100%" : "0%" }}
+                    className="h-px w-full origin-left bg-primary transition-transform duration-300 ease-out motion-reduce:transition-none"
+                    style={{
+                      transform: `scaleX(${done || index === active ? 1 : 0})`,
+                    }}
                   />
                 </li>
               )}
