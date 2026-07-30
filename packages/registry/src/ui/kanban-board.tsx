@@ -2,7 +2,7 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
 
 // CS-TEST-01 ← CMP-TEST-01 — kanban-board (kanban-card + kanban-column + board)
@@ -35,6 +35,22 @@ export interface KanbanCardProps
   statusLabel?: string
   assignees?: string[]
   assigneeOverflow?: number
+  /** Nama perusahaan calon klien/klien — ditampilkan di baris atas kartu. */
+  companyName?: string
+  /** URL logo perusahaan. Opsional; bila kosong dipakai inisial (AC-002-07/08). */
+  companyLogo?: string
+  /** Inisial fallback. Bila kosong, diturunkan dari `companyName`. */
+  companyInitials?: string
+}
+
+/** "PT Maju Jaya" → "MJ". Membuang prefiks badan usaha yang umum di Indonesia. */
+function initialsFrom(name: string) {
+  const words = name
+    .replace(/^(PT|CV|UD|PD|Tbk)\.?\s+/i, "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+  return words.slice(0, 2).map((w) => w[0]!.toUpperCase()).join("")
 }
 
 function KanbanCard({
@@ -45,16 +61,32 @@ function KanbanCard({
   statusLabel,
   assignees = [],
   assigneeOverflow = 0,
+  companyName,
+  companyLogo,
+  companyInitials,
   ...props
 }: KanbanCardProps) {
   return (
     <div className={cn(kanbanCardVariants({ state }), className)} {...props}>
+      {companyName && (
+        <div className="flex w-full items-center gap-2.5">
+          <Avatar className="size-5 shrink-0 bg-muted">
+            {companyLogo && <AvatarImage src={companyLogo} alt={companyName} />}
+            <AvatarFallback className="bg-muted text-[9px] text-muted-foreground">
+              {companyInitials ?? initialsFrom(companyName)}
+            </AvatarFallback>
+          </Avatar>
+          <p className="min-w-0 flex-1 truncate text-[13px] text-card-foreground">
+            {companyName}
+          </p>
+        </div>
+      )}
       <div className="flex w-full flex-col gap-2">
         <p className="w-full truncate text-sm font-medium text-card-foreground">
           {title}
         </p>
         {description && (
-          <p className="line-clamp-3 w-full text-sm text-neutral-8">
+          <p className="line-clamp-3 w-full text-[13px] text-neutral-8">
             {description}
           </p>
         )}
