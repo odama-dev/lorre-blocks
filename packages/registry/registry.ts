@@ -1639,6 +1639,27 @@ export const registry: RegistryItem[] = [
     files: [{ path: "ui/file-uploader.tsx", type: "registry:ui" }],
   },
   {
+    name: "logo-uploader",
+    type: "registry:ui",
+    description:
+      "Circular company-logo uploader — optional by design: when empty it falls back to initials derived from the company name rather than an empty ring. Keyboard-reachable (the circle is a button, not a hover-only target), with upload progress, replace/remove actions, and size/type validation stated before the user tries. Image fitting depends on aspect ratio: square logos fill the circle, non-square logos are scaled down and fitted with padding so a wide wordmark is never cropped. Storage-agnostic: pass an onUpload callback so the caller decides presigned-URL vs proxy.",
+    source: "lorre",
+    category: "component",
+    license: "MIT",
+    tags: [
+      "logo-uploader",
+      "avatar-upload",
+      "company-logo",
+      "upload",
+      "initials",
+      "fallback",
+      "crm",
+    ],
+    dependencies: ["@untitledui/icons"],
+    registryDependencies: ["utils", "avatar", "progress"],
+    files: [{ path: "ui/logo-uploader.tsx", type: "registry:ui" }],
+  },
+  {
     name: "widget-builder-canvas",
     type: "registry:ui",
     description:
