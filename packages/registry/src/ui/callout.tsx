@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const calloutVariants = cva(
-  "flex items-start gap-3 rounded-lg p-4 text-sm [&>svg]:mt-0.5 [&>svg]:size-4 [&>svg]:shrink-0",
+  "flex items-start gap-(--callout-gap) rounded-(--callout-radius) p-(--callout-padding) text-sm [&>svg]:mt-0.5 [&>svg]:size-4 [&>svg]:shrink-0",
   {
     variants: {
       variant: {

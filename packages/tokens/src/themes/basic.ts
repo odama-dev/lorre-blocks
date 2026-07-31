@@ -84,6 +84,15 @@ export const basic: ThemeDefinition = {
       gap: "calc(var(--spacing) * 1)",
       "dot-size": "calc(var(--spacing) * 1.5)",
     },
+    // Sama seperti button di atas: nilai diambil dari yang callout.tsx tulis
+    // sebelum ditokenisasi, jadi tampilannya tidak berubah — rounded-lg, p-4,
+    // gap-3. Sempat tertulis padding *3 (12px) yang diam-diam mengecilkan dari
+    // p-4 (16px).
+    callout: {
+      radius: "var(--radius-lg)",
+      padding: "calc(var(--spacing) * 4)",
+      gap: "calc(var(--spacing) * 3)",
+    },
     tabs: {
       radius: "var(--radius-lg)",
       "trigger-radius": "var(--radius-md)",

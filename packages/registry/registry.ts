@@ -469,7 +469,7 @@ export const registry: RegistryItem[] = [
     category: "component",
     tags: ["date-picker", "date", "calendar", "form", "picker"],
     dependencies: ["@untitledui/icons"],
-    registryDependencies: ["utils", "button", "calendar", "popover"],
+    registryDependencies: ["utils", "calendar", "popover"],
     files: [{ path: "ui/date-picker.tsx", type: "registry:ui" }],
   },
   {
