@@ -29,6 +29,12 @@ export interface DataTableProps<TData, TValue> {
   data: TData[]
   /** Show Previous/Next pagination controls (default on for >10 rows). */
   pagination?: boolean
+  /**
+   * Fill the parent's height: rows scroll INSIDE the bordered area with a
+   * sticky header, pagination stays pinned below. Parent chain must constrain
+   * height (e.g. flex column with min-h-0). For table-only screens.
+   */
+  fillHeight?: boolean
   className?: string
 }
 
@@ -42,12 +48,39 @@ function DataTable<TData, TValue>({
   columns,
   data,
   pagination,
+  fillHeight,
   className,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 
-  const paginate = pagination ?? data.length > 10
+  // fillHeight: pageSize dinamis — muat baris sebanyak yang MENGISI tinggi
+  // tersedia; sisanya pindah ke halaman berikutnya (bukan scroll internal).
+  const scrollerRef = React.useRef<HTMLDivElement>(null)
+  const [fitRows, setFitRows] = React.useState<number | null>(null)
+
+  React.useEffect(() => {
+    if (!fillHeight) return
+    const el = scrollerRef.current
+    if (!el) return
+    const measure = () => {
+      const container = el.querySelector('[data-slot="table-container"]') ?? el
+      const headH = el.querySelector("thead")?.getBoundingClientRect().height ?? 40
+      const rowH = el.querySelector("tbody tr")?.getBoundingClientRect().height ?? 53
+      setFitRows(Math.max(1, Math.floor((container.clientHeight - headH) / rowH)))
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [fillHeight])
+
+  const paginate =
+    pagination ?? (fillHeight && fitRows !== null ? data.length > fitRows : data.length > 10)
+  // Row-model pagination SELALU terpasang (menambah/melepasnya setelah instance
+  // dibuat tidak andal di TanStack) — kontrol lewat pageSize: tanpa pagination,
+  // pageSize = seluruh data.
+  const pageSize = paginate ? (fillHeight && fitRows !== null ? fitRows : 10) : Math.max(data.length, 1)
 
   const table = useReactTable({
     data,
@@ -55,15 +88,33 @@ function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    ...(paginate ? { getPaginationRowModel: getPaginationRowModel() } : {}),
+    getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     state: { sorting, columnFilters },
   })
 
+  React.useEffect(() => {
+    table.setPageSize(pageSize)
+    const last = Math.max(table.getPageCount() - 1, 0)
+    if (table.getState().pagination.pageIndex > last) table.setPageIndex(last)
+  }, [pageSize, table])
+
   return (
-    <div data-slot="data-table" className={cn("w-full", className)}>
-      <div className="overflow-hidden rounded-md border">
+    <div
+      data-slot="data-table"
+      className={cn("w-full", fillHeight && "flex h-full min-h-0 flex-col", className)}
+    >
+      <div
+        ref={scrollerRef}
+        className={cn(
+          "overflow-hidden rounded-md border",
+          // Scroller = table-container bawaan Table (sudah overflow-auto);
+          // th sticky butuh bg + garis bawah sendiri karena border tr tidak ikut menempel
+          fillHeight &&
+            "min-h-0 flex-1 [&_[data-slot=table-container]]:h-full [&_thead_th]:sticky [&_thead_th]:top-0 [&_thead_th]:z-10 [&_thead_th]:bg-background [&_thead_th]:shadow-[inset_0_-1px_0_0_var(--border)]"
+        )}
+      >
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -106,9 +157,9 @@ function DataTable<TData, TValue>({
         </Table>
       </div>
       {paginate && (
-        <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="flex shrink-0 items-center justify-end space-x-2 py-4">
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
@@ -116,7 +167,7 @@ function DataTable<TData, TValue>({
             Previous
           </Button>
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
