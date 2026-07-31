@@ -34,6 +34,13 @@ const UI_ROOT = path.join(HERE, "..", "..", "registry", "src")
 type Slot = "fills" | "strokes" | "text"
 type Binding = Partial<Record<Slot, string | null>>
 type Entry = { light: string; dark: string }
+/**
+ * Snapshot dikunci per NAMA komponen. Itu aman selama nama unik di Figma —
+ * dan pada 2026-07-31 sempat TIDAK unik: dua node berbeda sama-sama bernama
+ * "Tooltip", sehingga entri yang satu menimpa yang lain dan salah satunya
+ * hilang dari laporan tanpa jejak. Pemeriksaan di bawah menolak snapshot
+ * yang punya `node` berbeda untuk nama yang sama.
+ */
 type Snapshot = {
   tokens: Record<string, Entry>
   componentTokens: Record<string, Record<string, Entry>>
@@ -139,6 +146,22 @@ async function main() {
   const snap: Snapshot = JSON.parse(await fs.readFile(SNAPSHOT, "utf8"))
 
   const resolveValue = makeResolver(snap)
+
+  // Nama ganda menghasilkan laporan yang SALAH, bukan sekadar tidak lengkap —
+  // jadi ini berhenti, bukan memperingatkan.
+  const seenNodes = new Map<string, string>()
+  for (const [comp, def] of Object.entries(snap.bindings)) {
+    const prev = seenNodes.get(comp)
+    if (prev && prev !== def.node) {
+      throw new Error(
+        `Nama komponen ganda di snapshot: "${comp}" menunjuk node ${prev} DAN ${def.node}.\n` +
+          `Beri nama berbeda di Figma, lalu perbarui snapshot. Selama ganda, ` +
+          `laporan ini akan menyembunyikan salah satunya.`
+      )
+    }
+    seenNodes.set(comp, def.node)
+  }
+
   const missingFile: string[] = []
   type Row = {
     comp: string; variant: string; slot: Slot; figma: string; expect: string
