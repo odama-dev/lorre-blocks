@@ -105,7 +105,7 @@ export const registry: RegistryItem[] = [
     name: "tabs",
     type: "registry:ui",
     description:
-      "Tabbed interface for switching between panels of content, built on Radix Tabs.",
+      "Tabbed interface for switching between panels of content, built on Radix Tabs. The active indicator is a single element that slides and resizes between triggers rather than fading in place, so the eye keeps track of it; it is measured from the DOM because Radix ships no indicator primitive. Motion follows the house standard: 200ms, ease-in-out for on-screen movement, CSS transition so rapid clicks retarget mid-flight, and a reduced-motion guard.",
     source: "shadcn",
     category: "component",
     license: "MIT",
