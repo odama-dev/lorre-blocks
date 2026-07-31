@@ -260,6 +260,14 @@ export const KEY_COMPONENTS = {
   // hardcode their height/padding/font-size, which meant a theme could restyle
   // the default button and silently not touch the other two.
   button: [
+    // Warna tombol utama sengaja jadi component token, bukan pinjaman dari
+    // semantik. `--primary` adalah peran biru (dipakai varian `primary` dan
+    // `link`), dan `--foreground` adalah warna teks — memakai salah satunya
+    // sebagai latar tombol mengunci dua hal yang seharusnya bebas berubah.
+    // Opsional: tema yang tidak mengisinya jatuh ke `--primary` lewat fallback
+    // di @theme inline, jadi perilaku lama tetap.
+    "background",
+    "foreground",
     "radius",
     "height",
     "px",

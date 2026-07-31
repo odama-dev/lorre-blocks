@@ -22,7 +22,10 @@ import { Skeleton } from "@lorre-blocks/registry/ui/skeleton"
 export function ButtonDemo() {
   return (
     <div className="flex flex-wrap items-center gap-3">
+      {/* `default` hitam lewat --button-background; `primary` biru lewat
+          --primary. Dua peran berbeda — lihat DL-DS-009. */}
       <Button>Default</Button>
+      <Button variant="primary">Primary</Button>
       <Button variant="secondary">Secondary</Button>
       <Button variant="destructive">Destructive</Button>
       <Button variant="outline">Outline</Button>

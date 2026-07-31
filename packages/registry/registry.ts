@@ -1662,7 +1662,7 @@ export const registry: RegistryItem[] = [
       "resize",
       "builder",
     ],
-    dependencies: ["react-grid-layout", "@untitledui/icons"],
+    dependencies: ["react-grid-layout", "react-resizable", "@untitledui/icons"],
     registryDependencies: ["utils", "dropdown-menu"],
     files: [{ path: "ui/widget-builder-canvas.tsx", type: "registry:ui" }],
   },

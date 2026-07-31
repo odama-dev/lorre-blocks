@@ -318,6 +318,9 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
+  --color-button-background: var(--button-background, var(--primary));
+  --color-button-foreground: var(--button-foreground, var(--primary-foreground));
+
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);

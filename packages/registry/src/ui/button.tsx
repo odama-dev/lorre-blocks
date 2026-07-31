@@ -9,7 +9,12 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        // Hitam lewat component token, BUKAN --primary. DL-DS-009.
+        default:
+          "bg-button-background text-button-foreground hover:bg-button-background/90",
+        // Biru — peran terpisah dari `default`. Namanya menyebut peran, bukan
+        // rupa, supaya tidak menyesatkan kalau warnanya berubah.
+        primary: "bg-primary text-primary-foreground hover:bg-primary/90",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
