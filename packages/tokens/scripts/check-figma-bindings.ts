@@ -97,6 +97,10 @@ function classToCssVar(raw: string, slot: Slot): string | null {
   const prefix = slot === "fills" ? "bg-" : slot === "strokes" ? "border-" : "text-"
   if (!cls.startsWith(prefix)) return null
   let token = cls.slice(prefix.length)
+  // Sintaks Tailwind v4 `bg-(--var)` / `rounded-(--var)` menyebut var langsung.
+  const paren = token.match(/^\((--[\w-]+)\)$/)
+  if (paren) return paren[1]
+  if (token.startsWith("(")) return null
   token = token.replace(/\/\d+$/, "") // buang opacity: bg-primary/90
   if (!token || /^\[/.test(token)) return null
   // border-2, text-sm dll bukan warna
@@ -115,8 +119,12 @@ async function readCodeVars(codePath: string): Promise<{ bySlot: Record<Slot, Se
     return null
   }
   const bySlot: Record<Slot, Set<string>> = { fills: new Set(), strokes: new Set(), text: new Set() }
-  for (const m of src.matchAll(/["'`]([^"'`]{2,400})["'`]/g)) {
-    for (const cls of m[1].split(/\s+/)) {
+  // Literal string satu baris saja. Regex yang membolehkan newline akan
+  // memasangkan kutip penutup satu string dengan kutip pembuka string
+  // BERIKUTNYA, sehingga komentar di antaranya ikut terbaca sebagai kelas —
+  // itu pernah memunculkan token hantu `--active)` dari sebuah komentar.
+  for (const m of src.matchAll(/(["'`])([^"'`\n]{2,4000})\1/g)) {
+    for (const cls of m[2].split(/\s+/)) {
       for (const slot of ["fills", "strokes", "text"] as Slot[]) {
         const v = classToCssVar(cls, slot)
         if (v) bySlot[slot].add(v)

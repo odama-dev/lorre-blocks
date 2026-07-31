@@ -17,10 +17,14 @@ const buttonVariants = cva(
         primary: "bg-primary text-primary-foreground hover:bg-primary/90",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        // Garis GELAP (card-foreground), bukan abu — inilah yang membedakannya
+        // dari `secondary`. Latarnya transparan, bukan warna halaman.
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-card-foreground text-foreground hover:bg-accent hover:text-accent-foreground",
+        // Putih berbingkai halus + shadow. Satu-satunya varian Button yang
+        // ber-shadow di Figma (drop shadow r=2, diverifikasi 2026-07-31).
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "border border-neutral-3 bg-card text-foreground shadow-xs hover:bg-accent",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
