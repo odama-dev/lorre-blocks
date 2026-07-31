@@ -294,7 +294,7 @@ export const KEY_COMPONENTS = {
   input: ["radius", "height", "px", "font-size"],
   card: ["radius", "padding"],
   panel: ["radius", "padding"],
-  badge: ["radius", "px", "py"],
+  badge: ["radius", "pl", "pr", "py", "gap", "dot-size"],
   tabs: ["radius", "trigger-radius"],
   control: ["radius", "size"],
   tooltip: ["radius", "px", "py"],
