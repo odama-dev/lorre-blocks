@@ -26,6 +26,11 @@ import { cn } from "@/lib/utils"
  *    gerakan yang sedang berjalan, bukan mengantre di belakangnya.
  *  - `motion-reduce` mematikan gerak, menyisakan perpindahan seketika.
  *
+ * Indikator memakai `card` (#FFFFFF), BUKAN `background` (#FAFAFA). List-nya
+ * ber-latar `muted` (#F9F9F9) — selisihnya dengan #FAFAFA cuma satu unit,
+ * jadi pilnya nyaris tak terlihat. `card` memberi putih sungguhan, sejalan
+ * dengan panel lain yang berdiri di atas permukaan.
+ *
  * ⚠️ Soal menganimasikan `width` — standar melarang menganimasikan dimensi.
  * Larangan itu ada karena width memicu layout ulang dokumen. Di sini
  * indikatornya `absolute`, jadi perubahan lebarnya tidak me-reflow apa pun di
@@ -111,7 +116,7 @@ function TabsList({
           aria-hidden
           data-slot="tabs-indicator"
           className={cn(
-            "pointer-events-none absolute left-0 top-1 h-[calc(100%-0.5rem)] rounded-(--tabs-trigger-radius) bg-background shadow-sm",
+            "pointer-events-none absolute left-0 top-1 h-[calc(100%-0.5rem)] rounded-(--tabs-trigger-radius) bg-card shadow-sm",
             ready &&
               "transition-[transform,width] duration-(--motion-duration-normal) ease-[cubic-bezier(0.77,0,0.175,1)] motion-reduce:transition-none"
           )}
