@@ -3,7 +3,6 @@
 import * as React from "react"
 import { Calendar as CalendarIcon } from "@untitledui/icons"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import { Calendar, type CalendarProps } from "@/components/ui/calendar"
 import {
   Popover,
@@ -35,7 +34,14 @@ const defaultFormatDate = (date: Date) =>
   })
 
 /**
- * Single-date picker built from popover + calendar + button.
+ * Single-date picker built from popover + calendar.
+ *
+ * The trigger is styled as an INPUT, not a button: it is a field the user
+ * fills, so it carries the same `--input-*` geometry and the same three states
+ * as `Input` — default (placeholder `neutral-6`), focused/open (border
+ * `border-active` + bg `background`), filled (value in `foreground`). Using a
+ * Button here made a form field look like an action.
+ *
  * Controlled via `date`/`onDateChange`, or leave both off for uncontrolled use.
  */
 function DatePicker({
@@ -57,20 +63,26 @@ function DatePicker({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
+        <button
+          type="button"
           ref={ref}
           data-slot="date-picker-trigger"
-          variant="outline"
+          data-filled={date ? "" : undefined}
           disabled={disabled}
           className={cn(
-            "w-[240px] justify-start text-left font-normal",
-            !date && "text-muted-foreground",
+            // Geometri & warna DISALIN dari Input — jangan diubah sepihak di sini
+            "flex h-(--input-height) w-full items-center gap-2 rounded-(--input-radius) border border-neutral-3 bg-card px-(--input-px) py-1 text-left text-(length:--input-font-size) transition-colors",
+            "focus-visible:border-border-active focus-visible:bg-background focus-visible:outline-none",
+            // Kalender terbuka = tetap terlihat fokus meski fokus pindah ke popover
+            "data-[state=open]:border-border-active data-[state=open]:bg-background",
+            "disabled:cursor-not-allowed disabled:bg-background disabled:opacity-50",
+            date ? "text-foreground" : "text-neutral-6",
             className
           )}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
+          <CalendarIcon className="size-4 shrink-0 text-muted-foreground" />
           {date ? formatDate(date) : <span>{placeholder}</span>}
-        </Button>
+        </button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar

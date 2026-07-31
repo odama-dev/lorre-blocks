@@ -295,6 +295,7 @@ export const KEY_COMPONENTS = {
   card: ["radius", "padding"],
   panel: ["radius", "padding"],
   badge: ["radius", "pl", "pr", "py", "gap", "dot-size"],
+  callout: ["radius", "padding", "gap"],
   tabs: ["radius", "trigger-radius"],
   control: ["radius", "size"],
   tooltip: ["radius", "px", "py"],

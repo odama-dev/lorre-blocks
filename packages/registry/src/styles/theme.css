@@ -139,6 +139,9 @@
   --badge-py: calc(var(--spacing) * 0.5);
   --badge-gap: calc(var(--spacing) * 1);
   --badge-dot-size: calc(var(--spacing) * 1.5);
+  --callout-radius: var(--radius-lg);
+  --callout-padding: calc(var(--spacing) * 4);
+  --callout-gap: calc(var(--spacing) * 3);
   --tabs-radius: var(--radius-lg);
   --tabs-trigger-radius: var(--radius-md);
   --control-radius: var(--radius-sm);
