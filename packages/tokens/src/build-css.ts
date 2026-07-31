@@ -190,8 +190,21 @@ export function themeToCss(theme: ResolvedTheme): string {
   for (const name of SEMANTIC_ORDER) {
     out.push(`  --color-${name}: var(--${name});`)
   }
+  /**
+   * Semantik opsional SELALU di-emit sebagai utilitas, dengan fallback — bukan
+   * hanya saat temanya punya.
+   *
+   * Kalau utilitasnya tidak ada, `border-border-active` di komponen membuat
+   * Tailwind menulis `border-color: var(--color-border-active)` yang tidak
+   * terdefinisi, lalu browser jatuh ke `currentColor` — warna TEKS. Hasilnya
+   * garis fokus jadi hitam, bukan biru. Itu terjadi nyata pada konsumen yang
+   * temanya belum di-sync (2026-07-31).
+   */
+  const OPTIONAL_FALLBACK: Record<(typeof OPTIONAL_SEMANTICS)[number], string> = {
+    "border-active": "var(--ring)",
+  }
   for (const name of OPTIONAL_SEMANTICS) {
-    if (theme.semantics[name]) out.push(`  --color-${name}: var(--${name});`)
+    out.push(`  --color-${name}: var(--${name}, ${OPTIONAL_FALLBACK[name]});`)
   }
   out.push("")
   // Warna component token → utilitas Tailwind (`bg-button-background`).
