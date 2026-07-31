@@ -33,8 +33,30 @@ const UI_ROOT = path.join(HERE, "..", "..", "registry", "src")
 
 type Slot = "fills" | "strokes" | "text"
 type Binding = Partial<Record<Slot, string | null>>
+type Entry = { light: string; dark: string }
 type Snapshot = {
+  tokens: Record<string, Entry>
+  componentTokens: Record<string, Record<string, Entry>>
+  ramps: Record<string, Record<string, Entry>>
   bindings: Record<string, { node: string; code: string; variants: Record<string, Binding> }>
+}
+
+/**
+ * Nilai (light) yang dirender sebuah CSS custom property di tema odama.
+ *
+ * Ini yang membedakan selisih NYATA dari selisih NAMA. Contoh: Figma mengikat
+ * Popover ke `semantic/card` sementara kode memakai `--popover` — dua nama
+ * berbeda, tapi keduanya #FFFFFF, jadi rendernya identik dan tidak ada yang
+ * perlu diubah. Tanpa perbandingan nilai, laporan penuh temuan palsu.
+ */
+function makeResolver(snap: Snapshot) {
+  const map = new Map<string, string>()
+  for (const [k, v] of Object.entries(snap.tokens)) map.set(`--${k}`, v.light.toUpperCase())
+  for (const [comp, toks] of Object.entries(snap.componentTokens ?? {}))
+    for (const [k, v] of Object.entries(toks)) map.set(`--${comp}-${k}`, v.light.toUpperCase())
+  for (const [scale, steps] of Object.entries(snap.ramps ?? {}))
+    for (const [i, v] of Object.entries(steps)) map.set(`--${scale}-${i}`, v.light.toUpperCase())
+  return (cssVar: string) => map.get(cssVar) ?? null
 }
 
 /** Nama variabel Figma → nama CSS custom property di tema. */
@@ -75,6 +97,10 @@ function classToCssVar(raw: string, slot: Slot): string | null {
   const prefix = slot === "fills" ? "bg-" : slot === "strokes" ? "border-" : "text-"
   if (!cls.startsWith(prefix)) return null
   let token = cls.slice(prefix.length)
+  // Sintaks Tailwind v4 `bg-(--var)` / `rounded-(--var)` menyebut var langsung.
+  const paren = token.match(/^\((--[\w-]+)\)$/)
+  if (paren) return paren[1]
+  if (token.startsWith("(")) return null
   token = token.replace(/\/\d+$/, "") // buang opacity: bg-primary/90
   if (!token || /^\[/.test(token)) return null
   // border-2, text-sm dll bukan warna
@@ -93,8 +119,12 @@ async function readCodeVars(codePath: string): Promise<{ bySlot: Record<Slot, Se
     return null
   }
   const bySlot: Record<Slot, Set<string>> = { fills: new Set(), strokes: new Set(), text: new Set() }
-  for (const m of src.matchAll(/["'`]([^"'`]{2,400})["'`]/g)) {
-    for (const cls of m[1].split(/\s+/)) {
+  // Literal string satu baris saja. Regex yang membolehkan newline akan
+  // memasangkan kutip penutup satu string dengan kutip pembuka string
+  // BERIKUTNYA, sehingga komentar di antaranya ikut terbaca sebagai kelas —
+  // itu pernah memunculkan token hantu `--active)` dari sebuah komentar.
+  for (const m of src.matchAll(/(["'`])([^"'`\n]{2,4000})\1/g)) {
+    for (const cls of m[2].split(/\s+/)) {
       for (const slot of ["fills", "strokes", "text"] as Slot[]) {
         const v = classToCssVar(cls, slot)
         if (v) bySlot[slot].add(v)
@@ -108,12 +138,18 @@ async function main() {
   const strict = process.argv.includes("--strict")
   const snap: Snapshot = JSON.parse(await fs.readFile(SNAPSHOT, "utf8"))
 
+  const resolveValue = makeResolver(snap)
   const missingFile: string[] = []
-  type Row = { comp: string; variant: string; slot: Slot; figma: string; expect: string; codeUses: string[] }
+  type Row = {
+    comp: string; variant: string; slot: Slot; figma: string; expect: string
+    codeUses: string[]; figmaHex: string | null; sameColour: boolean
+  }
   /** Kode menetapkan token LAIN untuk slot itu — selisih nyata. */
   const conflicts: Row[] = []
   /** Kode tidak menetapkan apa pun untuk slot itu — biasanya warisan, bukan bug. */
   const unset: Row[] = []
+  /** Nama token beda tapi warnanya identik — render sudah benar. */
+  const sameName: Row[] = []
   let checked = 0
 
   for (const [comp, def] of Object.entries(snap.bindings)) {
@@ -131,7 +167,16 @@ async function main() {
         checked++
         const codeSlot = code.bySlot[slot]
         if (codeSlot.has(want)) continue
-        const row: Row = { comp, variant, slot, figma: figmaToken, expect: want, codeUses: [...codeSlot] }
+        // Nama token beda BELUM tentu warna beda. Kalau ada satu saja token di
+        // slot itu yang meresolusi ke warna yang sama, rendernya sudah benar.
+        const figmaHex = resolveValue(want)
+        const sameColour =
+          figmaHex !== null && [...codeSlot].some((v) => resolveValue(v) === figmaHex)
+        const row: Row = {
+          comp, variant, slot, figma: figmaToken, expect: want,
+          codeUses: [...codeSlot], figmaHex, sameColour,
+        }
+        if (sameColour) { sameName.push(row); continue }
         // Kode memilih token lain untuk slot ini → benar-benar beda.
         // Kode diam sama sekali → kemungkinan besar mewarisi dari induk.
         ;(codeSlot.size > 0 ? conflicts : unset).push(row)
@@ -143,23 +188,35 @@ async function main() {
   console.log(`Binding-diff Figma ↔ kode — ${checked} ikatan diperiksa\n`)
 
   if (conflicts.length === 0) {
-    console.log("✓ Tidak ada komponen yang memilih token berbeda dari Figma.")
+    console.log("✓ Tidak ada komponen yang warnanya berbeda dari Figma.")
   } else {
-    console.log(`✗ ${conflicts.length} SELISIH — kode memilih token lain daripada Figma:\n`)
+    console.log(`✗ ${conflicts.length} SELISIH WARNA — yang benar-benar terlihat beda:\n`)
     let last = ""
     for (const m of conflicts) {
       if (m.comp !== last) {
         console.log(`  ${m.comp}  (${snap.bindings[m.comp].code})`)
         last = m.comp
       }
+      const hex = m.figmaHex ? ` ${m.figmaHex}` : ""
+      const codeHex = m.codeUses
+        .map((v) => `${v}${resolveValue(v) ? ` ${resolveValue(v)}` : ""}`)
+        .join(", ")
       console.log(
-        `    ${m.variant.padEnd(11)} ${label[m.slot].padEnd(5)} Figma ${m.figma.padEnd(26)} → kode pakai ${m.codeUses.join(", ")}`
+        `    ${m.variant.padEnd(11)} ${label[m.slot].padEnd(5)} Figma ${m.figma}${hex}\n` +
+          `                      kode  ${codeHex}`
       )
     }
     console.log(
       "\nIni kelas bug yang tidak tertangkap sinkronisasi nilai token: nilainya bisa\n" +
         "sama persis, tapi komponennya menunjuk token yang berbeda. Putuskan sisi mana\n" +
         "yang benar — ubah komponen kode, ATAU ubah binding di Figma."
+    )
+  }
+
+  if (sameName.length) {
+    console.log(
+      `\nℹ ${sameName.length} slot memakai NAMA token berbeda tapi warnanya identik —` +
+        ` render sudah benar, tidak perlu diubah.`
     )
   }
 

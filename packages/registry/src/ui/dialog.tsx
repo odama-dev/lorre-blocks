@@ -56,7 +56,7 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 border bg-background p-(--panel-padding) shadow-lg animate-fade-in sm:rounded-(--panel-radius)",
+          "fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 border bg-card p-(--panel-padding) shadow-lg animate-fade-in sm:rounded-(--panel-radius)",
           className
         )}
         {...props}

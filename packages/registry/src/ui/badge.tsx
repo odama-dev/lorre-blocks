@@ -8,13 +8,15 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: "border-transparent bg-primary text-primary-foreground",
+        // Badge Odama LEMBUT, bukan solid: latar langkah 3 dari ramp, teks
+        // langkah 10. Ini bahasa desain yang berbeda dari shadcn bawaan —
+        // solid biru penuh diganti tint biru dengan teks biru tua.
+        default: "border-transparent bg-accent-3 text-accent-10",
         secondary: "border-transparent bg-secondary text-secondary-foreground",
-        destructive:
-          "border-transparent bg-destructive text-destructive-foreground",
-        success: "border-transparent bg-success text-success-foreground",
-        warning: "border-transparent bg-warning text-warning-foreground",
-        outline: "text-foreground",
+        destructive: "border-transparent bg-danger-3 text-danger-10",
+        success: "border-transparent bg-success-3 text-success-10",
+        warning: "border-transparent bg-warning-3 text-warning-10",
+        outline: "border-border text-neutral-10",
       },
     },
     defaultVariants: {

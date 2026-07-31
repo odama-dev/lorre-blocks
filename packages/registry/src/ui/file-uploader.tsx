@@ -234,7 +234,7 @@ function FileUploader({
           ? "border-solid border-border bg-card"
           : "border-dashed",
         hasError && "border-destructive bg-card",
-        dragOver && !hasError && "border-primary bg-accent",
+        dragOver && !hasError && "border-primary bg-accent-1",
         !hasError && !dragOver && !files.length && "border-border bg-card",
         disabled && "pointer-events-none opacity-50",
         className

@@ -317,6 +317,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-border-active: var(--border-active, var(--ring));
 
   --color-button-background: var(--button-background, var(--primary));
   --color-button-foreground: var(--button-foreground, var(--primary-foreground));

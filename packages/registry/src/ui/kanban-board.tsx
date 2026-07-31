@@ -16,9 +16,9 @@ const kanbanCardVariants = cva(
       state: {
         default: "",
         hover: "shadow-xs",
-        // Figma pakai semantic/border-active (biru pilihan human) — token itu belum
-        // ada di tema odama sisi kode; interim pakai ring (kandidat token: border-active)
-        dragging: "border-ring opacity-95 shadow-xs",
+        // Figma mengikat garis kartu yang sedang diseret ke semantic/border-active
+        // (#335CFF). Tokennya kini ada di kode, jadi tidak lagi memakai ring.
+        dragging: "border-border-active opacity-95 shadow-xs",
       },
     },
     defaultVariants: { state: "default" },

@@ -193,7 +193,7 @@ function RichTextField({
           "[&_.is-editor-empty:first-child::before]:pointer-events-none",
           "[&_.is-editor-empty:first-child::before]:float-left",
           "[&_.is-editor-empty:first-child::before]:h-0",
-          "[&_.is-editor-empty:first-child::before]:text-muted-foreground",
+          "[&_.is-editor-empty:first-child::before]:text-neutral-6",
           "[&_.is-editor-empty:first-child::before]:content-[attr(data-placeholder)]"
         ),
         "data-placeholder": placeholder,
@@ -214,7 +214,7 @@ function RichTextField({
       className={cn(
         "w-full overflow-hidden rounded-(--input-radius) border border-input bg-card transition-colors",
         "focus-within:border-ring",
-        readOnly && variant === "read-only" && "border-border bg-muted",
+        readOnly && variant === "read-only" && "border-border bg-background",
         readOnly && variant === "rendered" && "border-input bg-card",
         className
       )}
