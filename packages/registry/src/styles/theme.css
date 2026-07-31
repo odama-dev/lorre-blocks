@@ -133,9 +133,12 @@
   --card-padding: calc(var(--spacing) * 6);
   --panel-radius: var(--radius-lg);
   --panel-padding: calc(var(--spacing) * 6);
-  --badge-radius: var(--radius-md);
-  --badge-px: calc(var(--spacing) * 2.5);
+  --badge-radius: var(--radius-2xl);
+  --badge-pl: calc(var(--spacing) * 1.5);
+  --badge-pr: calc(var(--spacing) * 2);
   --badge-py: calc(var(--spacing) * 0.5);
+  --badge-gap: calc(var(--spacing) * 1);
+  --badge-dot-size: calc(var(--spacing) * 1.5);
   --tabs-radius: var(--radius-lg);
   --tabs-trigger-radius: var(--radius-md);
   --control-radius: var(--radius-sm);

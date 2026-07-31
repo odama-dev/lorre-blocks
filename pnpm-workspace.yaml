@@ -5,11 +5,17 @@ allowBuilds:
   esbuild: true
   sharp: true
 
-# Transitive deps pinned past high-severity advisories. Both are pulled in by
+# Transitive deps pinned past high-severity advisories. All are pulled in by
 # upstream packages that still range onto vulnerable versions:
-#   sharp    <0.35.0  — via next (declares ^0.34.5)   GHSA-f88m-g3jw-g9cj
-#   fast-uri <3.1.4   — via @modelcontextprotocol/sdk>ajv (declares ^3.0.1)
+#   sharp    <0.35.0   — via next (declares ^0.34.5)   GHSA-f88m-g3jw-g9cj
+#   fast-uri <3.1.4    — via @modelcontextprotocol/sdk>ajv (declares ^3.0.1)
+#   postcss  <=8.5.17  — dua jalur sekaligus:
+#                          8.4.31 via next
+#                          8.5.16 via @tailwindcss/postcss, tsup, vite
+#                        GHSA-6g55-p6wh-862q (arbitrary file read, <=8.5.11)
+#                        GHSA-r28c-9q8g-f849 (path traversal source map, <=8.5.17)
 # Drop each entry once the upstream range moves past it.
 overrides:
   sharp: "^0.35.0"
   fast-uri: "^3.1.4"
+  postcss: "^8.5.18"

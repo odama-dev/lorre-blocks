@@ -77,9 +77,12 @@ export const basic: ThemeDefinition = {
       padding: "calc(var(--spacing) * 6)",
     },
     badge: {
-      radius: "var(--radius-md)",
-      px: "calc(var(--spacing) * 2.5)",
+      radius: "var(--radius-2xl)",
+      pl: "calc(var(--spacing) * 1.5)",
+      pr: "calc(var(--spacing) * 2)",
       py: "calc(var(--spacing) * 0.5)",
+      gap: "calc(var(--spacing) * 1)",
+      "dot-size": "calc(var(--spacing) * 1.5)",
     },
     tabs: {
       radius: "var(--radius-lg)",
