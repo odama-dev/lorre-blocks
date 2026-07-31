@@ -23,6 +23,12 @@ jobs:
       - name: Build registry
         run: pnpm build:registry
 
+      # odama.ts must equal what the Figma snapshot generates. This is what
+      # stops token values from being retyped by hand and silently drifting
+      # away from the design. See packages/tokens/figma/README.md.
+      - name: Check theme matches Figma snapshot
+        run: pnpm --filter @lorre-blocks/tokens check:figma
+
       # The registry build regenerates tracked output (src/styles/theme.css);
       # a diff here means someone changed tokens without rebuilding, or the
       # build stopped being deterministic.

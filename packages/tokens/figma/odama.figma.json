@@ -1,0 +1,180 @@
+{
+  "$schema": "./odama.figma.schema.md",
+  "$comment": "SNAPSHOT variabel + binding komponen dari file Figma design system Odama. DIHASILKAN AGEN, JANGAN DIEDIT TANGAN — lihat figma/README.md untuk cara memperbaruinya. File ini adalah SUMBER KEBENARAN untuk nilai token tema odama; scripts/sync-figma-tokens.ts menulis ulang themes/odama.ts dari sini.",
+  "source": {
+    "fileKey": "0f4s3tC0701RAPeygzVOC6",
+    "fileName": "Lorre Design System — Odama",
+    "collection": "lorre/odama",
+    "modes": ["light", "dark"],
+    "capturedAt": "2026-07-31",
+    "capturedBy": "design-system-agent (Figma MCP)"
+  },
+
+  "tokens": {
+    "background":             { "figma": "semantic/background",             "alias": "surface/1",          "light": "#FAFAFA", "dark": "#171717" },
+    "foreground":             { "figma": "semantic/foreground",             "alias": "color/neutral/12",   "light": "#1F1F1F", "dark": "#EDEDED" },
+    "card":                   { "figma": "semantic/card",                   "alias": "surface/3",          "light": "#FFFFFF", "dark": "#252525" },
+    "card-foreground":        { "figma": "semantic/card-foreground",        "alias": "color/neutral/12",   "light": "#1F1F1F", "dark": "#EDEDED" },
+    "popover":                { "figma": "semantic/popover",                "alias": "surface/4",          "light": "#FFFFFF", "dark": "#2C2C2C" },
+    "popover-foreground":     { "figma": "semantic/popover-foreground",     "alias": "color/neutral/12",   "light": "#1F1F1F", "dark": "#EDEDED" },
+    "primary":                { "figma": "semantic/primary",                "alias": "color/accent/9",     "light": "#335CFF", "dark": "#335CFF" },
+    "primary-foreground":     { "figma": "semantic/primary-foreground",     "alias": null,                 "light": "#F8FAFE", "dark": "#F8FAFE" },
+    "secondary":              { "figma": "semantic/secondary",              "alias": "color/neutral/2",    "light": "#F9F9F9", "dark": "#191919" },
+    "secondary-foreground":   { "figma": "semantic/secondary-foreground",   "alias": "color/neutral/12",   "light": "#1F1F1F", "dark": "#EDEDED" },
+    "muted":                  { "figma": "semantic/muted",                  "alias": "color/neutral/2",    "light": "#F9F9F9", "dark": "#191919" },
+    "muted-foreground":       { "figma": "semantic/muted-foreground",       "alias": "color/neutral/11",   "light": "#666666", "dark": "#B7B7B7" },
+    "accent":                 { "figma": "semantic/accent",                 "alias": "color/neutral/4",    "light": "#E7E7E7", "dark": "#2B2B2B" },
+    "accent-foreground":      { "figma": "semantic/accent-foreground",      "alias": "color/neutral/12",   "light": "#1F1F1F", "dark": "#EDEDED" },
+    "destructive":            { "figma": "semantic/destructive",            "alias": "color/danger/9",     "light": "#FB3748", "dark": "#FB3748" },
+    "destructive-foreground": { "figma": "semantic/destructive-foreground", "alias": null,                 "light": "#FDF9F8", "dark": "#FDF9F8" },
+    "success":                { "figma": "semantic/success",                "alias": "color/success/9",    "light": "#1FC16B", "dark": "#1FC16B" },
+    "success-foreground":     { "figma": "semantic/success-foreground",     "alias": null,                 "light": "#002710", "dark": "#D3F8DC" },
+    "warning":                { "figma": "semantic/warning",                "alias": "color/warning/9",    "light": "#FA7319", "dark": "#FA7319" },
+    "warning-foreground":     { "figma": "semantic/warning-foreground",     "alias": null,                 "light": "#371300", "dark": "#FFE2CD" },
+    "border":                 { "figma": "semantic/border",                 "alias": "color/neutral/3",    "light": "#F0F0F0", "dark": "#232323" },
+    "input":                  { "figma": "semantic/input",                  "alias": "color/neutral/6",    "light": "#D1D1D1", "dark": "#3E3E3E" },
+    "ring":                   { "figma": "semantic/ring",                   "alias": "color/accent/8",     "light": "#77A2FF", "dark": "#395ABE" },
+    "border-active":          { "figma": "semantic/border-active",          "alias": "color/accent/9",     "light": "#335CFF", "dark": "#335CFF" }
+  },
+
+  "componentTokens": {
+    "button": {
+      "background": { "figma": "button/background", "alias": "color/neutral/12", "light": "#1F1F1F", "dark": "#EDEDED" },
+      "foreground": { "figma": "button/foreground", "alias": "color/neutral/1",  "light": "#FDFDFD", "dark": "#131313" }
+    }
+  },
+
+  "$bindingsComment": "Token yang DIIKAT tiap bagian komponen di Figma. Ini BUKAN nilai — ini pilihan token, dan tidak bisa di-generate ke kode karena merupakan keputusan desain. scripts/check-figma-bindings.ts membandingkannya dengan kelas Tailwind di komponen dan melaporkan selisihnya. 'HARDCODE' = paint di Figma tidak terikat variabel apa pun (pelanggaran house rule, perlu dibereskan human di Figma).",
+
+  "bindings": {
+    "Button": {
+      "node": "5:52",
+      "code": "ui/button.tsx",
+      "variants": {
+        "default":     { "fills": "button/background",  "strokes": null,                       "text": "button/foreground" },
+        "primary":     { "fills": "semantic/primary",   "strokes": null,                       "text": "semantic/primary-foreground" },
+        "secondary":   { "fills": "semantic/card",      "strokes": "color/neutral/3",          "text": "semantic/foreground" },
+        "destructive": { "fills": "semantic/destructive","strokes": null,                      "text": "semantic/destructive-foreground" },
+        "outline":     { "fills": null,                 "strokes": "semantic/card-foreground", "text": "semantic/foreground" },
+        "ghost":       { "fills": null,                 "strokes": null,                       "text": "semantic/foreground" },
+        "link":        { "fills": null,                 "strokes": null,                       "text": "semantic/primary" }
+      }
+    },
+    "Input": {
+      "node": "7:10",
+      "code": "ui/input.tsx",
+      "variants": {
+        "default":  { "fills": "semantic/card",       "strokes": "color/neutral/3",        "text": "color/neutral/6" },
+        "filled":   { "fills": "semantic/card",       "strokes": "color/neutral/3",        "text": "color/neutral/12" },
+        "focus":    { "fills": "semantic/background", "strokes": "semantic/border-active", "text": "semantic/muted-foreground" },
+        "disabled": { "fills": "semantic/background", "strokes": "color/neutral/3",        "text": "semantic/muted-foreground" }
+      }
+    },
+    "Textarea":   { "node": "7:13",    "code": "ui/textarea.tsx",     "variants": { "default": { "fills": "semantic/card", "strokes": "color/neutral/3", "text": "color/neutral/6" } } },
+    "Select":     { "node": "72:1867", "code": "ui/select.tsx",       "variants": { "default": { "fills": "semantic/card", "strokes": "color/neutral/3", "text": "color/neutral/6" } } },
+    "Checkbox":   { "node": "7:27",    "code": "ui/checkbox.tsx",     "variants": { "unchecked": { "fills": "semantic/background", "strokes": "semantic/input" }, "checked": { "fills": "semantic/primary", "strokes": null, "text": "semantic/primary-foreground" } } },
+    "Switch":     { "node": "7:38",    "code": "ui/switch.tsx",       "variants": { "off": { "fills": "semantic/border", "strokes": null }, "on": { "fills": "semantic/primary", "strokes": null } } },
+    "Badge": {
+      "node": "9:25", "code": "ui/badge.tsx",
+      "variants": {
+        "default":     { "fills": "color/accent/3",  "strokes": null,              "text": "color/accent/10" },
+        "secondary":   { "fills": "semantic/secondary","strokes": null,            "text": "semantic/secondary-foreground" },
+        "destructive": { "fills": "color/danger/3",  "strokes": null,              "text": "color/danger/10" },
+        "success":     { "fills": "color/success/3", "strokes": null,              "text": "color/success/10" },
+        "warning":     { "fills": "color/warning/3", "strokes": null,              "text": "color/warning/10" },
+        "outline":     { "fills": null,              "strokes": "semantic/border", "text": "color/neutral/10" }
+      }
+    },
+    "Alert": {
+      "node": "9:60", "code": "ui/alert.tsx",
+      "variants": {
+        "default":     { "fills": "semantic/background", "strokes": "semantic/border",  "text": "semantic/foreground" },
+        "destructive": { "fills": "color/danger/2",      "strokes": "color/danger/6",   "text": "color/danger/11" },
+        "success":     { "fills": "color/success/2",     "strokes": "color/success/6",  "text": "color/success/11" },
+        "warning":     { "fills": "color/warning/2",     "strokes": "color/warning/6",  "text": "color/warning/11" }
+      }
+    },
+    "Card":         { "node": "9:4",     "code": "ui/card.tsx",          "variants": { "default": { "fills": "semantic/card", "strokes": "semantic/border", "text": "semantic/card-foreground" } } },
+    "Avatar":       { "node": "9:28",    "code": "ui/avatar.tsx",        "variants": { "default": { "fills": "semantic/muted", "strokes": null, "text": "semantic/muted-foreground" } } },
+    "Dialog":       { "node": "16:4",    "code": "ui/dialog.tsx",        "variants": { "default": { "fills": "semantic/card", "strokes": "semantic/border", "text": "semantic/foreground" } } },
+    "AlertDialog":  { "node": "16:16",   "code": "ui/alert-dialog.tsx",  "variants": { "default": { "fills": "semantic/card", "strokes": "semantic/border", "text": "semantic/foreground" } } },
+    "Sheet":        { "node": "16:27",   "code": "ui/sheet.tsx",         "variants": { "default": { "fills": "semantic/card", "strokes": "semantic/border", "text": "semantic/foreground" } } },
+    "Drawer":       { "node": "16:35",   "code": "ui/drawer.tsx",        "variants": { "default": { "fills": "semantic/card", "strokes": "semantic/border", "text": "semantic/foreground" } } },
+    "Popover":      { "node": "17:4",    "code": "ui/popover.tsx",       "variants": { "default": { "fills": "semantic/card", "strokes": "semantic/border", "text": "semantic/foreground" } } },
+    "DropdownMenu": { "node": "17:13",   "code": "ui/dropdown-menu.tsx", "variants": { "default": { "fills": "semantic/popover", "strokes": "semantic/border", "text": "semantic/foreground" } } },
+    "ContextMenu":  { "node": "17:32",   "code": "ui/context-menu.tsx",  "variants": { "default": { "fills": "semantic/popover", "strokes": "semantic/border", "text": "semantic/foreground" } } },
+    "HoverCard":    { "node": "17:48",   "code": "ui/hover-card.tsx",    "variants": { "default": { "fills": "semantic/popover", "strokes": "semantic/border", "text": "semantic/muted-foreground" } } },
+    "Tooltip":      { "node": "17:57",   "code": "ui/tooltip.tsx",       "variants": { "default": { "fills": "color/neutral/12", "strokes": null, "text": "color/neutral/1" } } },
+    "Sonner":       { "node": "17:61",   "code": "ui/sonner.tsx",        "variants": { "default": { "fills": "semantic/card", "strokes": "semantic/border", "text": "semantic/foreground" } } },
+    "Sidebar":      { "node": "69:1943", "code": "ui/sidebar.tsx",       "variants": { "default": { "fills": "surface/1", "strokes": "semantic/border", "text": "semantic/foreground" } } },
+    "Menubar":      { "node": "69:1969", "code": "ui/menubar.tsx",       "variants": { "default": { "fills": "semantic/muted", "strokes": null, "text": "semantic/foreground" } } },
+    "Calendar":     { "node": "8:69",    "code": "ui/calendar.tsx",      "variants": { "default": { "fills": "semantic/card", "strokes": "semantic/border", "text": "semantic/muted-foreground" } } },
+    "FileTree":     { "node": "11:4",    "code": "ui/file-tree.tsx",     "variants": { "default": { "fills": "semantic/card", "strokes": "semantic/border", "text": "semantic/foreground" } } },
+    "ScrollArea":   { "node": "60:1866", "code": "ui/scroll-area.tsx",   "variants": { "default": { "fills": "semantic/card", "strokes": "semantic/border", "text": "semantic/foreground" } } },
+    "Kbd":          { "node": "6:33",    "code": "ui/kbd.tsx",           "variants": { "default": { "fills": "semantic/muted", "strokes": "semantic/border", "text": "semantic/muted-foreground" } } },
+    "SegmentedControl": { "node": "6:24", "code": "ui/segmented-control.tsx", "variants": { "default": { "fills": "semantic/muted", "strokes": null, "text": "semantic/foreground" } } },
+    "AspectRatio":  { "node": "11:21",   "code": "ui/aspect-ratio.tsx",  "variants": { "default": { "fills": "semantic/muted", "strokes": null, "text": "semantic/muted-foreground" } } },
+    "TiltedCard":   { "node": "11:43",   "code": "ui/tilted-card.tsx",   "variants": { "default": { "fills": "semantic/card", "strokes": "semantic/border", "text": "semantic/card-foreground" } } },
+    "Toggle": {
+      "node": "6:12", "code": "ui/toggle.tsx",
+      "variants": {
+        "default-off": { "fills": null,               "strokes": null,                       "text": "semantic/foreground" },
+        "default-on":  { "fills": "color/neutral/3",  "strokes": null,                       "text": "semantic/accent-foreground" },
+        "outline-off": { "fills": null,               "strokes": "color/neutral/3",          "text": "semantic/foreground" },
+        "outline-on":  { "fills": "semantic/background","strokes": "semantic/card-foreground","text": "semantic/accent-foreground" }
+      }
+    },
+    "Kanban Card": {
+      "node": "27:39", "code": "ui/kanban-board.tsx",
+      "variants": {
+        "default":  { "fills": "semantic/card", "strokes": "semantic/border",        "text": "semantic/muted-foreground" },
+        "hover":    { "fills": "semantic/card", "strokes": "semantic/border",        "text": "semantic/muted-foreground" },
+        "dragging": { "fills": "semantic/card", "strokes": "semantic/border-active", "text": "semantic/muted-foreground" }
+      }
+    },
+    "RichTextField": {
+      "node": "105:1922", "code": "ui/rich-text-field.tsx",
+      "variants": {
+        "empty":     { "fills": "semantic/card",       "strokes": "color/neutral/3", "text": "color/neutral/6" },
+        "editing":   { "fills": "semantic/card",       "strokes": "semantic/ring",   "text": "semantic/foreground" },
+        "rendered":  { "fills": "semantic/card",       "strokes": "color/neutral/3", "text": "semantic/foreground" },
+        "read-only": { "fills": "semantic/background", "strokes": "color/neutral/3", "text": "semantic/muted-foreground" }
+      }
+    },
+    "FileUploader": {
+      "node": "107:2014", "code": "ui/file-uploader.tsx",
+      "variants": {
+        "empty":     { "fills": "semantic/card",  "strokes": "semantic/border",      "text": "semantic/foreground" },
+        "drag-over": { "fills": "color/accent/1", "strokes": "semantic/primary",     "text": "semantic/foreground" },
+        "uploading": { "fills": "semantic/card",  "strokes": "semantic/border",      "text": "semantic/foreground" },
+        "uploaded":  { "fills": "semantic/card",  "strokes": "semantic/border",      "text": "semantic/foreground" },
+        "error":     { "fills": "semantic/card",  "strokes": "semantic/destructive", "text": "semantic/foreground" }
+      }
+    },
+    "WidgetBuilderCanvas": {
+      "node": "110:2066", "code": "ui/widget-builder-canvas.tsx",
+      "variants": { "default": { "fills": "semantic/card", "strokes": "semantic/border", "text": "semantic/muted-foreground" } }
+    },
+    "Logo Uploader": {
+      "node": "185:445", "code": "ui/logo-uploader.tsx",
+      "variants": {
+        "empty":  { "fills": "semantic/background", "strokes": null, "text": "semantic/muted-foreground" },
+        "filled": { "fills": "semantic/background", "strokes": null, "text": "semantic/foreground" },
+        "error":  { "fills": "semantic/background", "strokes": null, "text": "semantic/destructive" }
+      }
+    }
+  },
+
+  "$hardcodeComment": "Komponen Figma berikut punya paint yang TIDAK terikat variabel. Ini pelanggaran house rule dan hanya bisa dibereskan human di Figma — agent tidak pernah mengubah nilai token/paint sendiri.",
+  "unboundPaints": [
+    "Progress (10:35)", "ToggleGroup (6:15)", "Label (7:17)", "RadioGroup (7:41)",
+    "Combobox (8:10)", "Command (8:24)", "FormField (8:43)", "InputOTP (8:50)",
+    "Slider (8:63)", "AvatarCircles (9:32)", "Quote (9:68)", "Separator (9:73)",
+    "Typography (10:4)", "Skeleton (10:10)", "Table (10:38)", "DataTable (10:72)",
+    "DataList (10:100)", "Carousel (11:25)", "BentoGrid (11:47)", "Masonry (13:4)",
+    "Stack (13:20)", "Stepper (13:26)", "Chart (13:135)", "Tabs (14:4)",
+    "Accordion (14:13)", "Breadcrumb (14:29)", "Pagination (14:37)",
+    "NavigationMenu (14:52)", "Collapsible (15:30)", "Resizable (15:56)",
+    "RainbowButton (6:39, stroke)", "MagicCard (11:34, stroke)", "NeonGradientCard (11:38, stroke)"
+  ]
+}

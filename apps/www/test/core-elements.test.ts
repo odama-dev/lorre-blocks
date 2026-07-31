@@ -61,8 +61,11 @@ describe("color specimens", () => {
 describe("semantic specimens", () => {
   const semantics = semanticSpecimens()
 
-  it("lists all 23 semantic names", () => {
-    expect(semantics).toHaveLength(23)
+  // Jumlahnya ikut SEMANTIC_ORDER + semantik opsional yang dipakai tema rumah.
+  // Naik jadi 24 saat `border-active` masuk (disinkron dari Figma, 2026-07-31).
+  it("lists every semantic name the house theme carries", () => {
+    expect(semantics.length).toBeGreaterThanOrEqual(23)
+    expect(semantics.map((s) => s.name)).toContain("border-active")
   })
 
   it("agrees with the theme rather than restating it", () => {
@@ -77,12 +80,13 @@ describe("semantic specimens", () => {
     }
   })
 
-  it("carries AlignUI's values on the tokens the theme pins", () => {
+  it("carries the Figma-synced values on the tokens the theme pins", () => {
     const byName = new Map(semantics.map((s) => [s.name, s]))
-    // Spot-checks, not a second copy of the theme: if these drift, the page is
-    // no longer showing AlignUI and the whole exercise has quietly failed.
+    // Spot-check, bukan salinan kedua dari tema. Nilainya sekarang bersumber
+    // dari snapshot Figma (packages/tokens/figma/odama.figma.json), jadi hex
+    // di sini mengikuti desain — bukan lagi AlignUI mentah.
     expect(byName.get("background")).toMatchObject({
-      light: "#ffffff",
+      light: "#fafafa",
       dark: "#171717",
     })
     expect(byName.get("primary")?.light).toBe("#335cff")

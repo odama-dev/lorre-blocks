@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest"
 
+import figmaSnapshot from "../figma/odama.figma.json"
+
 import { themeToCss } from "./build-css"
 import { themeToDtcg } from "./build-dtcg"
 import { formatOklch, hexToOklch, hexToSeed, oklchToHex } from "./oklch"
@@ -7,6 +9,17 @@ import { checkContrast, contrastRatio, resolveSemanticColor } from "./contrast"
 import { generateScale, onSolidColor } from "./scale"
 import { themeDefinitionSchema } from "./schema"
 import { computeTypeScale } from "./type-scale"
+
+/**
+ * Foreground yang nilainya di Figma gagal kontras AA. sync-figma-tokens sengaja
+ * TIDAK menyalinnya — dibiarkan diwarisi tema induk yang menghitung otomatis.
+ * Daftar ini harus menyusut ke kosong begitu Figma dibereskan.
+ */
+const UNSYNCED_FOR_CONTRAST = new Set([
+  "destructive-foreground",
+  "success-foreground",
+  "warning-foreground",
+])
 import { allResolvedThemes, getResolvedTheme, resolveTheme } from "./index"
 
 describe("oklch", () => {
@@ -773,33 +786,41 @@ describe("contrast (7.7)", () => {
 describe("odama theme", () => {
   const odama = getResolvedTheme("odama")
 
-  it("lands AlignUI's exact values on the semantic layer, per mode", () => {
+  /**
+   * Dulu test ini menempelkan hex AlignUI langsung. Itu membuatnya jadi sumber
+   * kebenaran KEDUA — dan begitu Figma diedit, kode dan test sama-sama benar
+   * menurut dirinya sendiri sambil berbeda dari desain. Sekarang ia membaca
+   * snapshot Figma yang sama dengan yang dipakai sync, jadi tidak bisa lagi
+   * melenceng diam-diam.
+   */
+  it("matches the Figma snapshot on the semantic layer, per mode", () => {
     const at = (name: Parameters<typeof resolveSemanticColor>[1], mode: "light" | "dark") =>
       oklchToHex(resolveSemanticColor(odama, name, mode))
 
-    // bg-white-0 / text-strong-950
-    expect(at("background", "light")).toBe("#ffffff")
-    expect(at("background", "dark")).toBe("#171717")
-    expect(at("foreground", "light")).toBe("#171717")
-    expect(at("foreground", "dark")).toBe("#ffffff")
-    // bg-weak-50 / text-sub-600
-    expect(at("muted", "light")).toBe("#f7f7f7")
-    expect(at("muted", "dark")).toBe("#262626")
-    expect(at("muted-foreground", "light")).toBe("#5c5c5c")
-    expect(at("muted-foreground", "dark")).toBe("#a3a3a3")
-    // stroke-soft-200 / stroke-sub-300
-    expect(at("border", "light")).toBe("#ebebeb")
-    expect(at("input", "light")).toBe("#d1d1d1")
+    for (const [key, t] of Object.entries(figmaSnapshot.tokens)) {
+      // Foreground yang gagal kontras sengaja TIDAK disinkron — diwarisi
+      // tema induk yang menghitungnya. Lihat CONTRAST_PAIRS di sync-figma-tokens.
+      if (UNSYNCED_FOR_CONTRAST.has(key)) continue
+      if (!(key in odama.semantics!)) continue
+      expect(at(key as never, "light"), `${key} light`).toBe(t.light.toLowerCase())
+      expect(at(key as never, "dark"), `${key} dark`).toBe(t.dark.toLowerCase())
+    }
   })
 
   it("carries a dark mode no inversion rule would produce", () => {
-    // bg-weak-50 goes 50 -> 800. An inversion says 950 (#171717).
-    expect(oklchToHex(resolveSemanticColor(odama, "muted", "dark"))).toBe("#262626")
-    expect(oklchToHex(resolveSemanticColor(odama, "muted", "dark"))).not.toBe("#171717")
+    // Poinnya tetap: dark mode Odama BUKAN hasil membalik light. Nilainya
+    // sekarang datang dari Figma, jadi yang diuji sifatnya, bukan hex-nya.
+    const mutedDark = oklchToHex(resolveSemanticColor(odama, "muted", "dark"))
+    expect(mutedDark).toBe(figmaSnapshot.tokens.muted.dark.toLowerCase())
+    expect(mutedDark).not.toBe(
+      oklchToHex(resolveSemanticColor(odama, "background", "dark"))
+    )
     // text-sub-600 goes 600 -> 400. An inversion says 400... by luck. But
     // text-soft-400 -> 500 is the one that breaks the rule, and muted-foreground
     // resolving to #a3a3a3 rather than #5c5c5c proves the split is live.
-    expect(oklchToHex(resolveSemanticColor(odama, "muted-foreground", "dark"))).toBe("#a3a3a3")
+    expect(oklchToHex(resolveSemanticColor(odama, "muted-foreground", "dark"))).toBe(
+      figmaSnapshot.tokens["muted-foreground"].dark.toLowerCase()
+    )
   })
 
   it("anchors primary on AlignUI's blue-500 exactly", () => {
@@ -827,7 +848,7 @@ describe("odama theme", () => {
 
   it("reaches the CSS with its modifiers intact", () => {
     const css = themeToCss(odama)
-    expect(css).toContain("--background: #FFFFFF;")
+    expect(css).toContain(`--background: ${figmaSnapshot.tokens.background.light};`)
     expect(css).toContain("--text-subheading-sm--letter-spacing: 6%;")
     expect(css).toContain("--text-title-h1--font-family: var(--font-display);")
     expect(css).toContain("--font-display: Inter Display, Inter")

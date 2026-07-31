@@ -109,6 +109,16 @@ export type SemanticColorName =
   | "ring"
 
 /**
+ * Semantik OPSIONAL — tidak setiap tema punya. Dipisah dari union wajib supaya
+ * menambahkannya tidak memaksa semua tema ikut mendefinisikan.
+ *
+ * `border-active`: warna garis saat elemen aktif/fokus. Terpisah dari `ring`
+ * karena mekanismenya beda — Figma mengganti WARNA GARIS (#335CFF), bukan
+ * menambah ring di luar elemen (#77A2FF).
+ */
+export type OptionalSemanticColorName = "border-active"
+
+/**
  * Semantic value reference. Allowed forms:
  *  - "<scale>-<step>"  e.g. "accent-9"  → resolves to that scale step
  *  - "on-<scale>"      e.g. "on-accent" → computed text color on that scale's solid
@@ -134,7 +144,8 @@ export type SemanticValue =
   | SemanticRef
   | { light: SemanticRef; dark: SemanticRef }
 
-export type SemanticColors = Record<SemanticColorName, SemanticValue>
+export type SemanticColors = Record<SemanticColorName, SemanticValue> &
+  Partial<Record<OptionalSemanticColorName, SemanticValue>>
 
 /** The ref a semantic resolves to in one mode. */
 export function semanticRefFor(

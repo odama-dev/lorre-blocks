@@ -57,32 +57,44 @@ export const odama: ThemeDefinition = {
    * AlignUI compresses the range rather than mirroring it (bg-weak-50 goes
    * 50 → 800, where an inversion would say 950), so both sides are stated.
    */
+  /**
+   * DIHASILKAN dari packages/tokens/figma/odama.figma.json — JANGAN EDIT TANGAN.
+   * Perbarui lewat: pnpm --filter @lorre-blocks/tokens sync:figma
+   * CI memverifikasinya dengan --check, jadi edit manual akan tertangkap.
+   */
   semantics: {
-    // bg-white-0
-    background: { light: "#FFFFFF", dark: "#171717" },
-    card: { light: "#FFFFFF", dark: "#171717" },
-    popover: { light: "#FFFFFF", dark: "#171717" },
-
-    // text-strong-950
-    foreground: { light: "#171717", dark: "#FFFFFF" },
-    "card-foreground": { light: "#171717", dark: "#FFFFFF" },
-    "popover-foreground": { light: "#171717", dark: "#FFFFFF" },
-
-    // bg-weak-50
-    muted: { light: "#F7F7F7", dark: "#262626" },
-    secondary: { light: "#F7F7F7", dark: "#262626" },
-    "secondary-foreground": { light: "#171717", dark: "#FFFFFF" },
-
-    // text-sub-600
-    "muted-foreground": { light: "#5C5C5C", dark: "#A3A3A3" },
-
-    // bg-soft-200 — the interaction surface sits one step above muted.
-    accent: { light: "#EBEBEB", dark: "#333333" },
-    "accent-foreground": { light: "#171717", dark: "#FFFFFF" },
-
-    // stroke-soft-200 / stroke-sub-300
-    border: { light: "#EBEBEB", dark: "#333333" },
-    input: { light: "#D1D1D1", dark: "#5C5C5C" },
+    // <figma-sync:semantics>
+    background: { light: "#FAFAFA", dark: "#171717" },  // semantic/background → surface/1
+    foreground: { light: "#1F1F1F", dark: "#EDEDED" },  // semantic/foreground → color/neutral/12
+    card: { light: "#FFFFFF", dark: "#252525" },  // semantic/card → surface/3
+    "card-foreground": { light: "#1F1F1F", dark: "#EDEDED" },  // semantic/card-foreground → color/neutral/12
+    popover: { light: "#FFFFFF", dark: "#2C2C2C" },  // semantic/popover → surface/4
+    "popover-foreground": { light: "#1F1F1F", dark: "#EDEDED" },  // semantic/popover-foreground → color/neutral/12
+    primary: { light: "#335CFF", dark: "#335CFF" },  // semantic/primary → color/accent/9
+    "primary-foreground": { light: "#F8FAFE", dark: "#F8FAFE" },  // semantic/primary-foreground
+    secondary: { light: "#F9F9F9", dark: "#191919" },  // semantic/secondary → color/neutral/2
+    "secondary-foreground": { light: "#1F1F1F", dark: "#EDEDED" },  // semantic/secondary-foreground → color/neutral/12
+    muted: { light: "#F9F9F9", dark: "#191919" },  // semantic/muted → color/neutral/2
+    "muted-foreground": { light: "#666666", dark: "#B7B7B7" },  // semantic/muted-foreground → color/neutral/11
+    accent: { light: "#E7E7E7", dark: "#2B2B2B" },  // semantic/accent → color/neutral/4
+    "accent-foreground": { light: "#1F1F1F", dark: "#EDEDED" },  // semantic/accent-foreground → color/neutral/12
+    destructive: { light: "#FB3748", dark: "#FB3748" },  // semantic/destructive → color/danger/9
+    // ⚠️ destructive-foreground TIDAK disinkron — nilai Figma gagal kontras AA.
+    //    Dibiarkan diwarisi tema induk (yang menghitungnya otomatis).
+    //    Perbaiki di Figma, lalu snapshot ulang.
+    success: { light: "#1FC16B", dark: "#1FC16B" },  // semantic/success → color/success/9
+    // ⚠️ success-foreground TIDAK disinkron — nilai Figma gagal kontras AA.
+    //    Dibiarkan diwarisi tema induk (yang menghitungnya otomatis).
+    //    Perbaiki di Figma, lalu snapshot ulang.
+    warning: { light: "#FA7319", dark: "#FA7319" },  // semantic/warning → color/warning/9
+    // ⚠️ warning-foreground TIDAK disinkron — nilai Figma gagal kontras AA.
+    //    Dibiarkan diwarisi tema induk (yang menghitungnya otomatis).
+    //    Perbaiki di Figma, lalu snapshot ulang.
+    border: { light: "#F0F0F0", dark: "#232323" },  // semantic/border → color/neutral/3
+    input: { light: "#D1D1D1", dark: "#3E3E3E" },  // semantic/input → color/neutral/6
+    ring: { light: "#77A2FF", dark: "#395ABE" },  // semantic/ring → color/accent/8
+    "border-active": { light: "#335CFF", dark: "#335CFF" },  // semantic/border-active → color/accent/9
+    // </figma-sync:semantics>
   },
 
   /**
@@ -164,8 +176,10 @@ export const odama: ThemeDefinition = {
    */
   components: {
     button: {
-      background: "var(--neutral-12)",
-      foreground: "var(--neutral-1)",
+      // <figma-sync:button>
+      background: "var(--neutral-12)",  // button/background → color/neutral/12 (light #1F1F1F / dark #EDEDED)
+      foreground: "var(--neutral-1)",  // button/foreground → color/neutral/1 (light #FDFDFD / dark #131313)
+    // </figma-sync:button>
     },
   },
 }
