@@ -51,6 +51,9 @@ const SEMANTIC_ORDER: SemanticColorName[] = [
   "ring",
 ]
 
+/** Semantik opsional — hanya di-emit bila temanya mendefinisikan. */
+const OPTIONAL_SEMANTICS = ["border-active"] as const
+
 const RADIUS_KEYS = ["sm", "md", "lg", "xl", "2xl"] as const
 const SHADOW_KEYS = ["xs", "sm", "md", "lg", "xl"] as const
 
@@ -122,6 +125,10 @@ export function themeToCss(theme: ResolvedTheme): string {
   for (const name of SEMANTIC_ORDER) {
     out.push(`  --${name}: ${resolveSemantic(theme, semanticRefFor(theme.semantics[name], "light"), "light")};`)
   }
+  for (const name of OPTIONAL_SEMANTICS) {
+    const v = theme.semantics[name]
+    if (v) out.push(`  --${name}: ${resolveSemantic(theme, semanticRefFor(v, "light"), "light")};`)
+  }
   out.push("")
   out.push(`  --radius: ${theme.radius.base};`)
   for (const key of RADIUS_KEYS) {
@@ -166,6 +173,10 @@ export function themeToCss(theme: ResolvedTheme): string {
   for (const name of SEMANTIC_ORDER) {
     out.push(`  --${name}: ${resolveSemantic(theme, semanticRefFor(theme.semantics[name], "dark"), "dark")};`)
   }
+  for (const name of OPTIONAL_SEMANTICS) {
+    const v = theme.semantics[name]
+    if (v) out.push(`  --${name}: ${resolveSemantic(theme, semanticRefFor(v, "dark"), "dark")};`)
+  }
   out.push("}", "")
 
   // ---- @theme inline: Tailwind utility mapping ----
@@ -178,6 +189,9 @@ export function themeToCss(theme: ResolvedTheme): string {
   out.push("")
   for (const name of SEMANTIC_ORDER) {
     out.push(`  --color-${name}: var(--${name});`)
+  }
+  for (const name of OPTIONAL_SEMANTICS) {
+    if (theme.semantics[name]) out.push(`  --color-${name}: var(--${name});`)
   }
   out.push("")
   // Warna component token → utilitas Tailwind (`bg-button-background`).

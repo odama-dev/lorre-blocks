@@ -8,13 +8,17 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "check:bindings": "tsx scripts/check-figma-bindings.ts",
+    "check:figma": "tsx scripts/sync-figma-tokens.ts --check",
+    "sync:figma": "tsx scripts/sync-figma-tokens.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vitest": "^4.1.10"
   }
