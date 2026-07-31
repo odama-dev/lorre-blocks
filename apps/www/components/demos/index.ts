@@ -146,6 +146,13 @@ import {
   WavesDemo,
 } from "@www/components/demos/batch16"
 import {
+  FileUploaderDemo,
+  KanbanBoardDemo,
+  LogoUploaderDemo,
+  RichTextFieldDemo,
+  WidgetBuilderCanvasDemo,
+} from "@www/components/demos/batch17"
+import {
   AnimatedGradientDemo,
   CountUpDemo,
   FadeInDemo,
@@ -156,6 +163,11 @@ import {
 
 /** Registry item name → live demo rendered on its docs page. */
 export const demos: Record<string, React.ComponentType> = {
+  "file-uploader": FileUploaderDemo,
+  "kanban-board": KanbanBoardDemo,
+  "logo-uploader": LogoUploaderDemo,
+  "rich-text-field": RichTextFieldDemo,
+  "widget-builder-canvas": WidgetBuilderCanvasDemo,
   accordion: AccordionDemo,
   alert: AlertDemo,
   "alert-dialog": AlertDialogDemo,

@@ -148,4 +148,24 @@ export const odama: ThemeDefinition = {
     durationNormal: "300ms",
     durationSlow: "400ms",
   },
+
+  /**
+   * Tombol utama Odama hitam, sementara `--primary` tetap biru `#335cff`.
+   *
+   * Ini keputusan brand (DL-DS-009), jadi tempatnya di tema odama — bukan di
+   * `basic`, yang tombolnya tetap biru. Nilainya alias ke ramp neutral, bukan
+   * hex, supaya mode dark ikut sendiri: `neutral-12` gelap di light dan terang
+   * di dark, `neutral-1` sebaliknya. Menuliskan `#1f1f1f` di sini akan
+   * menghasilkan tombol hitam di dark mode juga.
+   *
+   * Yang sengaja TIDAK dilakukan: mengubah nilai `--primary` jadi hitam. Biru
+   * masih dipakai varian `primary`, varian `link`, dan `--ring` (focus state
+   * seluruh input) — mengubahnya akan menyeret semua itu ikut hitam.
+   */
+  components: {
+    button: {
+      background: "var(--neutral-12)",
+      foreground: "var(--neutral-1)",
+    },
+  },
 }

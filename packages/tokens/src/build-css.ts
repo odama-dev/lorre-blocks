@@ -180,6 +180,18 @@ export function themeToCss(theme: ResolvedTheme): string {
     out.push(`  --color-${name}: var(--${name});`)
   }
   out.push("")
+  // Warna component token → utilitas Tailwind (`bg-button-background`).
+  // Fallback ke semantik yang setara disengaja: tema yang tidak mengisi
+  // `button.background` — dan konsumen yang theme.css-nya belum di-sync —
+  // tetap dapat perilaku lama. Tanpa fallback, latar tombol jadi transparan
+  // dan tombol utama mereka hilang tanpa peringatan.
+  out.push(
+    "  --color-button-background: var(--button-background, var(--primary));"
+  )
+  out.push(
+    "  --color-button-foreground: var(--button-foreground, var(--primary-foreground));"
+  )
+  out.push("")
   for (const key of RADIUS_KEYS) {
     out.push(`  --radius-${key}: var(--radius-${key});`)
   }
