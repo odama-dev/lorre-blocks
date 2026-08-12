@@ -1,17 +1,24 @@
 import { describe, expect, it } from "vitest"
 
-import { ICON_SETS } from "@lorre-blocks/tokens"
+import { ICON_SETS, PUBLIC_ICON_SETS } from "@lorre-blocks/tokens"
 import { kebab, loadIconSet, pascal, searchIcons } from "@www/lib/icon-sets"
 
 describe("icon catalog", () => {
-  it("carries the four permissive sets — Untitled UI must never appear", () => {
-    expect(ICON_SETS.map((s) => s.name)).toEqual([
+  it("offers the four permissive sets — Untitled UI must never appear", () => {
+    expect(PUBLIC_ICON_SETS.map((s) => s.name)).toEqual([
       "lucide",
       "radix",
       "phosphor",
       "heroicons",
     ])
-    expect(ICON_SETS.every((s) => ["MIT", "ISC"].includes(s.license))).toBe(true)
+    expect(PUBLIC_ICON_SETS.every((s) => ["MIT", "ISC"].includes(s.license))).toBe(
+      true
+    )
+    expect(ICON_SETS.some((s) => /untitled/i.test(s.name))).toBe(false)
+  })
+
+  it("refuses to load a private set in the public app", async () => {
+    await expect(loadIconSet("lorre", undefined)).rejects.toThrow(/private/i)
   })
 })
 

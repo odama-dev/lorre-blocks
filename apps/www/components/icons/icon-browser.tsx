@@ -12,7 +12,7 @@ import {
   Search,
   SlidersHorizontal,
 } from "lucide-react"
-import { ICON_SETS, type IconSetName } from "@lorre-blocks/tokens"
+import { PUBLIC_ICON_SETS, type IconSetName } from "@lorre-blocks/tokens"
 
 import { cn } from "@lorre-blocks/registry/lib/utils"
 import { Button } from "@lorre-blocks/registry/ui/button"
@@ -83,7 +83,7 @@ export function IconBrowser() {
   const [color, setColor] = React.useState("currentColor")
   const [hexText, setHexText] = React.useState("")
 
-  const setInfo = ICON_SETS.find((s) => s.name === setName)!
+  const setInfo = PUBLIC_ICON_SETS.find((s) => s.name === setName)!
   const visible = matches.slice(0, GRID_CAP)
 
   React.useEffect(() => {
@@ -167,7 +167,7 @@ export function IconBrowser() {
           onValueChange={(value) => value && changeSet(value as IconSetName)}
           className="flex-wrap justify-start gap-1"
         >
-          {ICON_SETS.map((s) => (
+          {PUBLIC_ICON_SETS.map((s) => (
             <ToggleGroupItem
               key={s.name}
               value={s.name}

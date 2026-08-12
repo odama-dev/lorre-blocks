@@ -3,6 +3,7 @@ import path from "node:path"
 import color from "picocolors"
 
 import {
+  getIconSet,
   getResolvedTheme,
   isExplicitTypeScale,
   isRamp,
@@ -147,6 +148,12 @@ async function injectCss(
 export interface ThemeCreateOptions extends ThemeCreateFlags {
   cwd: string
   from?: string
+  /**
+   * Acknowledge that the chosen icon set is private. Without it a private set
+   * is refused — the flag exists so nobody wires a Lorre-only package into a
+   * project by accident and then can't install it in CI.
+   */
+  allowPrivate?: boolean
   /** Skip installing the icon-set npm package. */
   install?: boolean
 }
@@ -207,9 +214,20 @@ export async function runThemeCreate(options: ThemeCreateOptions): Promise<void>
   await writeConfig(cwd, { ...config, theme: def.name })
   out.success(`Set "theme": "${def.name}" in components.json`)
 
+  const privateSet = def.icons ? getIconSet(def.icons.set) : undefined
+  if (privateSet?.private && !options.allowPrivate) {
+    out.fail(
+      `Icon set "${privateSet.name}" is private (Lorre-only). Pass --private to ` +
+        `confirm, and make sure npm is authenticated against ${privateSet.registry}.`
+    )
+  }
+
   let iconPackage: string | null = null
   if (options.install !== false) {
     iconPackage = iconPackageFor(def)
+    if (iconPackage && privateSet?.private && privateSet.registry) {
+      await ensureScopedRegistry(cwd, iconPackage, privateSet.registry)
+    }
     if (iconPackage && !(await hasDependency(cwd, iconPackage))) {
       const pm = await detectPackageManager(cwd)
       const spinner = out.spinner()
@@ -313,6 +331,36 @@ export async function runThemeShow(options: ThemeShowOptions): Promise<void> {
       `  ${"icons".padEnd(10)} ${resolved.icons.set}${resolved.icons.style ? ` (${resolved.icons.style})` : ""}`
     )
   }
+}
+
+/**
+ * Point the package's scope at its private registry via the project .npmrc,
+ * so `install` resolves it instead of 404-ing against public npm.
+ *
+ * Only the registry line is written — never a token. Credentials belong in the
+ * user's ~/.npmrc or CI secrets; writing one into the project would be the
+ * exact leak this whole mechanism exists to prevent.
+ */
+async function ensureScopedRegistry(
+  cwd: string,
+  pkg: string,
+  registry: string
+): Promise<void> {
+  const scope = pkg.startsWith("@") ? pkg.split("/")[0] : null
+  if (!scope) return
+
+  const npmrc = path.join(cwd, ".npmrc")
+  const line = `${scope}:registry=${registry}`
+  const existing = (await readIfExists(npmrc)) ?? ""
+  if (existing.split(/\r?\n/).some((l) => l.trim() === line)) return
+
+  const body = existing && !existing.endsWith("\n") ? existing + "\n" : existing
+  await fs.writeFile(npmrc, `${body}${line}\n`, "utf8")
+  out.success(`Pointed ${scope} at ${registry} in .npmrc`)
+  out.warn(
+    `${pkg} is private — authenticate first (e.g. \`npm login --scope=${scope} ` +
+      `--registry=${registry}\`) or the install below will fail with 401/404.`
+  )
 }
 
 async function hasDependency(cwd: string, name: string): Promise<boolean> {
