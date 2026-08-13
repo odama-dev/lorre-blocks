@@ -1,7 +1,12 @@
+import { readdirSync, readFileSync } from "node:fs"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
 import { describe, expect, it } from "vitest"
 
 import { ICON_SETS, PUBLIC_ICON_SETS } from "@lorre-blocks/tokens"
 import { kebab, loadIconSet, pascal, searchIcons } from "@www/lib/icon-sets"
+
+const WWW_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 
 describe("icon catalog", () => {
   it("offers the four permissive sets — Untitled UI must never appear", () => {
@@ -19,6 +24,26 @@ describe("icon catalog", () => {
 
   it("refuses to load a private set in the public app", async () => {
     await expect(loadIconSet("lorre", undefined)).rejects.toThrow(/private/i)
+  })
+
+  // Everything under app/, components/, lib/ and scripts/ either ships to the
+  // browser or writes into public/ — so the raw catalog (which carries the
+  // private set) must not be reachable from any of them.
+  it("no public surface reads the raw catalog", () => {
+    const roots = ["app", "components", "lib", "scripts"]
+    const offenders: string[] = []
+
+    const walk = (dir: string) => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name)
+        if (entry.isDirectory()) walk(full)
+        else if (/\.tsx?$/.test(entry.name) && /\bICON_SETS\b/.test(readFileSync(full, "utf8")))
+          offenders.push(path.relative(WWW_ROOT, full))
+      }
+    }
+    for (const root of roots) walk(path.join(WWW_ROOT, root))
+
+    expect(offenders).toEqual([])
   })
 })
 
