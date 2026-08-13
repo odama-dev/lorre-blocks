@@ -3,9 +3,9 @@
 import * as React from "react"
 import { RotateCcw } from "lucide-react"
 import {
-  ICON_SETS,
   isExplicitTypeScale,
   isRamp,
+  PUBLIC_ICON_SETS,
   type ColorSeed,
   type ColorSpec,
   type ComponentTokens,
@@ -241,7 +241,7 @@ export function StudioControls({ def, patch, reset }: ControlsProps) {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {ICON_SETS.map((s) => (
+              {PUBLIC_ICON_SETS.map((s) => (
                 <SelectItem key={s.name} value={s.name}>
                   {s.label}
                 </SelectItem>
@@ -512,5 +512,5 @@ function patchComponent(
 
 function styleOptionsFor(setName: string | undefined): readonly string[] | null {
   if (!setName) return null
-  return ICON_SETS.find((s) => s.name === setName)?.styles ?? null
+  return PUBLIC_ICON_SETS.find((s) => s.name === setName)?.styles ?? null
 }

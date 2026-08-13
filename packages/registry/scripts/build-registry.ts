@@ -12,7 +12,13 @@ import {
   type RegistryIndexItem,
   type RegistryManifest,
 } from "../src/schema"
-import { allResolvedThemes, ICON_SETS, themeToCss, themeToDtcg } from "@lorre-blocks/tokens"
+import {
+  allResolvedThemes,
+  ICON_SETS,
+  PUBLIC_ICON_SETS,
+  themeToCss,
+  themeToDtcg,
+} from "@lorre-blocks/tokens"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const REGISTRY_ROOT = path.resolve(__dirname, "..")
@@ -224,15 +230,21 @@ async function build() {
   )
   console.log(`✓ themes index -> r/themes/index.json (${resolvedThemes.length} theme(s))`)
 
-  // Icon-set catalog: lets agents enumerate supported sets remotely.
+  // Icon-set catalog: lets agents enumerate supported sets remotely. Written
+  // into apps/www/public, so PUBLIC_ICON_SETS only — a private set listed here
+  // would be served to the world by Vercel.
   const iconsDir = path.join(OUTPUT_DIR, "icons")
   await fs.mkdir(iconsDir, { recursive: true })
   await fs.writeFile(
     path.join(iconsDir, "index.json"),
-    JSON.stringify([...ICON_SETS], null, 2) + "\n",
+    JSON.stringify([...PUBLIC_ICON_SETS], null, 2) + "\n",
     "utf8"
   )
-  console.log(`✓ icon sets -> r/icons/index.json (${ICON_SETS.length} set(s))`)
+  const withheld = ICON_SETS.length - PUBLIC_ICON_SETS.length
+  console.log(
+    `✓ icon sets -> r/icons/index.json (${PUBLIC_ICON_SETS.length} set(s)` +
+      `${withheld > 0 ? `, ${withheld} private withheld` : ""})`
+  )
 
   if (!basicCss) throw new Error('Root theme "basic" was not built')
 

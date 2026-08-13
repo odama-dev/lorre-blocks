@@ -1,5 +1,5 @@
 import * as React from "react"
-import type { IconSetName } from "@lorre-blocks/tokens"
+import { isPrivateIconSet, type IconSetName } from "@lorre-blocks/tokens"
 
 /**
  * Per-set adapters for the /icons browser (Phase 7.5). Each set is loaded via
@@ -42,6 +42,15 @@ export async function loadIconSet(
   set: IconSetName,
   style: string | undefined
 ): Promise<LoadedIconSet> {
+  // This app is public and its bundle is served to anyone. A private set's
+  // package is not even installed here — fail loudly rather than let a future
+  // edit quietly add the import.
+  if (isPrivateIconSet(set)) {
+    throw new Error(
+      `Icon set "${set}" is private and is not available in the public docs app.`
+    )
+  }
+
   switch (set) {
     case "lucide": {
       const m = await import("lucide-react")
@@ -128,6 +137,8 @@ export async function loadIconSet(
       }
     }
   }
+
+  throw new Error(`Unknown icon set "${set}".`)
 }
 
 export function kebab(pascalName: string): string {

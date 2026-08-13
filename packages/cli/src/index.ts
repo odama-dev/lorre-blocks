@@ -22,7 +22,7 @@ const program = new Command()
 program
   .name("lorre-blocks")
   .description("Add lorre-blocks components to your project by copying their source in.")
-  .version("0.8.0")
+  .version("0.9.0")
 
 /**
  * `--json` is declared per-command (commander has no true global flag) and read
@@ -98,6 +98,10 @@ theme
   .option("--type-ratio <n>", "type scale ratio, e.g. 1.25", parseFloat)
   .option("--scaling <n>", "layout density: 90..110 (percent) or 0.9..1.1", parseFloat)
   .option("--icons <set[:style]>", "icon set, e.g. lucide or phosphor:duotone")
+  .option(
+    "--private",
+    "opt in to a private, Lorre-only icon set (requires npm auth for its registry)"
+  )
   .option("--no-install", "skip installing the icon-set npm package")
   .addOption(jsonOption())
   .action(async (opts) => {
@@ -116,6 +120,7 @@ theme
       typeRatio: opts.typeRatio,
       scaling: opts.scaling,
       icons: opts.icons,
+      allowPrivate: opts.private,
       install: opts.install,
     })
   })
