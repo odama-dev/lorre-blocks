@@ -5,6 +5,70 @@ shipped, and what's next so any human or agent can pick up from here.
 
 ---
 
+## 2026-08-13 — Lorre Icons: private for a day, then public and in the library
+
+The house icon set — 585 icons drawn in-house, exported from the "All Icon" Figma file
+— landed twice, because the decision changed mid-flight. Both directions are recorded
+here; the second one is what shipped.
+
+**First: private (PR #64, owner-merged).** The premise was that this repo is public and
+everything under `apps/www/public` is served by Vercel, so **privacy cannot come from a
+flag** — it comes from the package living on an authenticated registry. `IconSetInfo`
+gained `private` + `registry`, `PUBLIC_ICON_SETS` became what every public surface reads
+(`/r/icons/index.json`, the /icons browser, the Studio picker), `loadIconSet` refused a
+private set outright, and `theme create --private` wrote only the scoped registry line
+into `.npmrc` — never a token. Two bugs the e2e run caught: the refusal fired *after* the
+CSS, `lorre.theme.json` and `components.json` were written (half-applied theme behind an
+error), and the `.npmrc` line was only written on the install path, so `--no-install` left
+a later manual `npm i` resolving against public npm.
+
+**Then: public (PR #66, merged).** Ilyas: put it in the library and show it on the site.
+That makes the whole private mechanism dead code, so it was pulled out in the same PR.
+
+- **`packages/icons`** — the artwork itself, published as **`lorre-icons` (MIT)**. One
+  entry point per style (`stroke-1/1.5/2`, `filled-1/1.5/2`); the www build produces
+  **exactly six lazily-loaded chunks**, which is the check that the split is real.
+  `prepare: tsup` builds dist on `pnpm install` — that is what lets www consume a
+  *published* package layout with no extra build step, unlike the source-exporting
+  workspace packages (registry, tokens). Root `build`/`release` gained `build:icons`.
+- **/icons adapter.** Duplicate Figma names ship as `_2` suffixes (`ArrowTop_2`), which no
+  kebab↔pascal round-trip can reconstruct, so the adapter **remembers each component name**
+  instead of deriving it. Stroke weight is baked into the paths — that is what the styles
+  *are* — so the customizer's `strokeWidth` deliberately does not reach this set, same as
+  Radix and Heroicons.
+- Removed: `IconSetInfo.private`/`registry`, `PUBLIC_ICON_SETS`, `isPrivateIconSet`, the
+  `loadIconSet` guard, the public-surface test, and the CLI's `--private` flag.
+
+**Release gotcha, worth remembering.** #66 and #65 (the open Version Packages PR) merged
+**12 seconds apart**. changesets/action publishes only when `.changeset/` is empty — with
+#66's changeset already on master, merging #65 bumped `package.json` (CLI → 0.9.0) and
+**published nothing**, then opened a fresh Version PR (#67) targeting 0.10.0. A green
+release run does not mean anything reached npm; check `npm view <pkg> version`. Follow-up
+PR #68 bumps the hardcoded `.version()` string to the version that will actually publish.
+**Merge order that avoids this: feature PR → wait for the Version PR to regenerate → fix
+the CLI version string → merge the Version PR.**
+
+**The `lorre-icons` repo is now the pipeline, not the package.** Its export writes into
+`lorre-blocks/packages/icons/src` (`--out` / `LORRE_ICONS_OUT`, default assumes sibling
+repos, refuses to run when the guess is wrong instead of creating a stray tree). Its
+exports map, tsup build, `publishConfig` and local contact sheet are gone — the public
+/icons browser replaced the last one.
+
+**Verified:** typecheck (tokens/icons/cli/registry/mcp) ✓ · workspace tests 488 (tokens 87,
+cli 84, mcp 10, www 308) ✓ · `build:registry` → 5 sets, `lorre:lorre-icons` MIT ·
+`build:www` ✓ with six icon chunks in `.next/static` · `next start` locally: /icons 200
+with the Lorre chip · production `/r/icons/index.json` lists all five · e2e in a fake
+consumer: `theme create --icons lorre:stroke-1.5` records set+style and writes no `.npmrc`.
+**Not verified:** the page rendering in a real browser — the Chrome extension was not
+connected on this machine.
+
+**Next:** merge #68 then #67 to publish `lorre-icons` 0.1.0 + CLI 0.10.0 (until then
+`--icons lorre` points at a package that is not on npm yet). Open after that: push the
+`lorre-icons` pipeline repo to GitHub, and the Figma-side name fixes the export log lists
+(48 duplicate names, the icon literally called `@`, the "Typograhpy" category typo).
+
+---
+
 ## 2026-07-12 — Phase 7 plan drafted + 7.1 tokens v2 shipped
 
 **PR #31 owner-merged (Phase 6 fully complete).** New direction from Ilyas: make the
