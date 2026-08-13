@@ -1,5 +1,12 @@
 # lorre-blocks-mcp
 
+## 0.2.2
+
+### Patch Changes
+
+- Updated dependencies [ab264d8]
+  - lorre-blocks@0.10.0
+
 ## 0.2.1
 
 ### Patch Changes
