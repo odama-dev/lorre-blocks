@@ -375,7 +375,7 @@ describe("themeDefinitionSchema (7.1)", () => {
 
   it("still resolves a private set by name, for authenticated consumers", () => {
     const lorre = getIconSet("lorre")
-    expect(lorre?.package).toBe("@lorre/icons")
+    expect(lorre?.package).toBe("@odama-dev/icons")
     expect(lorre?.registry).toBe("https://npm.pkg.github.com")
     expect(
       themeDefinitionSchema.safeParse({ ...valid, icons: { set: "lorre", style: "stroke-1.5" } })

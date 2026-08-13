@@ -80,7 +80,9 @@ export const ICON_SETS = [
     // only stroke weight and fill stay open to consumers.
     name: "lorre",
     label: "Lorre Icons",
-    package: "@lorre/icons",
+    // GitHub Packages resolves a scope to its owning org, so the scope has to
+    // be @odama-dev — @lorre/icons would 404 there no matter who is authed.
+    package: "@odama-dev/icons",
     styles: [
       "stroke-1",
       "stroke-1.5",

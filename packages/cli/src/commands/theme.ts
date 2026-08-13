@@ -198,6 +198,16 @@ export async function runThemeCreate(options: ThemeCreateOptions): Promise<void>
     out.fail(`Theme definition is invalid (${problems.length} problem(s)).`, { problems })
   }
 
+  // Refuse before anything is written — a half-applied theme plus an error is
+  // worse than no theme at all.
+  const privateSet = def.icons ? getIconSet(def.icons.set) : undefined
+  if (privateSet?.private && !options.allowPrivate) {
+    out.fail(
+      `Icon set "${privateSet.name}" is private (Lorre-only). Pass --private to ` +
+        `confirm, and make sure npm is authenticated against ${privateSet.registry}.`
+    )
+  }
+
   let css: string
   try {
     css = definitionToCss(def)
@@ -214,20 +224,15 @@ export async function runThemeCreate(options: ThemeCreateOptions): Promise<void>
   await writeConfig(cwd, { ...config, theme: def.name })
   out.success(`Set "theme": "${def.name}" in components.json`)
 
-  const privateSet = def.icons ? getIconSet(def.icons.set) : undefined
-  if (privateSet?.private && !options.allowPrivate) {
-    out.fail(
-      `Icon set "${privateSet.name}" is private (Lorre-only). Pass --private to ` +
-        `confirm, and make sure npm is authenticated against ${privateSet.registry}.`
-    )
+  // The registry line is configuration, not installation — write it even under
+  // --no-install, or the manual `npm i` that follows resolves against public npm.
+  if (privateSet?.private && privateSet.registry && privateSet.package) {
+    await ensureScopedRegistry(cwd, privateSet.package, privateSet.registry)
   }
 
   let iconPackage: string | null = null
   if (options.install !== false) {
     iconPackage = iconPackageFor(def)
-    if (iconPackage && privateSet?.private && privateSet.registry) {
-      await ensureScopedRegistry(cwd, iconPackage, privateSet.registry)
-    }
     if (iconPackage && !(await hasDependency(cwd, iconPackage))) {
       const pm = await detectPackageManager(cwd)
       const spinner = out.spinner()
@@ -359,7 +364,7 @@ async function ensureScopedRegistry(
   out.success(`Pointed ${scope} at ${registry} in .npmrc`)
   out.warn(
     `${pkg} is private — authenticate first (e.g. \`npm login --scope=${scope} ` +
-      `--registry=${registry}\`) or the install below will fail with 401/404.`
+      `--registry=${registry}\`) or installing it fails with 401/404.`
   )
 }
 
