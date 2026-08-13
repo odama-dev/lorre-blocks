@@ -21,6 +21,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "ldrs": "^1.1.9",
+    "lorre-icons": "workspace:*",
     "lucide-react": "^1.24.0",
     "next": "^16.2.11",
     "p5": "^2.3.0",

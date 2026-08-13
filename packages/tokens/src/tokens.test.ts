@@ -6,7 +6,7 @@ import { themeToCss } from "./build-css"
 import { themeToDtcg } from "./build-dtcg"
 import { formatOklch, hexToOklch, hexToSeed, oklchToHex } from "./oklch"
 import { checkContrast, contrastRatio, resolveSemanticColor } from "./contrast"
-import { getIconSet, ICON_SETS, isPrivateIconSet, PUBLIC_ICON_SETS } from "./icons"
+import { getIconSet } from "./icons"
 import { generateScale, onSolidColor } from "./scale"
 import { themeDefinitionSchema } from "./schema"
 import { computeTypeScale } from "./type-scale"
@@ -363,26 +363,19 @@ describe("themeDefinitionSchema (7.1)", () => {
     ).toBe(true)
   })
 
-  it("keeps private icon sets out of the public catalog", () => {
-    // PUBLIC_ICON_SETS is what gets written to apps/www/public and rendered in
-    // the /icons browser, so a private set reaching it is a real leak.
-    expect(ICON_SETS.some((s) => s.name === "lorre")).toBe(true)
-    expect(PUBLIC_ICON_SETS.some((s) => s.name === "lorre")).toBe(false)
-    expect(PUBLIC_ICON_SETS.every((s) => !s.private)).toBe(true)
-    expect(isPrivateIconSet("lorre")).toBe(true)
-    expect(isPrivateIconSet("lucide")).toBe(false)
-  })
-
-  it("still resolves a private set by name, for authenticated consumers", () => {
-    const lorre = getIconSet("lorre")
-    expect(lorre?.package).toBe("@odama-dev/icons")
-    expect(lorre?.registry).toBe("https://npm.pkg.github.com")
+  it("accepts every style the house set ships", () => {
+    const lorre = getIconSet("lorre")!
+    expect(lorre.package).toBe("lorre-icons")
+    // The catalog is what the CLI installs from, so a non-permissive license
+    // here would ship an uninstallable promise to every consumer.
+    expect(lorre.license).toBe("MIT")
+    for (const style of lorre.styles) {
+      expect(
+        themeDefinitionSchema.safeParse({ ...valid, icons: { set: "lorre", style } }).success
+      ).toBe(true)
+    }
     expect(
-      themeDefinitionSchema.safeParse({ ...valid, icons: { set: "lorre", style: "stroke-1.5" } })
-        .success
-    ).toBe(true)
-    expect(
-      themeDefinitionSchema.safeParse({ ...valid, icons: { set: "lorre", style: "duotone" } })
+      themeDefinitionSchema.safeParse({ ...valid, icons: { set: "lorre", style: "stroke-3" } })
         .success
     ).toBe(false)
   })
