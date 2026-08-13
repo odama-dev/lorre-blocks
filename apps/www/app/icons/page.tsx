@@ -7,7 +7,7 @@ import { ResourcesShell } from "@www/components/resources-shell"
 export const metadata: Metadata = {
   title: "Icons — Lorre Blocks",
   description:
-    "Browse the supported icon sets — Lucide, Radix Icons, Phosphor, Heroicons — filter by style and category, tune size, stroke and color, then copy as SVG or JSX or download. Built for designers and coders alike.",
+    "Browse the supported icon sets — Lorre Icons, Lucide, Radix Icons, Phosphor, Heroicons — filter by style and category, tune size, stroke and color, then copy as SVG or JSX or download. Built for designers and coders alike.",
 }
 
 export default function IconsPage() {
@@ -23,7 +23,8 @@ export default function IconsPage() {
         <div className="mt-4">
           <h1 className="text-3xl font-bold tracking-tight">Icons</h1>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Four permissively-licensed sets, one design system. Filter by style
+            Lorre Icons — 585 drawn in-house, MIT — plus four more
+            permissively-licensed sets, one design system. Filter by style
             and category, dial in size, stroke and color, then grab an icon as
             SVG for Figma or as JSX for code — pick a set and the Theme Studio,
             CLI and agents all honor it via{" "}

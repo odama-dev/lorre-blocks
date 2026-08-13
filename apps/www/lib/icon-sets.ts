@@ -1,5 +1,5 @@
 import * as React from "react"
-import { isPrivateIconSet, type IconSetName } from "@lorre-blocks/tokens"
+import type { IconSetName } from "@lorre-blocks/tokens"
 
 /**
  * Per-set adapters for the /icons browser (Phase 7.5). Each set is loaded via
@@ -42,15 +42,6 @@ export async function loadIconSet(
   set: IconSetName,
   style: string | undefined
 ): Promise<LoadedIconSet> {
-  // This app is public and its bundle is served to anyone. A private set's
-  // package is not even installed here — fail loudly rather than let a future
-  // edit quietly add the import.
-  if (isPrivateIconSet(set)) {
-    throw new Error(
-      `Icon set "${set}" is private and is not available in the public docs app.`
-    )
-  }
-
   switch (set) {
     case "lucide": {
       const m = await import("lucide-react")
@@ -112,6 +103,30 @@ export async function loadIconSet(
         },
       }
     }
+    case "lorre": {
+      const variant = style ?? "stroke-1.5"
+      const m = (await importLorreStyle(variant)) as Record<string, unknown>
+      const icons: LoadedIconSet["icons"] = {}
+      // Duplicate Figma names are exported with a `_2` suffix, which no
+      // kebab/pascal round-trip can reconstruct — so the component name is
+      // remembered per icon instead of derived back from the display name.
+      const componentOf: Record<string, string> = {}
+      for (const key of Object.keys(m)) {
+        if (!/^[A-Z]/.test(key)) continue
+        const display = kebab(key)
+        icons[display] = m[key] as LoadedIconSet["icons"][string]
+        componentOf[display] = key
+      }
+      const subpath = `lorre-icons/${variant}`
+      return {
+        icons,
+        importLine: (name) => `import { ${componentOf[name] ?? pascal(name)} } from "${subpath}"`,
+        // Stroke weight is baked into each path (that is what the styles are),
+        // so the customizer's strokeWidth deliberately does not reach these.
+        jsxSnippet: (name, opts) =>
+          `<${componentOf[name] ?? pascal(name)}${styleAttr(opts)} />`,
+      }
+    }
     case "heroicons": {
       const variant = style ?? "outline"
       const m = (await (variant === "outline"
@@ -137,8 +152,28 @@ export async function loadIconSet(
       }
     }
   }
+}
 
-  throw new Error(`Unknown icon set "${set}".`)
+/**
+ * One entry point per style, spelled out: a template-literal specifier gives
+ * bundlers nothing to resolve statically, and each style is a separate 585-icon
+ * module we do not want pulled in together.
+ */
+function importLorreStyle(variant: string): Promise<unknown> {
+  switch (variant) {
+    case "stroke-1":
+      return import("lorre-icons/stroke-1")
+    case "stroke-2":
+      return import("lorre-icons/stroke-2")
+    case "filled-1":
+      return import("lorre-icons/filled-1")
+    case "filled-1.5":
+      return import("lorre-icons/filled-1.5")
+    case "filled-2":
+      return import("lorre-icons/filled-2")
+    default:
+      return import("lorre-icons/stroke-1.5")
+  }
 }
 
 export function kebab(pascalName: string): string {

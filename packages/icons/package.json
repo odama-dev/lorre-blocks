@@ -1,0 +1,50 @@
+{
+  "name": "lorre-icons",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Lorre's icon set — 585 icons in 6 stroke/fill styles, drawn in-house.",
+  "license": "MIT",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "./stroke-1": "./dist/stroke-1/index.js",
+    "./stroke-1.5": "./dist/stroke-1.5/index.js",
+    "./stroke-2": "./dist/stroke-2/index.js",
+    "./filled-1": "./dist/filled-1/index.js",
+    "./filled-1.5": "./dist/filled-1.5/index.js",
+    "./filled-2": "./dist/filled-2/index.js",
+    "./catalog.json": "./dist/catalog.json"
+  },
+  "scripts": {
+    "build": "tsup",
+    "prepare": "tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "icons",
+    "react",
+    "svg",
+    "lorre"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/odama-dev/lorre-blocks.git",
+    "directory": "packages/icons"
+  },
+  "homepage": "https://lorre-blocks.vercel.app/icons",
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "@types/react": "^19.0.0",
+    "react": "^19.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

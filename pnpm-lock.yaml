@@ -49,6 +49,9 @@ importers:
       ldrs:
         specifier: ^1.1.9
         version: 1.1.9
+      lorre-icons:
+        specifier: workspace:*
+        version: link:../../packages/icons
       lucide-react:
         specifier: ^1.24.0
         version: 1.24.0(react@19.2.7)
@@ -168,6 +171,24 @@ importers:
       zod:
         specifier: ^4.4.3
         version: 4.4.3
+
+  packages/icons:
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.5
+        version: 22.20.0
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.2.17
+      react:
+        specifier: ^19.0.0
+        version: 19.2.7
+      tsup:
+        specifier: ^8.3.5
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.25)(tsx@4.23.0)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
 
   packages/mcp:
     dependencies:

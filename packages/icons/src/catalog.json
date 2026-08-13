@@ -1,0 +1,5453 @@
+{
+  "pinned": {
+    "radius": "2",
+    "join": "round"
+  },
+  "styles": [
+    "stroke-1",
+    "stroke-1.5",
+    "stroke-2",
+    "filled-1",
+    "filled-1.5",
+    "filled-2"
+  ],
+  "icons": [
+    {
+      "name": "arrow-top-circle",
+      "slug": "arrow-top-circle",
+      "component": "ArrowTopCircle",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow-bottom-circle",
+      "slug": "arrow-bottom-circle",
+      "component": "ArrowBottomCircle",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow-right-circle",
+      "slug": "arrow-right-circle",
+      "component": "ArrowRightCircle",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow-left-circle",
+      "slug": "arrow-left-circle",
+      "component": "ArrowLeftCircle",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow-top",
+      "slug": "arrow-top",
+      "component": "ArrowTop",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow-top-right",
+      "slug": "arrow-top-right",
+      "component": "ArrowTopRight",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow-top",
+      "slug": "arrow-top",
+      "component": "ArrowTop_2",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow-bottom-right",
+      "slug": "arrow-bottom-right",
+      "component": "ArrowBottomRight",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow-bottom",
+      "slug": "arrow-bottom",
+      "component": "ArrowBottom",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow-bottom-left",
+      "slug": "arrow-bottom-left",
+      "component": "ArrowBottomLeft",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow-left",
+      "slug": "arrow-left",
+      "component": "ArrowLeft",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow-top-left",
+      "slug": "arrow-top-left",
+      "component": "ArrowTopLeft",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow-expand-h",
+      "slug": "arrow-expand-h",
+      "component": "ArrowExpandH",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow-expand-v",
+      "slug": "arrow-expand-v",
+      "component": "ArrowExpandV",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "chevron-top",
+      "slug": "chevron-top",
+      "component": "ChevronTop",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "chevron-right",
+      "slug": "chevron-right",
+      "component": "ChevronRight",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "chevron-bottom",
+      "slug": "chevron-bottom",
+      "component": "ChevronBottom",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "chevron-left",
+      "slug": "chevron-left",
+      "component": "ChevronLeft",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "chevron-top-small",
+      "slug": "chevron-top-small",
+      "component": "ChevronTopSmall",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "chevron-down-small",
+      "slug": "chevron-down-small",
+      "component": "ChevronDownSmall",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "chevron-right-small",
+      "slug": "chevron-right-small",
+      "component": "ChevronRightSmall",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "chevron-right-small",
+      "slug": "chevron-right-small",
+      "component": "ChevronRightSmall_2",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "chevron double up",
+      "slug": "chevron-double-up",
+      "component": "ChevronDoubleUp",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "chevron double down",
+      "slug": "chevron-double-down",
+      "component": "ChevronDoubleDown",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "chevron double right",
+      "slug": "chevron-double-right",
+      "component": "ChevronDoubleRight",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "chevron double left",
+      "slug": "chevron-double-left",
+      "component": "ChevronDoubleLeft",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "expand",
+      "slug": "expand",
+      "component": "Expand",
+      "category": "Arrows",
+      "keywords": [
+        "arrow",
+        "enlarge"
+      ]
+    },
+    {
+      "name": "minimize",
+      "slug": "minimize",
+      "component": "Minimize",
+      "category": "Arrows",
+      "keywords": [
+        "arrow",
+        "shrink"
+      ]
+    },
+    {
+      "name": "chevron-grabber-horizontal",
+      "slug": "chevron-grabber-horizontal",
+      "component": "ChevronGrabberHorizontal",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "chevron-grabber-horizontal",
+      "slug": "chevron-grabber-horizontal",
+      "component": "ChevronGrabberHorizontal_2",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow path right",
+      "slug": "arrow-path-right",
+      "component": "ArrowPathRight",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow path left",
+      "slug": "arrow-path-left",
+      "component": "ArrowPathLeft",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow path up",
+      "slug": "arrow-path-up",
+      "component": "ArrowPathUp",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "arrow path down",
+      "slug": "arrow-path-down",
+      "component": "ArrowPathDown",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "corner down right",
+      "slug": "corner-down-right",
+      "component": "CornerDownRight",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "corner down left",
+      "slug": "corner-down-left",
+      "component": "CornerDownLeft",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "corner up right",
+      "slug": "corner-up-right",
+      "component": "CornerUpRight",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "corner up right",
+      "slug": "corner-up-right",
+      "component": "CornerUpRight_2",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "corner right down",
+      "slug": "corner-right-down",
+      "component": "CornerRightDown",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "corner left down",
+      "slug": "corner-left-down",
+      "component": "CornerLeftDown",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "corner right up",
+      "slug": "corner-right-up",
+      "component": "CornerRightUp",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "corner left up",
+      "slug": "corner-left-up",
+      "component": "CornerLeftUp",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "undo",
+      "slug": "undo",
+      "component": "Undo",
+      "category": "Arrows",
+      "keywords": [
+        "back",
+        "top"
+      ]
+    },
+    {
+      "name": "redo",
+      "slug": "redo",
+      "component": "Redo",
+      "category": "Arrows",
+      "keywords": [
+        "forward"
+      ]
+    },
+    {
+      "name": "undo",
+      "slug": "undo",
+      "component": "Undo_2",
+      "category": "Arrows",
+      "keywords": [
+        "back",
+        "bottom"
+      ]
+    },
+    {
+      "name": "redo",
+      "slug": "redo",
+      "component": "Redo_2",
+      "category": "Arrows",
+      "keywords": [
+        "forward"
+      ]
+    },
+    {
+      "name": "sort 1",
+      "slug": "sort-1",
+      "component": "Sort1",
+      "category": "Arrows",
+      "keywords": [
+        "switch vertical"
+      ]
+    },
+    {
+      "name": "sort 2",
+      "slug": "sort-2",
+      "component": "Sort2",
+      "category": "Arrows",
+      "keywords": [
+        "switch vertical"
+      ]
+    },
+    {
+      "name": "sort 1",
+      "slug": "sort-1",
+      "component": "Sort1_2",
+      "category": "Arrows",
+      "keywords": [
+        "switch horizontal"
+      ]
+    },
+    {
+      "name": "sort 2",
+      "slug": "sort-2",
+      "component": "Sort2_2",
+      "category": "Arrows",
+      "keywords": [
+        "switch horizonatl"
+      ]
+    },
+    {
+      "name": "repeat",
+      "slug": "repeat",
+      "component": "Repeat",
+      "category": "Arrows",
+      "keywords": [
+        "retweet"
+      ]
+    },
+    {
+      "name": "repeat 2",
+      "slug": "repeat-2",
+      "component": "Repeat2",
+      "category": "Arrows",
+      "keywords": [
+        "retweet"
+      ]
+    },
+    {
+      "name": "rotate clockwise",
+      "slug": "rotate-clockwise",
+      "component": "RotateClockwise",
+      "category": "Arrows",
+      "keywords": [
+        "rotate"
+      ]
+    },
+    {
+      "name": "rotate counterclockwise",
+      "slug": "rotate-counterclockwise",
+      "component": "RotateCounterclockwise",
+      "category": "Arrows",
+      "keywords": [
+        "rotate"
+      ]
+    },
+    {
+      "name": "rotate",
+      "slug": "rotate",
+      "component": "Rotate",
+      "category": "Arrows",
+      "keywords": [
+        "repeat",
+        "refresh"
+      ]
+    },
+    {
+      "name": "rotate 02",
+      "slug": "rotate-02",
+      "component": "Rotate02",
+      "category": "Arrows",
+      "keywords": [
+        "repeat",
+        "refresh"
+      ]
+    },
+    {
+      "name": "move",
+      "slug": "move",
+      "component": "Move",
+      "category": "Arrows",
+      "keywords": []
+    },
+    {
+      "name": "cursor 1",
+      "slug": "cursor-1",
+      "component": "Cursor1",
+      "category": "Arrows",
+      "keywords": [
+        "arrow"
+      ]
+    },
+    {
+      "name": "cursor 2",
+      "slug": "cursor-2",
+      "component": "Cursor2",
+      "category": "Arrows",
+      "keywords": [
+        "arrow"
+      ]
+    },
+    {
+      "name": "cursor 3",
+      "slug": "cursor-3",
+      "component": "Cursor3",
+      "category": "Arrows",
+      "keywords": [
+        "arrow"
+      ]
+    },
+    {
+      "name": "cursor box",
+      "slug": "cursor-box",
+      "component": "CursorBox",
+      "category": "Arrows",
+      "keywords": [
+        "arrow"
+      ]
+    },
+    {
+      "name": "cursor click",
+      "slug": "cursor-click",
+      "component": "CursorClick",
+      "category": "Arrows",
+      "keywords": [
+        "arrow"
+      ]
+    },
+    {
+      "name": "share",
+      "slug": "share",
+      "component": "Share",
+      "category": "Arrows",
+      "keywords": [
+        "arrow"
+      ]
+    },
+    {
+      "name": "share 2",
+      "slug": "share-2",
+      "component": "Share2",
+      "category": "Arrows",
+      "keywords": [
+        "arrow"
+      ]
+    },
+    {
+      "name": "chevron large left",
+      "slug": "chevron-large-left",
+      "component": "ChevronLargeLeft",
+      "category": "Arrows",
+      "keywords": [
+        "chev left"
+      ]
+    },
+    {
+      "name": "chevron large right",
+      "slug": "chevron-large-right",
+      "component": "ChevronLargeRight",
+      "category": "Arrows",
+      "keywords": [
+        "chev right"
+      ]
+    },
+    {
+      "name": "chevron large top",
+      "slug": "chevron-large-top",
+      "component": "ChevronLargeTop",
+      "category": "Arrows",
+      "keywords": [
+        "chev top"
+      ]
+    },
+    {
+      "name": "chevron large down",
+      "slug": "chevron-large-down",
+      "component": "ChevronLargeDown",
+      "category": "Arrows",
+      "keywords": [
+        "chev down"
+      ]
+    },
+    {
+      "name": "align right",
+      "slug": "align-right",
+      "component": "AlignRight",
+      "category": "Arrows",
+      "keywords": [
+        "arrow"
+      ]
+    },
+    {
+      "name": "align left",
+      "slug": "align-left",
+      "component": "AlignLeft",
+      "category": "Arrows",
+      "keywords": [
+        "arrow"
+      ]
+    },
+    {
+      "name": "align bottom",
+      "slug": "align-bottom",
+      "component": "AlignBottom",
+      "category": "Arrows",
+      "keywords": [
+        "arrow"
+      ]
+    },
+    {
+      "name": "align top",
+      "slug": "align-top",
+      "component": "AlignTop",
+      "category": "Arrows",
+      "keywords": [
+        "arrow"
+      ]
+    },
+    {
+      "name": "align right 2",
+      "slug": "align-right-2",
+      "component": "AlignRight2",
+      "category": "Arrows",
+      "keywords": [
+        "arrow"
+      ]
+    },
+    {
+      "name": "align left 2",
+      "slug": "align-left-2",
+      "component": "AlignLeft2",
+      "category": "Arrows",
+      "keywords": [
+        "arrow"
+      ]
+    },
+    {
+      "name": "align bottom 2",
+      "slug": "align-bottom-2",
+      "component": "AlignBottom2",
+      "category": "Arrows",
+      "keywords": [
+        "arrow"
+      ]
+    },
+    {
+      "name": "align bottom 2",
+      "slug": "align-bottom-2",
+      "component": "AlignBottom2_2",
+      "category": "Arrows",
+      "keywords": [
+        "arrow"
+      ]
+    },
+    {
+      "name": "phone",
+      "slug": "phone",
+      "component": "Phone",
+      "category": "Devices & Signals",
+      "keywords": [
+        "device",
+        "iphone",
+        "mobile"
+      ]
+    },
+    {
+      "name": "phone dynamic island",
+      "slug": "phone-dynamic-island",
+      "component": "PhoneDynamicIsland",
+      "category": "Devices & Signals",
+      "keywords": []
+    },
+    {
+      "name": "macbook",
+      "slug": "macbook",
+      "component": "Macbook",
+      "category": "Devices & Signals",
+      "keywords": [
+        "laptop",
+        "computer",
+        "device"
+      ]
+    },
+    {
+      "name": "mouse 1",
+      "slug": "mouse-1",
+      "component": "Mouse1",
+      "category": "Devices & Signals",
+      "keywords": []
+    },
+    {
+      "name": "mouse 2",
+      "slug": "mouse-2",
+      "component": "Mouse2",
+      "category": "Devices & Signals",
+      "keywords": [
+        "scroll down"
+      ]
+    },
+    {
+      "name": "mouse 3",
+      "slug": "mouse-3",
+      "component": "Mouse3",
+      "category": "Devices & Signals",
+      "keywords": [
+        "scroll up"
+      ]
+    },
+    {
+      "name": "calculator",
+      "slug": "calculator",
+      "component": "Calculator",
+      "category": "Devices & Signals",
+      "keywords": []
+    },
+    {
+      "name": "imac",
+      "slug": "imac",
+      "component": "Imac",
+      "category": "Devices & Signals",
+      "keywords": [
+        "computer",
+        "device 2"
+      ]
+    },
+    {
+      "name": "webcam",
+      "slug": "webcam",
+      "component": "Webcam",
+      "category": "Devices & Signals",
+      "keywords": [
+        "camera",
+        "view"
+      ]
+    },
+    {
+      "name": "usb",
+      "slug": "usb",
+      "component": "Usb",
+      "category": "Devices & Signals",
+      "keywords": [
+        "connection",
+        "connect",
+        "save",
+        "data"
+      ]
+    },
+    {
+      "name": "television 1",
+      "slug": "television-1",
+      "component": "Television1",
+      "category": "Devices & Signals",
+      "keywords": [
+        "tv",
+        "monitor",
+        "video",
+        "screen",
+        "display"
+      ]
+    },
+    {
+      "name": "television 2",
+      "slug": "television-2",
+      "component": "Television2",
+      "category": "Devices & Signals",
+      "keywords": [
+        "tv",
+        "monitor",
+        "video",
+        "screen",
+        "display"
+      ]
+    },
+    {
+      "name": "connect devices",
+      "slug": "connect-devices",
+      "component": "ConnectDevices",
+      "category": "Devices & Signals",
+      "keywords": [
+        "macbook",
+        "iphone",
+        "phone"
+      ]
+    },
+    {
+      "name": "airpod case",
+      "slug": "airpod-case",
+      "component": "AirpodCase",
+      "category": "Devices & Signals",
+      "keywords": [
+        "airpods"
+      ]
+    },
+    {
+      "name": "processor",
+      "slug": "processor",
+      "component": "Processor",
+      "category": "Devices & Signals",
+      "keywords": [
+        "chip"
+      ]
+    },
+    {
+      "name": "server 1",
+      "slug": "server-1",
+      "component": "Server1",
+      "category": "Devices & Signals",
+      "keywords": [
+        "storage",
+        "data",
+        "coins",
+        "money"
+      ]
+    },
+    {
+      "name": "server 2",
+      "slug": "server-2",
+      "component": "Server2",
+      "category": "Devices & Signals",
+      "keywords": [
+        "storage",
+        "data",
+        "coins",
+        "money"
+      ]
+    },
+    {
+      "name": "watch 1",
+      "slug": "watch-1",
+      "component": "Watch1",
+      "category": "Devices & Signals",
+      "keywords": [
+        "clock",
+        "time"
+      ]
+    },
+    {
+      "name": "watch 1",
+      "slug": "watch-1",
+      "component": "Watch1_2",
+      "category": "Devices & Signals",
+      "keywords": [
+        "clock",
+        "time"
+      ]
+    },
+    {
+      "name": "keyboard down",
+      "slug": "keyboard-down",
+      "component": "KeyboardDown",
+      "category": "Devices & Signals",
+      "keywords": [
+        "close",
+        "down",
+        "open",
+        "arrow"
+      ]
+    },
+    {
+      "name": "keyboard up 1",
+      "slug": "keyboard-up-1",
+      "component": "KeyboardUp1",
+      "category": "Devices & Signals",
+      "keywords": [
+        "close",
+        "down",
+        "open",
+        "arrow"
+      ]
+    },
+    {
+      "name": "keyboard up 2",
+      "slug": "keyboard-up-2",
+      "component": "KeyboardUp2",
+      "category": "Devices & Signals",
+      "keywords": [
+        "close",
+        "down",
+        "open",
+        "arrow"
+      ]
+    },
+    {
+      "name": "storage",
+      "slug": "storage",
+      "component": "Storage",
+      "category": "Devices & Signals",
+      "keywords": [
+        "hdd",
+        "ssd"
+      ]
+    },
+    {
+      "name": "printer",
+      "slug": "printer",
+      "component": "Printer",
+      "category": "Devices & Signals",
+      "keywords": [
+        "print"
+      ]
+    },
+    {
+      "name": "speaker",
+      "slug": "speaker",
+      "component": "Speaker",
+      "category": "Devices & Signals",
+      "keywords": [
+        "music",
+        "sound"
+      ]
+    },
+    {
+      "name": "record",
+      "slug": "record",
+      "component": "Record",
+      "category": "Devices & Signals",
+      "keywords": [
+        "voicemail",
+        "band",
+        "tape"
+      ]
+    },
+    {
+      "name": "tape",
+      "slug": "tape",
+      "component": "Tape",
+      "category": "Devices & Signals",
+      "keywords": []
+    },
+    {
+      "name": "gamepad",
+      "slug": "gamepad",
+      "component": "Gamepad",
+      "category": "Devices & Signals",
+      "keywords": [
+        "gaming",
+        "joystick",
+        "games"
+      ]
+    },
+    {
+      "name": "chromecast",
+      "slug": "chromecast",
+      "component": "Chromecast",
+      "category": "Devices & Signals",
+      "keywords": [
+        "cast"
+      ]
+    },
+    {
+      "name": "bluetooth",
+      "slug": "bluetooth",
+      "component": "Bluetooth",
+      "category": "Devices & Signals",
+      "keywords": []
+    },
+    {
+      "name": "wifi",
+      "slug": "wifi",
+      "component": "Wifi",
+      "category": "Devices & Signals",
+      "keywords": [
+        "spot",
+        "signal",
+        "hot spot"
+      ]
+    },
+    {
+      "name": "wifi 2",
+      "slug": "wifi-2",
+      "component": "Wifi2",
+      "category": "Devices & Signals",
+      "keywords": [
+        "spot",
+        "signal",
+        "hot spot"
+      ]
+    },
+    {
+      "name": "battery full",
+      "slug": "battery-full",
+      "component": "BatteryFull",
+      "category": "Devices & Signals",
+      "keywords": [
+        "power"
+      ]
+    },
+    {
+      "name": "battery medium",
+      "slug": "battery-medium",
+      "component": "BatteryMedium",
+      "category": "Devices & Signals",
+      "keywords": [
+        "power"
+      ]
+    },
+    {
+      "name": "battery low",
+      "slug": "battery-low",
+      "component": "BatteryLow",
+      "category": "Devices & Signals",
+      "keywords": [
+        "power"
+      ]
+    },
+    {
+      "name": "battery empty",
+      "slug": "battery-empty",
+      "component": "BatteryEmpty",
+      "category": "Devices & Signals",
+      "keywords": [
+        "power"
+      ]
+    },
+    {
+      "name": "battery error",
+      "slug": "battery-error",
+      "component": "BatteryError",
+      "category": "Devices & Signals",
+      "keywords": [
+        "power"
+      ]
+    },
+    {
+      "name": "battery loading",
+      "slug": "battery-loading",
+      "component": "BatteryLoading",
+      "category": "Devices & Signals",
+      "keywords": [
+        "power"
+      ]
+    },
+    {
+      "name": "camera 1",
+      "slug": "camera-1",
+      "component": "Camera1",
+      "category": "Photography & Video",
+      "keywords": [
+        "picture",
+        "image",
+        "cam"
+      ]
+    },
+    {
+      "name": "camera 1 off",
+      "slug": "camera-1-off",
+      "component": "Camera1Off",
+      "category": "Photography & Video",
+      "keywords": [
+        "picture",
+        "image",
+        "cam"
+      ]
+    },
+    {
+      "name": "camera 2",
+      "slug": "camera-2",
+      "component": "Camera2",
+      "category": "Photography & Video",
+      "keywords": [
+        "picture",
+        "image",
+        "cam"
+      ]
+    },
+    {
+      "name": "camera 3",
+      "slug": "camera-3",
+      "component": "Camera3",
+      "category": "Photography & Video",
+      "keywords": [
+        "picture",
+        "image",
+        "cam"
+      ]
+    },
+    {
+      "name": "camera 4",
+      "slug": "camera-4",
+      "component": "Camera4",
+      "category": "Photography & Video",
+      "keywords": [
+        "action cam",
+        "GoPro"
+      ]
+    },
+    {
+      "name": "focus",
+      "slug": "focus",
+      "component": "Focus",
+      "category": "Photography & Video",
+      "keywords": [
+        "Camera",
+        "exposure"
+      ]
+    },
+    {
+      "name": "images 1",
+      "slug": "images-1",
+      "component": "Images1",
+      "category": "Photography & Video",
+      "keywords": [
+        "photos",
+        "pictures",
+        "shot"
+      ]
+    },
+    {
+      "name": "images 2",
+      "slug": "images-2",
+      "component": "Images2",
+      "category": "Photography & Video",
+      "keywords": [
+        "photos",
+        "pictures",
+        "shot"
+      ]
+    },
+    {
+      "name": "images 3",
+      "slug": "images-3",
+      "component": "Images3",
+      "category": "Photography & Video",
+      "keywords": [
+        "photos",
+        "pictures",
+        "shot"
+      ]
+    },
+    {
+      "name": "images 4",
+      "slug": "images-4",
+      "component": "Images4",
+      "category": "Photography & Video",
+      "keywords": [
+        "photos",
+        "pictures",
+        "shot"
+      ]
+    },
+    {
+      "name": "images 5",
+      "slug": "images-5",
+      "component": "Images5",
+      "category": "Photography & Video",
+      "keywords": [
+        "photos",
+        "pictures",
+        "shot"
+      ]
+    },
+    {
+      "name": "video camera",
+      "slug": "video-camera",
+      "component": "VideoCamera",
+      "category": "Photography & Video",
+      "keywords": [
+        "movie",
+        "play"
+      ]
+    },
+    {
+      "name": "video clapperboard",
+      "slug": "video-clapperboard",
+      "component": "VideoClapperboard",
+      "category": "Photography & Video",
+      "keywords": []
+    },
+    {
+      "name": "video clip",
+      "slug": "video-clip",
+      "component": "VideoClip",
+      "category": "Photography & Video",
+      "keywords": [
+        "film",
+        "movie"
+      ]
+    },
+    {
+      "name": "multi media",
+      "slug": "multi-media",
+      "component": "MultiMedia",
+      "category": "Photography & Video",
+      "keywords": [
+        "media",
+        "image and video"
+      ]
+    },
+    {
+      "name": "auto size",
+      "slug": "auto-size",
+      "component": "AutoSize",
+      "category": "Photography & Video",
+      "keywords": [
+        "automatic size",
+        "page",
+        "page size"
+      ]
+    },
+    {
+      "name": "crop",
+      "slug": "crop",
+      "component": "Crop",
+      "category": "Photography & Video",
+      "keywords": []
+    },
+    {
+      "name": "scan",
+      "slug": "scan",
+      "component": "Scan",
+      "category": "Photography & Video",
+      "keywords": [
+        "focus"
+      ]
+    },
+    {
+      "name": "gif",
+      "slug": "gif",
+      "component": "Gif",
+      "category": "Photography & Video",
+      "keywords": []
+    },
+    {
+      "name": "closed captioning",
+      "slug": "closed-captioning",
+      "component": "ClosedCaptioning",
+      "category": "Photography & Video",
+      "keywords": [
+        "cc"
+      ]
+    },
+    {
+      "name": "transcription",
+      "slug": "transcription",
+      "component": "Transcription",
+      "category": "Photography & Video",
+      "keywords": []
+    },
+    {
+      "name": "people",
+      "slug": "people",
+      "component": "People",
+      "category": "People",
+      "keywords": [
+        "user",
+        "person",
+        "avatar"
+      ]
+    },
+    {
+      "name": "added people",
+      "slug": "added-people",
+      "component": "AddedPeople",
+      "category": "People",
+      "keywords": [
+        "add user",
+        "added person"
+      ]
+    },
+    {
+      "name": "add people",
+      "slug": "add-people",
+      "component": "AddPeople",
+      "category": "People",
+      "keywords": [
+        "add user",
+        "add person"
+      ]
+    },
+    {
+      "name": "remove people",
+      "slug": "remove-people",
+      "component": "RemovePeople",
+      "category": "People",
+      "keywords": [
+        "remove user",
+        "remove person"
+      ]
+    },
+    {
+      "name": "add people",
+      "slug": "add-people",
+      "component": "AddPeople_2",
+      "category": "People",
+      "keywords": [
+        "add user",
+        "add person 2"
+      ]
+    },
+    {
+      "name": "remove people",
+      "slug": "remove-people",
+      "component": "RemovePeople_2",
+      "category": "People",
+      "keywords": [
+        "remove user",
+        "remove person 2"
+      ]
+    },
+    {
+      "name": "people like",
+      "slug": "people-like",
+      "component": "PeopleLike",
+      "category": "People",
+      "keywords": [
+        "love",
+        "heart"
+      ]
+    },
+    {
+      "name": "people circle",
+      "slug": "people-circle",
+      "component": "PeopleCircle",
+      "category": "People",
+      "keywords": [
+        "user",
+        "person",
+        "avatar 2"
+      ]
+    },
+    {
+      "name": "people shadow",
+      "slug": "people-shadow",
+      "component": "PeopleShadow",
+      "category": "People",
+      "keywords": [
+        "user",
+        "avatar",
+        "group"
+      ]
+    },
+    {
+      "name": "people together",
+      "slug": "people-together",
+      "component": "PeopleTogether",
+      "category": "People",
+      "keywords": [
+        "user",
+        "avatar",
+        "group 2"
+      ]
+    },
+    {
+      "name": "people behind",
+      "slug": "people-behind",
+      "component": "PeopleBehind",
+      "category": "People",
+      "keywords": [
+        "user",
+        "avatar",
+        "group 3"
+      ]
+    },
+    {
+      "name": "people copy",
+      "slug": "people-copy",
+      "component": "PeopleCopy",
+      "category": "People",
+      "keywords": [
+        "members"
+      ]
+    },
+    {
+      "name": "credit card 1",
+      "slug": "credit-card-1",
+      "component": "CreditCard1",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "card",
+        "payment"
+      ]
+    },
+    {
+      "name": "credit card 2",
+      "slug": "credit-card-2",
+      "component": "CreditCard2",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "card",
+        "payment"
+      ]
+    },
+    {
+      "name": "credit card 3",
+      "slug": "credit-card-3",
+      "component": "CreditCard3",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "card",
+        "payment"
+      ]
+    },
+    {
+      "name": "giro card",
+      "slug": "giro-card",
+      "component": "GiroCard",
+      "category": "Shopping & Payment",
+      "keywords": []
+    },
+    {
+      "name": "money",
+      "slug": "money",
+      "component": "Money",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "bill",
+        "dollar",
+        "euro"
+      ]
+    },
+    {
+      "name": "euro",
+      "slug": "euro",
+      "component": "Euro",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "currency",
+        "money",
+        "coin",
+        "EURO"
+      ]
+    },
+    {
+      "name": "yen",
+      "slug": "yen",
+      "component": "Yen",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "currency",
+        "money",
+        "coin"
+      ]
+    },
+    {
+      "name": "dollar",
+      "slug": "dollar",
+      "component": "Dollar",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "currency",
+        "money",
+        "coin",
+        "USD"
+      ]
+    },
+    {
+      "name": "pound",
+      "slug": "pound",
+      "component": "Pound",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "currency",
+        "money",
+        "coin",
+        "GBP"
+      ]
+    },
+    {
+      "name": "basket 1",
+      "slug": "basket-1",
+      "component": "Basket1",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "cart",
+        "shopping"
+      ]
+    },
+    {
+      "name": "basket 2",
+      "slug": "basket-2",
+      "component": "Basket2",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "shopping",
+        "bag"
+      ]
+    },
+    {
+      "name": "bag",
+      "slug": "bag",
+      "component": "Bag",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "shopping"
+      ]
+    },
+    {
+      "name": "bag-2",
+      "slug": "bag-2",
+      "component": "Bag2",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "shopping"
+      ]
+    },
+    {
+      "name": "gift side view",
+      "slug": "gift-side-view",
+      "component": "GiftSideView",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "present"
+      ]
+    },
+    {
+      "name": "gift top view",
+      "slug": "gift-top-view",
+      "component": "GiftTopView",
+      "category": "Shopping & Payment",
+      "keywords": []
+    },
+    {
+      "name": "wallet",
+      "slug": "wallet",
+      "component": "Wallet",
+      "category": "Shopping & Payment",
+      "keywords": []
+    },
+    {
+      "name": "percent",
+      "slug": "percent",
+      "component": "Percent",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "sales"
+      ]
+    },
+    {
+      "name": "package",
+      "slug": "package",
+      "component": "Package",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "delivery"
+      ]
+    },
+    {
+      "name": "adress",
+      "slug": "adress",
+      "component": "Adress",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "package",
+        "delivery"
+      ]
+    },
+    {
+      "name": "package",
+      "slug": "package",
+      "component": "Package_2",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "delivery 2"
+      ]
+    },
+    {
+      "name": "truck",
+      "slug": "truck",
+      "component": "Truck",
+      "category": "Shopping & Payment",
+      "keywords": [
+        "delivery"
+      ]
+    },
+    {
+      "name": "folder",
+      "slug": "folder",
+      "component": "Folder",
+      "category": "Folders & Files",
+      "keywords": []
+    },
+    {
+      "name": "folders",
+      "slug": "folders",
+      "component": "Folders",
+      "category": "Folders & Files",
+      "keywords": []
+    },
+    {
+      "name": "folder add",
+      "slug": "folder-add",
+      "component": "FolderAdd",
+      "category": "Folders & Files",
+      "keywords": [
+        "plus"
+      ]
+    },
+    {
+      "name": "folder delete",
+      "slug": "folder-delete",
+      "component": "FolderDelete",
+      "category": "Folders & Files",
+      "keywords": [
+        "x"
+      ]
+    },
+    {
+      "name": "folder bookmarks",
+      "slug": "folder-bookmarks",
+      "component": "FolderBookmarks",
+      "category": "Folders & Files",
+      "keywords": [
+        "bookmark"
+      ]
+    },
+    {
+      "name": "folder restricted",
+      "slug": "folder-restricted",
+      "component": "FolderRestricted",
+      "category": "Folders & Files",
+      "keywords": []
+    },
+    {
+      "name": "folder cloud 1",
+      "slug": "folder-cloud-1",
+      "component": "FolderCloud1",
+      "category": "Folders & Files",
+      "keywords": []
+    },
+    {
+      "name": "folder cloud 2",
+      "slug": "folder-cloud-2",
+      "component": "FolderCloud2",
+      "category": "Folders & Files",
+      "keywords": []
+    },
+    {
+      "name": "folder shared",
+      "slug": "folder-shared",
+      "component": "FolderShared",
+      "category": "Folders & Files",
+      "keywords": [
+        "user"
+      ]
+    },
+    {
+      "name": "folder upload",
+      "slug": "folder-upload",
+      "component": "FolderUpload",
+      "category": "Folders & Files",
+      "keywords": []
+    },
+    {
+      "name": "folder download",
+      "slug": "folder-download",
+      "component": "FolderDownload",
+      "category": "Folders & Files",
+      "keywords": []
+    },
+    {
+      "name": "folder 2",
+      "slug": "folder-2",
+      "component": "Folder2",
+      "category": "Folders & Files",
+      "keywords": []
+    },
+    {
+      "name": "archive",
+      "slug": "archive",
+      "component": "Archive",
+      "category": "Folders & Files",
+      "keywords": [
+        "folder",
+        "box"
+      ]
+    },
+    {
+      "name": "disk 1",
+      "slug": "disk-1",
+      "component": "Disk1",
+      "category": "Folders & Files",
+      "keywords": [
+        "save"
+      ]
+    },
+    {
+      "name": "disk 2",
+      "slug": "disk-2",
+      "component": "Disk2",
+      "category": "Folders & Files",
+      "keywords": [
+        "save"
+      ]
+    },
+    {
+      "name": "server",
+      "slug": "server",
+      "component": "Server",
+      "category": "Folders & Files",
+      "keywords": [
+        "data",
+        "storage"
+      ]
+    },
+    {
+      "name": "sd card",
+      "slug": "sd-card",
+      "component": "SdCard",
+      "category": "Folders & Files",
+      "keywords": [
+        "memory stick"
+      ]
+    },
+    {
+      "name": "memory 1",
+      "slug": "memory-1",
+      "component": "Memory1",
+      "category": "Folders & Files",
+      "keywords": [
+        "sim card",
+        "card"
+      ]
+    },
+    {
+      "name": "memory 2",
+      "slug": "memory-2",
+      "component": "Memory2",
+      "category": "Folders & Files",
+      "keywords": [
+        "sim card",
+        "sd card"
+      ]
+    },
+    {
+      "name": "file 1",
+      "slug": "file-1",
+      "component": "File1",
+      "category": "Folders & Files",
+      "keywords": [
+        "document",
+        "cloud",
+        "sync"
+      ]
+    },
+    {
+      "name": "file 2",
+      "slug": "file-2",
+      "component": "File2",
+      "category": "Folders & Files",
+      "keywords": [
+        "documents",
+        "copy"
+      ]
+    },
+    {
+      "name": "file 3",
+      "slug": "file-3",
+      "component": "File3",
+      "category": "Folders & Files",
+      "keywords": [
+        "document",
+        "cloud",
+        "sync"
+      ]
+    },
+    {
+      "name": "file 4",
+      "slug": "file-4",
+      "component": "File4",
+      "category": "Folders & Files",
+      "keywords": [
+        "document",
+        "cloud",
+        "sync"
+      ]
+    },
+    {
+      "name": "file 5",
+      "slug": "file-5",
+      "component": "File5",
+      "category": "Folders & Files",
+      "keywords": [
+        "document",
+        "cloud",
+        "sync"
+      ]
+    },
+    {
+      "name": "file 6",
+      "slug": "file-6",
+      "component": "File6",
+      "category": "Folders & Files",
+      "keywords": [
+        "document",
+        "text"
+      ]
+    },
+    {
+      "name": "file 7",
+      "slug": "file-7",
+      "component": "File7",
+      "category": "Folders & Files",
+      "keywords": [
+        "document",
+        "locked",
+        "password"
+      ]
+    },
+    {
+      "name": "file 8",
+      "slug": "file-8",
+      "component": "File8",
+      "category": "Folders & Files",
+      "keywords": [
+        "document",
+        "cloud",
+        "sync"
+      ]
+    },
+    {
+      "name": "document",
+      "slug": "document",
+      "component": "Document",
+      "category": "Folders & Files",
+      "keywords": [
+        "list",
+        "page",
+        "file"
+      ]
+    },
+    {
+      "name": "document with lines",
+      "slug": "document-with-lines",
+      "component": "DocumentWithLines",
+      "category": "Folders & Files",
+      "keywords": [
+        "list",
+        "page",
+        "file"
+      ]
+    },
+    {
+      "name": "search",
+      "slug": "search",
+      "component": "Search",
+      "category": "Folders & Files",
+      "keywords": [
+        "page",
+        "find"
+      ]
+    },
+    {
+      "name": "attachment",
+      "slug": "attachment",
+      "component": "Attachment",
+      "category": "Folders & Files",
+      "keywords": [
+        "attach",
+        "document attachement",
+        "list",
+        "page",
+        "file"
+      ]
+    },
+    {
+      "name": "search",
+      "slug": "search",
+      "component": "Search_2",
+      "category": "Folders & Files",
+      "keywords": [
+        "magnifier",
+        "document",
+        "list",
+        "page",
+        "file"
+      ]
+    },
+    {
+      "name": "search lines",
+      "slug": "search-lines",
+      "component": "SearchLines",
+      "category": "Folders & Files",
+      "keywords": [
+        "magnifier",
+        "document",
+        "list",
+        "page",
+        "file"
+      ]
+    },
+    {
+      "name": "graph",
+      "slug": "graph",
+      "component": "Graph",
+      "category": "Folders & Files",
+      "keywords": [
+        "statistics",
+        "document",
+        "list",
+        "page",
+        "file"
+      ]
+    },
+    {
+      "name": "graph lines",
+      "slug": "graph-lines",
+      "component": "GraphLines",
+      "category": "Folders & Files",
+      "keywords": [
+        "statistics",
+        "document",
+        "list",
+        "page",
+        "file"
+      ]
+    },
+    {
+      "name": "secured",
+      "slug": "secured",
+      "component": "Secured",
+      "category": "Folders & Files",
+      "keywords": [
+        "locked",
+        "security",
+        "document",
+        "list",
+        "page",
+        "file"
+      ]
+    },
+    {
+      "name": "secured lines",
+      "slug": "secured-lines",
+      "component": "SecuredLines",
+      "category": "Folders & Files",
+      "keywords": [
+        "locked",
+        "security",
+        "document",
+        "list",
+        "page",
+        "file"
+      ]
+    },
+    {
+      "name": "cloud",
+      "slug": "cloud",
+      "component": "Cloud",
+      "category": "Folders & Files",
+      "keywords": [
+        "sync",
+        "document",
+        "list",
+        "page",
+        "file"
+      ]
+    },
+    {
+      "name": "cloud lines",
+      "slug": "cloud-lines",
+      "component": "CloudLines",
+      "category": "Folders & Files",
+      "keywords": [
+        "sync",
+        "document",
+        "list",
+        "page",
+        "file"
+      ]
+    },
+    {
+      "name": "link",
+      "slug": "link",
+      "component": "Link",
+      "category": "Folders & Files",
+      "keywords": [
+        "document",
+        "list",
+        "page",
+        "file"
+      ]
+    },
+    {
+      "name": "link lines",
+      "slug": "link-lines",
+      "component": "LinkLines",
+      "category": "Folders & Files",
+      "keywords": [
+        "document",
+        "list",
+        "page",
+        "file"
+      ]
+    },
+    {
+      "name": "plus",
+      "slug": "plus",
+      "component": "Plus",
+      "category": "Folders & Files",
+      "keywords": [
+        "add",
+        "document",
+        "list",
+        "page",
+        "file"
+      ]
+    },
+    {
+      "name": "plus lines",
+      "slug": "plus-lines",
+      "component": "PlusLines",
+      "category": "Folders & Files",
+      "keywords": [
+        "add",
+        "document",
+        "list",
+        "page",
+        "file"
+      ]
+    },
+    {
+      "name": "staple",
+      "slug": "staple",
+      "component": "Staple",
+      "category": "Folders & Files",
+      "keywords": [
+        "notebook",
+        "cover"
+      ]
+    },
+    {
+      "name": "library",
+      "slug": "library",
+      "component": "Library",
+      "category": "Folders & Files",
+      "keywords": []
+    },
+    {
+      "name": "globus",
+      "slug": "globus",
+      "component": "Globus",
+      "category": "Location",
+      "keywords": [
+        "map",
+        "earth",
+        "globe"
+      ]
+    },
+    {
+      "name": "earth",
+      "slug": "earth",
+      "component": "Earth",
+      "category": "Location",
+      "keywords": [
+        "globe",
+        "world"
+      ]
+    },
+    {
+      "name": "world",
+      "slug": "world",
+      "component": "World",
+      "category": "Location",
+      "keywords": [
+        "globus",
+        "internet",
+        "web"
+      ]
+    },
+    {
+      "name": "pin",
+      "slug": "pin",
+      "component": "Pin",
+      "category": "Location",
+      "keywords": [
+        "location"
+      ]
+    },
+    {
+      "name": "send",
+      "slug": "send",
+      "component": "Send",
+      "category": "Location",
+      "keywords": [
+        "email",
+        "paper plane",
+        "arrow"
+      ]
+    },
+    {
+      "name": "map",
+      "slug": "map",
+      "component": "Map",
+      "category": "Location",
+      "keywords": [
+        "paper"
+      ]
+    },
+    {
+      "name": "sign",
+      "slug": "sign",
+      "component": "Sign",
+      "category": "Location",
+      "keywords": [
+        "direction",
+        "route"
+      ]
+    },
+    {
+      "name": "location",
+      "slug": "location",
+      "component": "Location",
+      "category": "Location",
+      "keywords": [
+        "explore",
+        "compass"
+      ]
+    },
+    {
+      "name": "pin circle",
+      "slug": "pin-circle",
+      "component": "PinCircle",
+      "category": "Location",
+      "keywords": [
+        "location"
+      ]
+    },
+    {
+      "name": "pin flag",
+      "slug": "pin-flag",
+      "component": "PinFlag",
+      "category": "Location",
+      "keywords": [
+        "location"
+      ]
+    },
+    {
+      "name": "pin",
+      "slug": "pin",
+      "component": "Pin_2",
+      "category": "Location",
+      "keywords": [
+        "location"
+      ]
+    },
+    {
+      "name": "location",
+      "slug": "location",
+      "component": "Location_2",
+      "category": "Location",
+      "keywords": [
+        "map",
+        "route"
+      ]
+    },
+    {
+      "name": "radar",
+      "slug": "radar",
+      "component": "Radar",
+      "category": "Location",
+      "keywords": [
+        "location",
+        "search"
+      ]
+    },
+    {
+      "name": "chart 1",
+      "slug": "chart-1",
+      "component": "Chart1",
+      "category": "Statistics & Charts",
+      "keywords": [
+        "statistics",
+        "flipchart",
+        "presentation",
+        "graph"
+      ]
+    },
+    {
+      "name": "chart 2",
+      "slug": "chart-2",
+      "component": "Chart2",
+      "category": "Statistics & Charts",
+      "keywords": [
+        "statistics",
+        "flipchart",
+        "presentation",
+        "graph 2"
+      ]
+    },
+    {
+      "name": "chart 3",
+      "slug": "chart-3",
+      "component": "Chart3",
+      "category": "Statistics & Charts",
+      "keywords": [
+        "statistics",
+        "graph",
+        "signal"
+      ]
+    },
+    {
+      "name": "chart 4",
+      "slug": "chart-4",
+      "component": "Chart4",
+      "category": "Statistics & Charts",
+      "keywords": [
+        "statistics",
+        "graph 2"
+      ]
+    },
+    {
+      "name": "chart 5",
+      "slug": "chart-5",
+      "component": "Chart5",
+      "category": "Statistics & Charts",
+      "keywords": [
+        "statistics",
+        "graph 3"
+      ]
+    },
+    {
+      "name": "chart 6",
+      "slug": "chart-6",
+      "component": "Chart6",
+      "category": "Statistics & Charts",
+      "keywords": [
+        "statistics",
+        "graph 4"
+      ]
+    },
+    {
+      "name": "chart 7",
+      "slug": "chart-7",
+      "component": "Chart7",
+      "category": "Statistics & Charts",
+      "keywords": [
+        "statistics",
+        "graph 5"
+      ]
+    },
+    {
+      "name": "pie chart",
+      "slug": "pie-chart",
+      "component": "PieChart",
+      "category": "Statistics & Charts",
+      "keywords": [
+        "graph",
+        "chart",
+        "statistics"
+      ]
+    },
+    {
+      "name": "line chart",
+      "slug": "line-chart",
+      "component": "LineChart",
+      "category": "Statistics & Charts",
+      "keywords": [
+        "statistics",
+        "graph"
+      ]
+    },
+    {
+      "name": "line chart 2",
+      "slug": "line-chart-2",
+      "component": "LineChart2",
+      "category": "Statistics & Charts",
+      "keywords": [
+        "statistics",
+        "graph"
+      ]
+    },
+    {
+      "name": "line chart 3",
+      "slug": "line-chart-3",
+      "component": "LineChart3",
+      "category": "Statistics & Charts",
+      "keywords": [
+        "statistics",
+        "graph"
+      ]
+    },
+    {
+      "name": "line chart 3",
+      "slug": "line-chart-3",
+      "component": "LineChart3_2",
+      "category": "Statistics & Charts",
+      "keywords": [
+        "statistics",
+        "graph"
+      ]
+    },
+    {
+      "name": "volume full",
+      "slug": "volume-full",
+      "component": "VolumeFull",
+      "category": "Sound & Music",
+      "keywords": [
+        "speaker",
+        "loud",
+        "sound on",
+        "music"
+      ]
+    },
+    {
+      "name": "volume half",
+      "slug": "volume-half",
+      "component": "VolumeHalf",
+      "category": "Sound & Music",
+      "keywords": [
+        "speaker",
+        "loud",
+        "sound on",
+        "music"
+      ]
+    },
+    {
+      "name": "volume minimum",
+      "slug": "volume-minimum",
+      "component": "VolumeMinimum",
+      "category": "Sound & Music",
+      "keywords": [
+        "speaker",
+        "loud",
+        "sound on",
+        "music"
+      ]
+    },
+    {
+      "name": "volume off",
+      "slug": "volume-off",
+      "component": "VolumeOff",
+      "category": "Sound & Music",
+      "keywords": [
+        "speaker",
+        "loud",
+        "sound on",
+        "music"
+      ]
+    },
+    {
+      "name": "volume down",
+      "slug": "volume-down",
+      "component": "VolumeDown",
+      "category": "Sound & Music",
+      "keywords": [
+        "speaker",
+        "loud",
+        "sound on",
+        "music"
+      ]
+    },
+    {
+      "name": "volume off",
+      "slug": "volume-off",
+      "component": "VolumeOff_2",
+      "category": "Sound & Music",
+      "keywords": [
+        "speaker",
+        "loud",
+        "sound on",
+        "music"
+      ]
+    },
+    {
+      "name": "microphone",
+      "slug": "microphone",
+      "component": "Microphone",
+      "category": "Sound & Music",
+      "keywords": [
+        "mic",
+        "sound",
+        "podcast"
+      ]
+    },
+    {
+      "name": "microphone",
+      "slug": "microphone",
+      "component": "Microphone_2",
+      "category": "Sound & Music",
+      "keywords": [
+        "mic",
+        "sound",
+        "podcast"
+      ]
+    },
+    {
+      "name": "audio",
+      "slug": "audio",
+      "component": "Audio",
+      "category": "Sound & Music",
+      "keywords": [
+        "music",
+        "playlist",
+        "musical note"
+      ]
+    },
+    {
+      "name": "headphones",
+      "slug": "headphones",
+      "component": "Headphones",
+      "category": "Sound & Music",
+      "keywords": [
+        "support"
+      ]
+    },
+    {
+      "name": "keyboard",
+      "slug": "keyboard",
+      "component": "Keyboard",
+      "category": "Sound & Music",
+      "keywords": [
+        "midi",
+        "keys",
+        "piano"
+      ]
+    },
+    {
+      "name": "voice",
+      "slug": "voice",
+      "component": "Voice",
+      "category": "Sound & Music",
+      "keywords": []
+    },
+    {
+      "name": "megaphone",
+      "slug": "megaphone",
+      "component": "Megaphone",
+      "category": "Sound & Music",
+      "keywords": [
+        "loud",
+        "speak",
+        "promote"
+      ]
+    },
+    {
+      "name": "play",
+      "slug": "play",
+      "component": "Play",
+      "category": "Sound & Music",
+      "keywords": [
+        "go"
+      ]
+    },
+    {
+      "name": "pause",
+      "slug": "pause",
+      "component": "Pause",
+      "category": "Sound & Music",
+      "keywords": []
+    },
+    {
+      "name": "stop",
+      "slug": "stop",
+      "component": "Stop",
+      "category": "Sound & Music",
+      "keywords": []
+    },
+    {
+      "name": "record",
+      "slug": "record",
+      "component": "Record_2",
+      "category": "Sound & Music",
+      "keywords": []
+    },
+    {
+      "name": "rewind 5s",
+      "slug": "rewind-5s",
+      "component": "Rewind5s",
+      "category": "Sound & Music",
+      "keywords": []
+    },
+    {
+      "name": "rewind 10s",
+      "slug": "rewind-10s",
+      "component": "Rewind10s",
+      "category": "Sound & Music",
+      "keywords": []
+    },
+    {
+      "name": "rewind 15s",
+      "slug": "rewind-15s",
+      "component": "Rewind15s",
+      "category": "Sound & Music",
+      "keywords": []
+    },
+    {
+      "name": "rewind 30s",
+      "slug": "rewind-30s",
+      "component": "Rewind30s",
+      "category": "Sound & Music",
+      "keywords": []
+    },
+    {
+      "name": "fast forward 5s",
+      "slug": "fast-forward-5s",
+      "component": "FastForward5s",
+      "category": "Sound & Music",
+      "keywords": []
+    },
+    {
+      "name": "fast forward 10s",
+      "slug": "fast-forward-10s",
+      "component": "FastForward10s",
+      "category": "Sound & Music",
+      "keywords": []
+    },
+    {
+      "name": "fast forward 15s",
+      "slug": "fast-forward-15s",
+      "component": "FastForward15s",
+      "category": "Sound & Music",
+      "keywords": []
+    },
+    {
+      "name": "fast forward 30s",
+      "slug": "fast-forward-30s",
+      "component": "FastForward30s",
+      "category": "Sound & Music",
+      "keywords": []
+    },
+    {
+      "name": "fast forward symbol",
+      "slug": "fast-forward-symbol",
+      "component": "FastForwardSymbol",
+      "category": "Sound & Music",
+      "keywords": []
+    },
+    {
+      "name": "rewind symbol",
+      "slug": "rewind-symbol",
+      "component": "RewindSymbol",
+      "category": "Sound & Music",
+      "keywords": []
+    },
+    {
+      "name": "lock",
+      "slug": "lock",
+      "component": "Lock",
+      "category": "Security",
+      "keywords": [
+        "private"
+      ]
+    },
+    {
+      "name": "unlocked",
+      "slug": "unlocked",
+      "component": "Unlocked",
+      "category": "Security",
+      "keywords": [
+        "unlock",
+        "private"
+      ]
+    },
+    {
+      "name": "shield",
+      "slug": "shield",
+      "component": "Shield",
+      "category": "Security",
+      "keywords": [
+        "security",
+        "protection"
+      ]
+    },
+    {
+      "name": "shield crossed",
+      "slug": "shield-crossed",
+      "component": "ShieldCrossed",
+      "category": "Security",
+      "keywords": [
+        "security",
+        "protection"
+      ]
+    },
+    {
+      "name": "shield check",
+      "slug": "shield-check",
+      "component": "ShieldCheck",
+      "category": "Security",
+      "keywords": [
+        "security",
+        "protection"
+      ]
+    },
+    {
+      "name": "password",
+      "slug": "password",
+      "component": "Password",
+      "category": "Security",
+      "keywords": [
+        "lock",
+        "protection"
+      ]
+    },
+    {
+      "name": "finder",
+      "slug": "finder",
+      "component": "Finder",
+      "category": "Security",
+      "keywords": [
+        "face id"
+      ]
+    },
+    {
+      "name": "finger print",
+      "slug": "finger-print",
+      "component": "FingerPrint",
+      "category": "Security",
+      "keywords": [
+        "touch id"
+      ]
+    },
+    {
+      "name": "umbrella",
+      "slug": "umbrella",
+      "component": "Umbrella",
+      "category": "Security",
+      "keywords": [
+        "security"
+      ]
+    },
+    {
+      "name": "code",
+      "slug": "code",
+      "component": "Code",
+      "category": "Code",
+      "keywords": []
+    },
+    {
+      "name": "console",
+      "slug": "console",
+      "component": "Console",
+      "category": "Code",
+      "keywords": [
+        "terminal"
+      ]
+    },
+    {
+      "name": "code insert",
+      "slug": "code-insert",
+      "component": "CodeInsert",
+      "category": "Code",
+      "keywords": []
+    },
+    {
+      "name": "pull request",
+      "slug": "pull-request",
+      "component": "PullRequest",
+      "category": "Code",
+      "keywords": []
+    },
+    {
+      "name": "fork",
+      "slug": "fork",
+      "component": "Fork",
+      "category": "Code",
+      "keywords": []
+    },
+    {
+      "name": "branches",
+      "slug": "branches",
+      "component": "Branches",
+      "category": "Code",
+      "keywords": []
+    },
+    {
+      "name": "ship",
+      "slug": "ship",
+      "component": "Ship",
+      "category": "Code",
+      "keywords": [
+        "changelog"
+      ]
+    },
+    {
+      "name": "sandbox",
+      "slug": "sandbox",
+      "component": "Sandbox",
+      "category": "Code",
+      "keywords": [
+        "safe"
+      ]
+    },
+    {
+      "name": "color",
+      "slug": "color",
+      "component": "Color",
+      "category": "Edit",
+      "keywords": []
+    },
+    {
+      "name": "pencil",
+      "slug": "pencil",
+      "component": "Pencil",
+      "category": "Edit",
+      "keywords": [
+        "pen tool",
+        "write"
+      ]
+    },
+    {
+      "name": "pencil-2",
+      "slug": "pencil-2",
+      "component": "Pencil2",
+      "category": "Edit",
+      "keywords": [
+        "pen tool",
+        "write"
+      ]
+    },
+    {
+      "name": "color picker",
+      "slug": "color-picker",
+      "component": "ColorPicker",
+      "category": "Edit",
+      "keywords": [
+        "color"
+      ]
+    },
+    {
+      "name": "brush",
+      "slug": "brush",
+      "component": "Brush",
+      "category": "Edit",
+      "keywords": [
+        "color"
+      ]
+    },
+    {
+      "name": "edit",
+      "slug": "edit",
+      "component": "Edit",
+      "category": "Edit",
+      "keywords": [
+        "pencil",
+        "write"
+      ]
+    },
+    {
+      "name": "edit-03",
+      "slug": "edit-03",
+      "component": "Edit03",
+      "category": "Edit",
+      "keywords": [
+        "pencil",
+        "pencil",
+        "pen",
+        "write",
+        "draw"
+      ]
+    },
+    {
+      "name": "ruler",
+      "slug": "ruler",
+      "component": "Ruler",
+      "category": "Edit",
+      "keywords": []
+    },
+    {
+      "name": "edit-small",
+      "slug": "edit-small",
+      "component": "EditSmall",
+      "category": "Edit",
+      "keywords": [
+        "box",
+        "pencil",
+        "pen",
+        "write",
+        "draw"
+      ]
+    },
+    {
+      "name": "edit-01",
+      "slug": "edit-01",
+      "component": "Edit01",
+      "category": "Edit",
+      "keywords": []
+    },
+    {
+      "name": "edit-big",
+      "slug": "edit-big",
+      "component": "EditBig",
+      "category": "Edit",
+      "keywords": [
+        "box",
+        "pencil",
+        "pen",
+        "write",
+        "draw"
+      ]
+    },
+    {
+      "name": "bezier curve",
+      "slug": "bezier-curve",
+      "component": "BezierCurve",
+      "category": "Edit",
+      "keywords": [
+        "bezier",
+        "vector"
+      ]
+    },
+    {
+      "name": "colors",
+      "slug": "colors",
+      "component": "Colors",
+      "category": "Edit",
+      "keywords": [
+        "palette",
+        "colours"
+      ]
+    },
+    {
+      "name": "color swatch",
+      "slug": "color-swatch",
+      "component": "ColorSwatch",
+      "category": "Edit",
+      "keywords": [
+        "palette",
+        "colours"
+      ]
+    },
+    {
+      "name": "bitcoin",
+      "slug": "bitcoin",
+      "component": "Bitcoin",
+      "category": "Crypto",
+      "keywords": []
+    },
+    {
+      "name": "ethereum",
+      "slug": "ethereum",
+      "component": "Ethereum",
+      "category": "Crypto",
+      "keywords": []
+    },
+    {
+      "name": "crypto coin",
+      "slug": "crypto-coin",
+      "component": "CryptoCoin",
+      "category": "Crypto",
+      "keywords": []
+    },
+    {
+      "name": "crypto",
+      "slug": "crypto",
+      "component": "Crypto",
+      "category": "Crypto",
+      "keywords": []
+    },
+    {
+      "name": "wallet",
+      "slug": "wallet",
+      "component": "Wallet_2",
+      "category": "Crypto",
+      "keywords": []
+    },
+    {
+      "name": "web3",
+      "slug": "web3",
+      "component": "Web3",
+      "category": "Crypto",
+      "keywords": [
+        "crypto space"
+      ]
+    },
+    {
+      "name": "trade",
+      "slug": "trade",
+      "component": "Trade",
+      "category": "Crypto",
+      "keywords": [
+        "trading"
+      ]
+    },
+    {
+      "name": "filter 1",
+      "slug": "filter-1",
+      "component": "Filter1",
+      "category": "Filter",
+      "keywords": [
+        "sort"
+      ]
+    },
+    {
+      "name": "filter 2",
+      "slug": "filter-2",
+      "component": "Filter2",
+      "category": "Filter",
+      "keywords": [
+        "sort"
+      ]
+    },
+    {
+      "name": "filter ascending",
+      "slug": "filter-ascending",
+      "component": "FilterAscending",
+      "category": "Filter",
+      "keywords": [
+        "sort",
+        "az",
+        "ascending",
+        "asc"
+      ]
+    },
+    {
+      "name": "filter descending",
+      "slug": "filter-descending",
+      "component": "FilterDescending",
+      "category": "Filter",
+      "keywords": [
+        "sort",
+        "za",
+        "descending",
+        "desc"
+      ]
+    },
+    {
+      "name": "filter timeline",
+      "slug": "filter-timeline",
+      "component": "FilterTimeline",
+      "category": "Filter",
+      "keywords": [
+        "sort"
+      ]
+    },
+    {
+      "name": "cup",
+      "slug": "cup",
+      "component": "Cup",
+      "category": "Things",
+      "keywords": [
+        "tea",
+        "coffee"
+      ]
+    },
+    {
+      "name": "smiley",
+      "slug": "smiley",
+      "component": "Smiley",
+      "category": "Things",
+      "keywords": [
+        "face",
+        "emoji",
+        "smile"
+      ]
+    },
+    {
+      "name": "smile",
+      "slug": "smile",
+      "component": "Smile",
+      "category": "Things",
+      "keywords": [
+        "emoji"
+      ]
+    },
+    {
+      "name": "add reaction",
+      "slug": "add-reaction",
+      "component": "AddReaction",
+      "category": "Things",
+      "keywords": [
+        "reaction",
+        "emoji"
+      ]
+    },
+    {
+      "name": "badge",
+      "slug": "badge",
+      "component": "Badge",
+      "category": "Things",
+      "keywords": [
+        "verified",
+        "award"
+      ]
+    },
+    {
+      "name": "support",
+      "slug": "support",
+      "component": "Support",
+      "category": "Things",
+      "keywords": []
+    },
+    {
+      "name": "bell",
+      "slug": "bell",
+      "component": "Bell",
+      "category": "Things",
+      "keywords": [
+        "concierge"
+      ]
+    },
+    {
+      "name": "life buoy",
+      "slug": "life-buoy",
+      "component": "LifeBuoy",
+      "category": "Things",
+      "keywords": [
+        "help",
+        "support"
+      ]
+    },
+    {
+      "name": "scissors",
+      "slug": "scissors",
+      "component": "Scissors",
+      "category": "Things",
+      "keywords": []
+    },
+    {
+      "name": "stocks",
+      "slug": "stocks",
+      "component": "Stocks",
+      "category": "Things",
+      "keywords": []
+    },
+    {
+      "name": "growth",
+      "slug": "growth",
+      "component": "Growth",
+      "category": "Things",
+      "keywords": [
+        "grow",
+        "leafs"
+      ]
+    },
+    {
+      "name": "cookies",
+      "slug": "cookies",
+      "component": "Cookies",
+      "category": "Things",
+      "keywords": []
+    },
+    {
+      "name": "dashboard fast",
+      "slug": "dashboard-fast",
+      "component": "DashboardFast",
+      "category": "Things",
+      "keywords": []
+    },
+    {
+      "name": "dashboard middle",
+      "slug": "dashboard-middle",
+      "component": "DashboardMiddle",
+      "category": "Things",
+      "keywords": []
+    },
+    {
+      "name": "dashboard low",
+      "slug": "dashboard-low",
+      "component": "DashboardLow",
+      "category": "Things",
+      "keywords": []
+    },
+    {
+      "name": "fire",
+      "slug": "fire",
+      "component": "Fire",
+      "category": "Things",
+      "keywords": [
+        "flame",
+        "hot"
+      ]
+    },
+    {
+      "name": "grids",
+      "slug": "grids",
+      "component": "Grids",
+      "category": "Things",
+      "keywords": []
+    },
+    {
+      "name": "alignment center",
+      "slug": "alignment-center",
+      "component": "AlignmentCenter",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "alignment left",
+      "slug": "alignment-left",
+      "component": "AlignmentLeft",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "alignment right",
+      "slug": "alignment-right",
+      "component": "AlignmentRight",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "alignment justify",
+      "slug": "alignment-justify",
+      "component": "AlignmentJustify",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "alignment bar",
+      "slug": "alignment-bar",
+      "component": "AlignmentBar",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "bold",
+      "slug": "bold",
+      "component": "Bold",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "italic",
+      "slug": "italic",
+      "component": "Italic",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "strike through",
+      "slug": "strike-through",
+      "component": "StrikeThrough",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "underline",
+      "slug": "underline",
+      "component": "Underline",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "bullet list",
+      "slug": "bullet-list",
+      "component": "BulletList",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "numbered list",
+      "slug": "numbered-list",
+      "component": "NumberedList",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "write",
+      "slug": "write",
+      "component": "Write",
+      "category": "Typograhpy",
+      "keywords": [
+        "edit list",
+        "list"
+      ]
+    },
+    {
+      "name": "text indent left",
+      "slug": "text-indent-left",
+      "component": "TextIndentLeft",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "text indent right",
+      "slug": "text-indent-right",
+      "component": "TextIndentRight",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "text size",
+      "slug": "text-size",
+      "component": "TextSize",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "text",
+      "slug": "text",
+      "component": "Text",
+      "category": "Typograhpy",
+      "keywords": [
+        "t"
+      ]
+    },
+    {
+      "name": "text 2",
+      "slug": "text-2",
+      "component": "Text2",
+      "category": "Typograhpy",
+      "keywords": [
+        "t 2"
+      ]
+    },
+    {
+      "name": "text indicator",
+      "slug": "text-indicator",
+      "component": "TextIndicator",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "title case",
+      "slug": "title-case",
+      "component": "TitleCase",
+      "category": "Typograhpy",
+      "keywords": []
+    },
+    {
+      "name": "sun",
+      "slug": "sun",
+      "component": "Sun",
+      "category": "Weather",
+      "keywords": [
+        "light mode",
+        "day"
+      ]
+    },
+    {
+      "name": "moon",
+      "slug": "moon",
+      "component": "Moon",
+      "category": "Weather",
+      "keywords": [
+        "dark mode",
+        "night"
+      ]
+    },
+    {
+      "name": "moon star",
+      "slug": "moon-star",
+      "component": "MoonStar",
+      "category": "Weather",
+      "keywords": [
+        "night"
+      ]
+    },
+    {
+      "name": "zap",
+      "slug": "zap",
+      "component": "Zap",
+      "category": "Weather",
+      "keywords": [
+        "lightning",
+        "flash"
+      ]
+    },
+    {
+      "name": "lightning",
+      "slug": "lightning",
+      "component": "Lightning",
+      "category": "Weather",
+      "keywords": []
+    },
+    {
+      "name": "snow flakes",
+      "slug": "snow-flakes",
+      "component": "SnowFlakes",
+      "category": "Weather",
+      "keywords": [
+        "freeze",
+        "frozen"
+      ]
+    },
+    {
+      "name": "windy 1",
+      "slug": "windy-1",
+      "component": "Windy1",
+      "category": "Weather",
+      "keywords": [
+        "wind"
+      ]
+    },
+    {
+      "name": "cloud",
+      "slug": "cloud",
+      "component": "Cloud_2",
+      "category": "Weather",
+      "keywords": [
+        "clouds"
+      ]
+    },
+    {
+      "name": "cloudy",
+      "slug": "cloudy",
+      "component": "Cloudy",
+      "category": "Weather",
+      "keywords": [
+        "clouds"
+      ]
+    },
+    {
+      "name": "cloudy sun",
+      "slug": "cloudy-sun",
+      "component": "CloudySun",
+      "category": "Weather",
+      "keywords": [
+        "clouds"
+      ]
+    },
+    {
+      "name": "rainy",
+      "slug": "rainy",
+      "component": "Rainy",
+      "category": "Weather",
+      "keywords": [
+        "rain"
+      ]
+    },
+    {
+      "name": "snow cloud",
+      "slug": "snow-cloud",
+      "component": "SnowCloud",
+      "category": "Weather",
+      "keywords": []
+    },
+    {
+      "name": "light rain",
+      "slug": "light-rain",
+      "component": "LightRain",
+      "category": "Weather",
+      "keywords": []
+    },
+    {
+      "name": "sun up",
+      "slug": "sun-up",
+      "component": "SunUp",
+      "category": "Weather",
+      "keywords": []
+    },
+    {
+      "name": "sun down",
+      "slug": "sun-down",
+      "component": "SunDown",
+      "category": "Weather",
+      "keywords": []
+    },
+    {
+      "name": "sunrise",
+      "slug": "sunrise",
+      "component": "Sunrise",
+      "category": "Weather",
+      "keywords": []
+    },
+    {
+      "name": "sunset",
+      "slug": "sunset",
+      "component": "Sunset",
+      "category": "Weather",
+      "keywords": []
+    },
+    {
+      "name": "email",
+      "slug": "email",
+      "component": "Email",
+      "category": "Communication",
+      "keywords": [
+        "envelope"
+      ]
+    },
+    {
+      "name": "email 2",
+      "slug": "email-2",
+      "component": "Email2",
+      "category": "Communication",
+      "keywords": [
+        "envelope",
+        "mail"
+      ]
+    },
+    {
+      "name": "email 2 notification",
+      "slug": "email-2-notification",
+      "component": "Email2Notification",
+      "category": "Communication",
+      "keywords": [
+        "badge",
+        "envelope",
+        "mail"
+      ]
+    },
+    {
+      "name": "bubble",
+      "slug": "bubble",
+      "component": "Bubble",
+      "category": "Communication",
+      "keywords": [
+        "message"
+      ]
+    },
+    {
+      "name": "bubble notification",
+      "slug": "bubble-notification",
+      "component": "BubbleNotification",
+      "category": "Communication",
+      "keywords": [
+        "badge",
+        "message"
+      ]
+    },
+    {
+      "name": "bubble annotation",
+      "slug": "bubble-annotation",
+      "component": "BubbleAnnotation",
+      "category": "Communication",
+      "keywords": [
+        "message"
+      ]
+    },
+    {
+      "name": "bubble 2",
+      "slug": "bubble-2",
+      "component": "Bubble2",
+      "category": "Communication",
+      "keywords": [
+        "message"
+      ]
+    },
+    {
+      "name": "bubble 2 annotation",
+      "slug": "bubble-2-annotation",
+      "component": "Bubble2Annotation",
+      "category": "Communication",
+      "keywords": [
+        "message"
+      ]
+    },
+    {
+      "name": "bubbles 2",
+      "slug": "bubbles-2",
+      "component": "Bubbles2",
+      "category": "Communication",
+      "keywords": [
+        "messages",
+        "chat",
+        "communicate"
+      ]
+    },
+    {
+      "name": "bubble 3 message",
+      "slug": "bubble-3-message",
+      "component": "Bubble3Message",
+      "category": "Communication",
+      "keywords": []
+    },
+    {
+      "name": "bubble 4 annotation message",
+      "slug": "bubble-4-annotation-message",
+      "component": "Bubble4AnnotationMessage",
+      "category": "Communication",
+      "keywords": []
+    },
+    {
+      "name": "bubble 5",
+      "slug": "bubble-5",
+      "component": "Bubble5",
+      "category": "Communication",
+      "keywords": [
+        "message"
+      ]
+    },
+    {
+      "name": "bubble 5 annotation",
+      "slug": "bubble-5-annotation",
+      "component": "Bubble5Annotation",
+      "category": "Communication",
+      "keywords": [
+        "message"
+      ]
+    },
+    {
+      "name": "bubble 6",
+      "slug": "bubble-6",
+      "component": "Bubble6",
+      "category": "Communication",
+      "keywords": [
+        "message"
+      ]
+    },
+    {
+      "name": "bubble 6 annotation",
+      "slug": "bubble-6-annotation",
+      "component": "Bubble6Annotation",
+      "category": "Communication",
+      "keywords": [
+        "message"
+      ]
+    },
+    {
+      "name": "bubble 7",
+      "slug": "bubble-7",
+      "component": "Bubble7",
+      "category": "Communication",
+      "keywords": [
+        "message"
+      ]
+    },
+    {
+      "name": "bubble 7 annotation",
+      "slug": "bubble-7-annotation",
+      "component": "Bubble7Annotation",
+      "category": "Communication",
+      "keywords": [
+        "message"
+      ]
+    },
+    {
+      "name": "bubble 7 text",
+      "slug": "bubble-7-text",
+      "component": "Bubble7Text",
+      "category": "Communication",
+      "keywords": [
+        "message"
+      ]
+    },
+    {
+      "name": "paper plane",
+      "slug": "paper-plane",
+      "component": "PaperPlane",
+      "category": "Communication",
+      "keywords": [
+        "send"
+      ]
+    },
+    {
+      "name": "phone",
+      "slug": "phone",
+      "component": "Phone_2",
+      "category": "Communication",
+      "keywords": [
+        "telephone",
+        "contact"
+      ]
+    },
+    {
+      "name": "book",
+      "slug": "book",
+      "component": "Book",
+      "category": "Communication",
+      "keywords": [
+        "guide",
+        "info",
+        "faq"
+      ]
+    },
+    {
+      "name": "Newspaper",
+      "slug": "newspaper",
+      "component": "Newspaper",
+      "category": "Communication",
+      "keywords": [
+        "News",
+        "paper"
+      ]
+    },
+    {
+      "name": "book-2",
+      "slug": "book-2",
+      "component": "Book2",
+      "category": "Communication",
+      "keywords": [
+        "guide",
+        "info",
+        "faq"
+      ]
+    },
+    {
+      "name": "news",
+      "slug": "news",
+      "component": "News",
+      "category": "Communication",
+      "keywords": [
+        "paper"
+      ]
+    },
+    {
+      "name": "postcard",
+      "slug": "postcard",
+      "component": "Postcard",
+      "category": "Communication",
+      "keywords": [
+        "card",
+        "news"
+      ]
+    },
+    {
+      "name": "layout sidebar",
+      "slug": "layout-sidebar",
+      "component": "LayoutSidebar",
+      "category": "Layout",
+      "keywords": [
+        "grid",
+        "window"
+      ]
+    },
+    {
+      "name": "layout topbar",
+      "slug": "layout-topbar",
+      "component": "LayoutTopbar",
+      "category": "Layout",
+      "keywords": [
+        "grid",
+        "window"
+      ]
+    },
+    {
+      "name": "layout dashboard",
+      "slug": "layout-dashboard",
+      "component": "LayoutDashboard",
+      "category": "Layout",
+      "keywords": [
+        "grid",
+        "window"
+      ]
+    },
+    {
+      "name": "layout window",
+      "slug": "layout-window",
+      "component": "LayoutWindow",
+      "category": "Layout",
+      "keywords": [
+        "grid",
+        "window"
+      ]
+    },
+    {
+      "name": "layout top",
+      "slug": "layout-top",
+      "component": "LayoutTop",
+      "category": "Layout",
+      "keywords": [
+        "grid",
+        "window"
+      ]
+    },
+    {
+      "name": "layout bottom",
+      "slug": "layout-bottom",
+      "component": "LayoutBottom",
+      "category": "Layout",
+      "keywords": [
+        "grid",
+        "window"
+      ]
+    },
+    {
+      "name": "layout right",
+      "slug": "layout-right",
+      "component": "LayoutRight",
+      "category": "Layout",
+      "keywords": [
+        "grid",
+        "window"
+      ]
+    },
+    {
+      "name": "layout left",
+      "slug": "layout-left",
+      "component": "LayoutLeft",
+      "category": "Layout",
+      "keywords": [
+        "grid",
+        "window"
+      ]
+    },
+    {
+      "name": "layout 2 rows",
+      "slug": "layout-2-rows",
+      "component": "Layout2Rows",
+      "category": "Layout",
+      "keywords": [
+        "grid",
+        "window"
+      ]
+    },
+    {
+      "name": "layout 3 rows",
+      "slug": "layout-3-rows",
+      "component": "Layout3Rows",
+      "category": "Layout",
+      "keywords": [
+        "grid",
+        "window"
+      ]
+    },
+    {
+      "name": "layout grid 1",
+      "slug": "layout-grid-1",
+      "component": "LayoutGrid1",
+      "category": "Layout",
+      "keywords": [
+        "grid",
+        "window"
+      ]
+    },
+    {
+      "name": "layout grid 2",
+      "slug": "layout-grid-2",
+      "component": "LayoutGrid2",
+      "category": "Layout",
+      "keywords": [
+        "grid"
+      ]
+    },
+    {
+      "name": "layout column",
+      "slug": "layout-column",
+      "component": "LayoutColumn",
+      "category": "Layout",
+      "keywords": [
+        "grid",
+        "column"
+      ]
+    },
+    {
+      "name": "align bottom",
+      "slug": "align-bottom",
+      "component": "AlignBottom_2",
+      "category": "Layout",
+      "keywords": [
+        "alignment"
+      ]
+    },
+    {
+      "name": "align right",
+      "slug": "align-right",
+      "component": "AlignRight_2",
+      "category": "Layout",
+      "keywords": [
+        "alignment"
+      ]
+    },
+    {
+      "name": "align left",
+      "slug": "align-left",
+      "component": "AlignLeft_2",
+      "category": "Layout",
+      "keywords": [
+        "alignment"
+      ]
+    },
+    {
+      "name": "align top",
+      "slug": "align-top",
+      "component": "AlignTop_2",
+      "category": "Layout",
+      "keywords": [
+        "alignment"
+      ]
+    },
+    {
+      "name": "column wide",
+      "slug": "column-wide",
+      "component": "ColumnWide",
+      "category": "Layout",
+      "keywords": [
+        "colums"
+      ]
+    },
+    {
+      "name": "add column",
+      "slug": "add-column",
+      "component": "AddColumn",
+      "category": "Layout",
+      "keywords": [
+        "add page"
+      ]
+    },
+    {
+      "name": "remove column",
+      "slug": "remove-column",
+      "component": "RemoveColumn",
+      "category": "Layout",
+      "keywords": [
+        "delete column"
+      ]
+    },
+    {
+      "name": "rows wide",
+      "slug": "rows-wide",
+      "component": "RowsWide",
+      "category": "Layout",
+      "keywords": [
+        "rows wide"
+      ]
+    },
+    {
+      "name": "add row",
+      "slug": "add-row",
+      "component": "AddRow",
+      "category": "Layout",
+      "keywords": [
+        "add rows"
+      ]
+    },
+    {
+      "name": "remove row",
+      "slug": "remove-row",
+      "component": "RemoveRow",
+      "category": "Layout",
+      "keywords": [
+        "delete row"
+      ]
+    },
+    {
+      "name": "add slide",
+      "slug": "add-slide",
+      "component": "AddSlide",
+      "category": "Layout",
+      "keywords": [
+        "add canvas",
+        "add page",
+        "horizontal"
+      ]
+    },
+    {
+      "name": "add sheet",
+      "slug": "add-sheet",
+      "component": "AddSheet",
+      "category": "Layout",
+      "keywords": [
+        "add canvas",
+        "add page",
+        "vertical"
+      ]
+    },
+    {
+      "name": "add slide",
+      "slug": "add-slide",
+      "component": "AddSlide_2",
+      "category": "Layout",
+      "keywords": [
+        "add page",
+        "add copy"
+      ]
+    },
+    {
+      "name": "pages",
+      "slug": "pages",
+      "component": "Pages",
+      "category": "Layout",
+      "keywords": [
+        "boards"
+      ]
+    },
+    {
+      "name": "add pages",
+      "slug": "add-pages",
+      "component": "AddPages",
+      "category": "Layout",
+      "keywords": [
+        "add boards"
+      ]
+    },
+    {
+      "name": "slides",
+      "slug": "slides",
+      "component": "Slides",
+      "category": "Layout",
+      "keywords": [
+        "pages"
+      ]
+    },
+    {
+      "name": "add pages wide",
+      "slug": "add-pages-wide",
+      "component": "AddPagesWide",
+      "category": "Layout",
+      "keywords": [
+        "add boards"
+      ]
+    },
+    {
+      "name": "stack",
+      "slug": "stack",
+      "component": "Stack",
+      "category": "Layout",
+      "keywords": [
+        "layer"
+      ]
+    },
+    {
+      "name": "cloud",
+      "slug": "cloud",
+      "component": "Cloud_3",
+      "category": "Clouds",
+      "keywords": []
+    },
+    {
+      "name": "cloud download",
+      "slug": "cloud-download",
+      "component": "CloudDownload",
+      "category": "Clouds",
+      "keywords": []
+    },
+    {
+      "name": "cloud upload",
+      "slug": "cloud-upload",
+      "component": "CloudUpload",
+      "category": "Clouds",
+      "keywords": []
+    },
+    {
+      "name": "cloud off",
+      "slug": "cloud-off",
+      "component": "CloudOff",
+      "category": "Clouds",
+      "keywords": [
+        "offline"
+      ]
+    },
+    {
+      "name": "cloud off 2",
+      "slug": "cloud-off-2",
+      "component": "CloudOff2",
+      "category": "Clouds",
+      "keywords": [
+        "offline"
+      ]
+    },
+    {
+      "name": "home door",
+      "slug": "home-door",
+      "component": "HomeDoor",
+      "category": "Building",
+      "keywords": [
+        "house"
+      ]
+    },
+    {
+      "name": "home simple",
+      "slug": "home-simple",
+      "component": "HomeSimple",
+      "category": "Building",
+      "keywords": [
+        "house"
+      ]
+    },
+    {
+      "name": "home roof",
+      "slug": "home-roof",
+      "component": "HomeRoof",
+      "category": "Building",
+      "keywords": [
+        "house"
+      ]
+    },
+    {
+      "name": "home door",
+      "slug": "home-door",
+      "component": "HomeDoor_2",
+      "category": "Building",
+      "keywords": [
+        "house"
+      ]
+    },
+    {
+      "name": "home open",
+      "slug": "home-open",
+      "component": "HomeOpen",
+      "category": "Building",
+      "keywords": [
+        "house"
+      ]
+    },
+    {
+      "name": "court",
+      "slug": "court",
+      "component": "Court",
+      "category": "Building",
+      "keywords": []
+    },
+    {
+      "name": "bank",
+      "slug": "bank",
+      "component": "Bank",
+      "category": "Building",
+      "keywords": []
+    },
+    {
+      "name": "buildings",
+      "slug": "buildings",
+      "component": "Buildings",
+      "category": "Building",
+      "keywords": []
+    },
+    {
+      "name": "block",
+      "slug": "block",
+      "component": "Block",
+      "category": "Building",
+      "keywords": []
+    },
+    {
+      "name": "garage",
+      "slug": "garage",
+      "component": "Garage",
+      "category": "Building",
+      "keywords": []
+    },
+    {
+      "name": "store",
+      "slug": "store",
+      "component": "Store",
+      "category": "Building",
+      "keywords": [
+        "shop",
+        "business"
+      ]
+    },
+    {
+      "name": "business",
+      "slug": "business",
+      "component": "Business",
+      "category": "Building",
+      "keywords": [
+        "shop",
+        "store"
+      ]
+    },
+    {
+      "name": "cmd",
+      "slug": "cmd",
+      "component": "Cmd",
+      "category": "Keyboard",
+      "keywords": [
+        "command",
+        "apple",
+        "key"
+      ]
+    },
+    {
+      "name": "cmd box",
+      "slug": "cmd-box",
+      "component": "CmdBox",
+      "category": "Keyboard",
+      "keywords": [
+        "command",
+        "apple",
+        "key"
+      ]
+    },
+    {
+      "name": "opt",
+      "slug": "opt",
+      "component": "Opt",
+      "category": "Keyboard",
+      "keywords": [
+        "option",
+        "key"
+      ]
+    },
+    {
+      "name": "opt alt",
+      "slug": "opt-alt",
+      "component": "OptAlt",
+      "category": "Keyboard",
+      "keywords": [
+        "option alt",
+        "key"
+      ]
+    },
+    {
+      "name": "esc",
+      "slug": "esc",
+      "component": "Esc",
+      "category": "Keyboard",
+      "keywords": [
+        "power"
+      ]
+    },
+    {
+      "name": "backward",
+      "slug": "backward",
+      "component": "Backward",
+      "category": "Keyboard",
+      "keywords": [
+        "delete",
+        "remove",
+        "key"
+      ]
+    },
+    {
+      "name": "ai 3 stars",
+      "slug": "ai-3-stars",
+      "component": "Ai3Stars",
+      "category": "AI & Magic",
+      "keywords": [
+        "sparkles",
+        "✨"
+      ]
+    },
+    {
+      "name": "ai 2 stars",
+      "slug": "ai-2-stars",
+      "component": "Ai2Stars",
+      "category": "AI & Magic",
+      "keywords": [
+        "sparkles",
+        "✨"
+      ]
+    },
+    {
+      "name": "ai 2 stars 180",
+      "slug": "ai-2-stars-180",
+      "component": "Ai2Stars180",
+      "category": "AI & Magic",
+      "keywords": [
+        "sparkles",
+        "✨"
+      ]
+    },
+    {
+      "name": "star",
+      "slug": "star",
+      "component": "Star",
+      "category": "AI & Magic",
+      "keywords": [
+        "ai",
+        "sparkle"
+      ]
+    },
+    {
+      "name": "star 2",
+      "slug": "star-2",
+      "component": "Star2",
+      "category": "AI & Magic",
+      "keywords": [
+        "magic sparkle"
+      ]
+    },
+    {
+      "name": "magic eyes",
+      "slug": "magic-eyes",
+      "component": "MagicEyes",
+      "category": "AI & Magic",
+      "keywords": []
+    },
+    {
+      "name": "ai images",
+      "slug": "ai-images",
+      "component": "AiImages",
+      "category": "AI & Magic",
+      "keywords": [
+        "midjourney",
+        "ai generated"
+      ]
+    },
+    {
+      "name": "ai text",
+      "slug": "ai-text",
+      "component": "AiText",
+      "category": "AI & Magic",
+      "keywords": [
+        "text generation"
+      ]
+    },
+    {
+      "name": "magic stick star",
+      "slug": "magic-stick-star",
+      "component": "MagicStickStar",
+      "category": "AI & Magic",
+      "keywords": []
+    },
+    {
+      "name": "magic stick",
+      "slug": "magic-stick",
+      "component": "MagicStick",
+      "category": "AI & Magic",
+      "keywords": []
+    },
+    {
+      "name": "magic stick top",
+      "slug": "magic-stick-top",
+      "component": "MagicStickTop",
+      "category": "AI & Magic",
+      "keywords": []
+    },
+    {
+      "name": "whisper",
+      "slug": "whisper",
+      "component": "Whisper",
+      "category": "AI & Magic",
+      "keywords": [
+        "api"
+      ]
+    },
+    {
+      "name": "chat gpt",
+      "slug": "chat-gpt",
+      "component": "ChatGpt",
+      "category": "AI & Magic",
+      "keywords": []
+    },
+    {
+      "name": "brain",
+      "slug": "brain",
+      "component": "Brain",
+      "category": "AI & Magic",
+      "keywords": [
+        "ai",
+        "thinking"
+      ]
+    },
+    {
+      "name": "ai avatar",
+      "slug": "ai-avatar",
+      "component": "AiAvatar",
+      "category": "AI & Magic",
+      "keywords": [
+        "generated avatar",
+        "profile ai",
+        "magic avatar"
+      ]
+    },
+    {
+      "name": "magic book",
+      "slug": "magic-book",
+      "component": "MagicBook",
+      "category": "AI & Magic",
+      "keywords": [
+        "magician"
+      ]
+    },
+    {
+      "name": "magic pencil",
+      "slug": "magic-pencil",
+      "component": "MagicPencil",
+      "category": "AI & Magic",
+      "keywords": [
+        "magic brush"
+      ]
+    },
+    {
+      "name": "broom",
+      "slug": "broom",
+      "component": "Broom",
+      "category": "AI & Magic",
+      "keywords": [
+        "brush"
+      ]
+    },
+    {
+      "name": "magic box",
+      "slug": "magic-box",
+      "component": "MagicBox",
+      "category": "AI & Magic",
+      "keywords": []
+    },
+    {
+      "name": "calendar 1",
+      "slug": "calendar-1",
+      "component": "Calendar1",
+      "category": "Time & Date",
+      "keywords": []
+    },
+    {
+      "name": "calendar 2",
+      "slug": "calendar-2",
+      "component": "Calendar2",
+      "category": "Time & Date",
+      "keywords": []
+    },
+    {
+      "name": "clock circle",
+      "slug": "clock-circle",
+      "component": "ClockCircle",
+      "category": "Time & Date",
+      "keywords": [
+        "time"
+      ]
+    },
+    {
+      "name": "clock square",
+      "slug": "clock-square",
+      "component": "ClockSquare",
+      "category": "Time & Date",
+      "keywords": [
+        "time",
+        "timer",
+        "watch"
+      ]
+    },
+    {
+      "name": "clock alert",
+      "slug": "clock-alert",
+      "component": "ClockAlert",
+      "category": "Time & Date",
+      "keywords": [
+        "timer"
+      ]
+    },
+    {
+      "name": "clock snooze",
+      "slug": "clock-snooze",
+      "component": "ClockSnooze",
+      "category": "Time & Date",
+      "keywords": [
+        "timer",
+        "snooze",
+        "zz"
+      ]
+    },
+    {
+      "name": "hourglass",
+      "slug": "hourglass",
+      "component": "Hourglass",
+      "category": "Time & Date",
+      "keywords": [
+        "time",
+        "watch",
+        "clock"
+      ]
+    },
+    {
+      "name": "stopwatch",
+      "slug": "stopwatch",
+      "component": "Stopwatch",
+      "category": "Time & Date",
+      "keywords": []
+    },
+    {
+      "name": "bookmark",
+      "slug": "bookmark",
+      "component": "Bookmark",
+      "category": "Interface General",
+      "keywords": [
+        "banner",
+        "flag",
+        "tag"
+      ]
+    },
+    {
+      "name": "bookmark plus",
+      "slug": "bookmark-plus",
+      "component": "BookmarkPlus",
+      "category": "Interface General",
+      "keywords": [
+        "banner",
+        "flag",
+        "tag"
+      ]
+    },
+    {
+      "name": "bookmark delete",
+      "slug": "bookmark-delete",
+      "component": "BookmarkDelete",
+      "category": "Interface General",
+      "keywords": [
+        "remove",
+        "banner",
+        "flag",
+        "tag"
+      ]
+    },
+    {
+      "name": "bookmark check",
+      "slug": "bookmark-check",
+      "component": "BookmarkCheck",
+      "category": "Interface General",
+      "keywords": [
+        "add",
+        "check"
+      ]
+    },
+    {
+      "name": "search",
+      "slug": "search",
+      "component": "Search_3",
+      "category": "Interface General",
+      "keywords": [
+        "magnifying glass"
+      ]
+    },
+    {
+      "name": "search 2",
+      "slug": "search-2",
+      "component": "Search2",
+      "category": "Interface General",
+      "keywords": [
+        "magnifying glass"
+      ]
+    },
+    {
+      "name": "zoom",
+      "slug": "zoom",
+      "component": "Zoom",
+      "category": "Interface General",
+      "keywords": [
+        "search",
+        "magnifying glass"
+      ]
+    },
+    {
+      "name": "zoom",
+      "slug": "zoom",
+      "component": "Zoom_2",
+      "category": "Interface General",
+      "keywords": [
+        "search",
+        "magnifying glass"
+      ]
+    },
+    {
+      "name": "Notification",
+      "slug": "notification",
+      "component": "Notification",
+      "category": "Interface General",
+      "keywords": [
+        "bell",
+        "activity"
+      ]
+    },
+    {
+      "name": "Notification off",
+      "slug": "notification-off",
+      "component": "NotificationOff",
+      "category": "Interface General",
+      "keywords": [
+        "bell",
+        "activity"
+      ]
+    },
+    {
+      "name": "Notification alarm",
+      "slug": "notification-alarm",
+      "component": "NotificationAlarm",
+      "category": "Interface General",
+      "keywords": [
+        "bell",
+        "activity",
+        "alert"
+      ]
+    },
+    {
+      "name": "archive",
+      "slug": "archive",
+      "component": "Archive_2",
+      "category": "Interface General",
+      "keywords": [
+        "box",
+        "inbox",
+        "file"
+      ]
+    },
+    {
+      "name": "inbox 1",
+      "slug": "inbox-1",
+      "component": "Inbox1",
+      "category": "Interface General",
+      "keywords": [
+        "archive",
+        "tray",
+        "shelf"
+      ]
+    },
+    {
+      "name": "inbox 2",
+      "slug": "inbox-2",
+      "component": "Inbox2",
+      "category": "Interface General",
+      "keywords": [
+        "archive",
+        "tray",
+        "shelf"
+      ]
+    },
+    {
+      "name": "open",
+      "slug": "open",
+      "component": "Open",
+      "category": "Interface General",
+      "keywords": [
+        "new",
+        "link",
+        "open link",
+        "box",
+        "arrow"
+      ]
+    },
+    {
+      "name": "open 2",
+      "slug": "open-2",
+      "component": "Open2",
+      "category": "Interface General",
+      "keywords": [
+        "new",
+        "link",
+        "open link",
+        "box",
+        "arrow"
+      ]
+    },
+    {
+      "name": "resize big",
+      "slug": "resize-big",
+      "component": "ResizeBig",
+      "category": "Interface General",
+      "keywords": [
+        "box",
+        "arrow"
+      ]
+    },
+    {
+      "name": "resize small",
+      "slug": "resize-small",
+      "component": "ResizeSmall",
+      "category": "Interface General",
+      "keywords": [
+        "box",
+        "arrow"
+      ]
+    },
+    {
+      "name": "dock",
+      "slug": "dock",
+      "component": "Dock",
+      "category": "Interface General",
+      "keywords": [
+        "box",
+        "arrow"
+      ]
+    },
+    {
+      "name": "undock",
+      "slug": "undock",
+      "component": "Undock",
+      "category": "Interface General",
+      "keywords": [
+        "box",
+        "arrow"
+      ]
+    },
+    {
+      "name": "copy 1",
+      "slug": "copy-1",
+      "component": "Copy1",
+      "category": "Interface General",
+      "keywords": [
+        "layers",
+        "pages"
+      ]
+    },
+    {
+      "name": "copy 2",
+      "slug": "copy-2",
+      "component": "Copy2",
+      "category": "Interface General",
+      "keywords": [
+        "layers",
+        "pages"
+      ]
+    },
+    {
+      "name": "copy 3",
+      "slug": "copy-3",
+      "component": "Copy3",
+      "category": "Interface General",
+      "keywords": [
+        "layers",
+        "pages"
+      ]
+    },
+    {
+      "name": "copy 4",
+      "slug": "copy-4",
+      "component": "Copy4",
+      "category": "Interface General",
+      "keywords": [
+        "layers",
+        "pages"
+      ]
+    },
+    {
+      "name": "copy 5",
+      "slug": "copy-5",
+      "component": "Copy5",
+      "category": "Interface General",
+      "keywords": [
+        "layers",
+        "pages"
+      ]
+    },
+    {
+      "name": "layers",
+      "slug": "layers",
+      "component": "Layers",
+      "category": "Interface General",
+      "keywords": [
+        "copy"
+      ]
+    },
+    {
+      "name": "note",
+      "slug": "note",
+      "component": "Note",
+      "category": "Interface General",
+      "keywords": [
+        "card",
+        "text"
+      ]
+    },
+    {
+      "name": "eye",
+      "slug": "eye",
+      "component": "Eye",
+      "category": "Interface General",
+      "keywords": [
+        "see",
+        "reveal",
+        "look",
+        "visible"
+      ]
+    },
+    {
+      "name": "eye off",
+      "slug": "eye-off",
+      "component": "EyeOff",
+      "category": "Interface General",
+      "keywords": [
+        "see",
+        "look",
+        "not visible"
+      ]
+    },
+    {
+      "name": "shield",
+      "slug": "shield",
+      "component": "Shield_2",
+      "category": "Interface General",
+      "keywords": [
+        "protect",
+        "security",
+        "check"
+      ]
+    },
+    {
+      "name": "delete",
+      "slug": "delete",
+      "component": "Delete",
+      "category": "Interface General",
+      "keywords": [
+        "remove",
+        "garbage",
+        "waste",
+        "trash can"
+      ]
+    },
+    {
+      "name": "delete 2",
+      "slug": "delete-2",
+      "component": "Delete2",
+      "category": "Interface General",
+      "keywords": [
+        "remove",
+        "garbage",
+        "waste",
+        "trash can"
+      ]
+    },
+    {
+      "name": "compass",
+      "slug": "compass",
+      "component": "Compass",
+      "category": "Interface General",
+      "keywords": [
+        "browser",
+        "safari",
+        "web",
+        "internet"
+      ]
+    },
+    {
+      "name": "bag",
+      "slug": "bag",
+      "component": "Bag_2",
+      "category": "Interface General",
+      "keywords": [
+        "luggage",
+        "buggage"
+      ]
+    },
+    {
+      "name": "bag 2",
+      "slug": "bag-2",
+      "component": "Bag2_2",
+      "category": "Interface General",
+      "keywords": [
+        "luggage",
+        "buggage"
+      ]
+    },
+    {
+      "name": "browser",
+      "slug": "browser",
+      "component": "Browser",
+      "category": "Interface General",
+      "keywords": [
+        "window",
+        "app",
+        "desktop"
+      ]
+    },
+    {
+      "name": "browser 2",
+      "slug": "browser-2",
+      "component": "Browser2",
+      "category": "Interface General",
+      "keywords": [
+        "window",
+        "app",
+        "desktop"
+      ]
+    },
+    {
+      "name": "notifications",
+      "slug": "notifications",
+      "component": "Notifications",
+      "category": "Interface General",
+      "keywords": [
+        "badge"
+      ]
+    },
+    {
+      "name": "star",
+      "slug": "star",
+      "component": "Star_2",
+      "category": "Interface General",
+      "keywords": [
+        "favorite",
+        "award"
+      ]
+    },
+    {
+      "name": "icon",
+      "slug": "icon",
+      "component": "Icon",
+      "category": "Interface General",
+      "keywords": [
+        "icons",
+        "shapes",
+        "games"
+      ]
+    },
+    {
+      "name": "checkbox",
+      "slug": "checkbox",
+      "component": "Checkbox",
+      "category": "Interface General",
+      "keywords": [
+        "check",
+        "checkmark",
+        "confirm"
+      ]
+    },
+    {
+      "name": "check radio",
+      "slug": "check-radio",
+      "component": "CheckRadio",
+      "category": "Interface General",
+      "keywords": [
+        "circle",
+        "checkbox",
+        "check",
+        "checkmark",
+        "confirm"
+      ]
+    },
+    {
+      "name": "check",
+      "slug": "check",
+      "component": "Check",
+      "category": "Interface General",
+      "keywords": [
+        "checmark"
+      ]
+    },
+    {
+      "name": "pin",
+      "slug": "pin",
+      "component": "Pin_3",
+      "category": "Interface General",
+      "keywords": [
+        "location",
+        "bookmark"
+      ]
+    },
+    {
+      "name": "settings 1",
+      "slug": "settings-1",
+      "component": "Settings1",
+      "category": "Interface General",
+      "keywords": [
+        "switch",
+        "preferences"
+      ]
+    },
+    {
+      "name": "settings 2",
+      "slug": "settings-2",
+      "component": "Settings2",
+      "category": "Interface General",
+      "keywords": [
+        "gear",
+        "preferences"
+      ]
+    },
+    {
+      "name": "settings 3",
+      "slug": "settings-3",
+      "component": "Settings3",
+      "category": "Interface General",
+      "keywords": [
+        "gear",
+        "preferences"
+      ]
+    },
+    {
+      "name": "settings 4",
+      "slug": "settings-4",
+      "component": "Settings4",
+      "category": "Interface General",
+      "keywords": [
+        "slider two"
+      ]
+    },
+    {
+      "name": "settings 6",
+      "slug": "settings-6",
+      "component": "Settings6",
+      "category": "Interface General",
+      "keywords": [
+        "slider three"
+      ]
+    },
+    {
+      "name": "settings 7",
+      "slug": "settings-7",
+      "component": "Settings7",
+      "category": "Interface General",
+      "keywords": [
+        "knob",
+        "volume",
+        "on",
+        "off"
+      ]
+    },
+    {
+      "name": "settings 8",
+      "slug": "settings-8",
+      "component": "Settings8",
+      "category": "Interface General",
+      "keywords": [
+        "switch 2"
+      ]
+    },
+    {
+      "name": "download",
+      "slug": "download",
+      "component": "Download",
+      "category": "Interface General",
+      "keywords": [
+        "file",
+        "down"
+      ]
+    },
+    {
+      "name": "login",
+      "slug": "login",
+      "component": "Login",
+      "category": "Interface General",
+      "keywords": [
+        "enter",
+        "door"
+      ]
+    },
+    {
+      "name": "upload",
+      "slug": "upload",
+      "component": "Upload",
+      "category": "Interface General",
+      "keywords": [
+        "share"
+      ]
+    },
+    {
+      "name": "logout",
+      "slug": "logout",
+      "component": "Logout",
+      "category": "Interface General",
+      "keywords": [
+        "leave",
+        "door"
+      ]
+    },
+    {
+      "name": "share",
+      "slug": "share",
+      "component": "Share_2",
+      "category": "Interface General",
+      "keywords": [
+        "arrow",
+        "login"
+      ]
+    },
+    {
+      "name": "sidebar",
+      "slug": "sidebar",
+      "component": "Sidebar",
+      "category": "Interface General",
+      "keywords": [
+        "menu",
+        "list",
+        "window"
+      ]
+    },
+    {
+      "name": "info square",
+      "slug": "info-square",
+      "component": "InfoSquare",
+      "category": "Interface General",
+      "keywords": []
+    },
+    {
+      "name": "info circle",
+      "slug": "info-circle",
+      "component": "InfoCircle",
+      "category": "Interface General",
+      "keywords": [
+        "tooltip"
+      ]
+    },
+    {
+      "name": "questionmark",
+      "slug": "questionmark",
+      "component": "Questionmark",
+      "category": "Interface General",
+      "keywords": [
+        "faq",
+        "help",
+        "questionaire"
+      ]
+    },
+    {
+      "name": "thumbs up",
+      "slug": "thumbs-up",
+      "component": "ThumbsUp",
+      "category": "Interface General",
+      "keywords": [
+        "thumb",
+        "hand",
+        "yes",
+        "pro"
+      ]
+    },
+    {
+      "name": "thumbs down",
+      "slug": "thumbs-down",
+      "component": "ThumbsDown",
+      "category": "Interface General",
+      "keywords": [
+        "thumb",
+        "hand",
+        "no",
+        "contra"
+      ]
+    },
+    {
+      "name": "bucket",
+      "slug": "bucket",
+      "component": "Bucket",
+      "category": "Interface General",
+      "keywords": [
+        "trash",
+        "can"
+      ]
+    },
+    {
+      "name": "receipt",
+      "slug": "receipt",
+      "component": "Receipt",
+      "category": "Interface General",
+      "keywords": [
+        "ticket"
+      ]
+    },
+    {
+      "name": "link 1",
+      "slug": "link-1",
+      "component": "Link1",
+      "category": "Interface General",
+      "keywords": [
+        "chain"
+      ]
+    },
+    {
+      "name": "link 2",
+      "slug": "link-2",
+      "component": "Link2",
+      "category": "Interface General",
+      "keywords": [
+        "chain"
+      ]
+    },
+    {
+      "name": "broken link",
+      "slug": "broken-link",
+      "component": "BrokenLink",
+      "category": "Interface General",
+      "keywords": []
+    },
+    {
+      "name": "circle placeholder on",
+      "slug": "circle-placeholder-on",
+      "component": "CirclePlaceholderOn",
+      "category": "Interface General",
+      "keywords": []
+    },
+    {
+      "name": "circle placeholder off",
+      "slug": "circle-placeholder-off",
+      "component": "CirclePlaceholderOff",
+      "category": "Interface General",
+      "keywords": []
+    },
+    {
+      "name": "plus-circle",
+      "slug": "plus-circle",
+      "component": "PlusCircle",
+      "category": "Interface General",
+      "keywords": [
+        "add"
+      ]
+    },
+    {
+      "name": "minus-circle",
+      "slug": "minus-circle",
+      "component": "MinusCircle",
+      "category": "Interface General",
+      "keywords": [
+        "remove"
+      ]
+    },
+    {
+      "name": "close",
+      "slug": "close",
+      "component": "Close",
+      "category": "Interface General",
+      "keywords": [
+        "x",
+        "circle",
+        "remove"
+      ]
+    },
+    {
+      "name": "square placeholder",
+      "slug": "square-placeholder",
+      "component": "SquarePlaceholder",
+      "category": "Interface General",
+      "keywords": []
+    },
+    {
+      "name": "plus-square",
+      "slug": "plus-square",
+      "component": "PlusSquare",
+      "category": "Interface General",
+      "keywords": [
+        "add"
+      ]
+    },
+    {
+      "name": "minus-square",
+      "slug": "minus-square",
+      "component": "MinusSquare",
+      "category": "Interface General",
+      "keywords": [
+        "remove",
+        "delete"
+      ]
+    },
+    {
+      "name": "close",
+      "slug": "close",
+      "component": "Close_2",
+      "category": "Interface General",
+      "keywords": [
+        "x",
+        "checkbox",
+        "remove"
+      ]
+    },
+    {
+      "name": "delete",
+      "slug": "delete",
+      "component": "Delete_2",
+      "category": "Interface General",
+      "keywords": [
+        "remove",
+        "backspace"
+      ]
+    },
+    {
+      "name": "heart",
+      "slug": "heart",
+      "component": "Heart",
+      "category": "Interface General",
+      "keywords": [
+        "like",
+        "health",
+        "life",
+        "favorite"
+      ]
+    },
+    {
+      "name": "heart 2",
+      "slug": "heart-2",
+      "component": "Heart2",
+      "category": "Interface General",
+      "keywords": [
+        "like",
+        "health",
+        "life",
+        "fav"
+      ]
+    },
+    {
+      "name": "target",
+      "slug": "target",
+      "component": "Target",
+      "category": "Interface General",
+      "keywords": [
+        "arrow",
+        "goal",
+        "aim"
+      ]
+    },
+    {
+      "name": "clipboard",
+      "slug": "clipboard",
+      "component": "Clipboard",
+      "category": "Interface General",
+      "keywords": [
+        "copy",
+        "list"
+      ]
+    },
+    {
+      "name": "clipboard 2",
+      "slug": "clipboard-2",
+      "component": "Clipboard2",
+      "category": "Interface General",
+      "keywords": [
+        "copy",
+        "list"
+      ]
+    },
+    {
+      "name": "menu 1",
+      "slug": "menu-1",
+      "component": "Menu1",
+      "category": "Interface General",
+      "keywords": [
+        "grid",
+        "circle"
+      ]
+    },
+    {
+      "name": "menu 2",
+      "slug": "menu-2",
+      "component": "Menu2",
+      "category": "Interface General",
+      "keywords": [
+        "grid",
+        "circle"
+      ]
+    },
+    {
+      "name": "target 1",
+      "slug": "target-1",
+      "component": "Target1",
+      "category": "Interface General",
+      "keywords": [
+        "zoom"
+      ]
+    },
+    {
+      "name": "target 2",
+      "slug": "target-2",
+      "component": "Target2",
+      "category": "Interface General",
+      "keywords": [
+        "zoom"
+      ]
+    },
+    {
+      "name": "attachment",
+      "slug": "attachment",
+      "component": "Attachment_2",
+      "category": "Interface General",
+      "keywords": [
+        "attach",
+        "paper clip"
+      ]
+    },
+    {
+      "name": "attachment 2",
+      "slug": "attachment-2",
+      "component": "Attachment2",
+      "category": "Interface General",
+      "keywords": [
+        "attach",
+        "paper clip"
+      ]
+    },
+    {
+      "name": "activity",
+      "slug": "activity",
+      "component": "Activity",
+      "category": "Interface General",
+      "keywords": [
+        "notification",
+        "pulse",
+        "heartbeat",
+        "beat"
+      ]
+    },
+    {
+      "name": "anchor 1",
+      "slug": "anchor-1",
+      "component": "Anchor1",
+      "category": "Interface General",
+      "keywords": []
+    },
+    {
+      "name": "anchor 2",
+      "slug": "anchor-2",
+      "component": "Anchor2",
+      "category": "Interface General",
+      "keywords": []
+    },
+    {
+      "name": "airplay",
+      "slug": "airplay",
+      "component": "Airplay",
+      "category": "Interface General",
+      "keywords": []
+    },
+    {
+      "name": "@",
+      "slug": "",
+      "component": "At",
+      "category": "Interface General",
+      "keywords": [
+        "at"
+      ]
+    },
+    {
+      "name": "medal",
+      "slug": "medal",
+      "component": "Medal",
+      "category": "Interface General",
+      "keywords": [
+        "trophy",
+        "badge",
+        "winner",
+        "win"
+      ]
+    },
+    {
+      "name": "performance",
+      "slug": "performance",
+      "component": "Performance",
+      "category": "Interface General",
+      "keywords": [
+        "speed",
+        "scale"
+      ]
+    },
+    {
+      "name": "visit page",
+      "slug": "visit-page",
+      "component": "VisitPage",
+      "category": "Interface General",
+      "keywords": [
+        "open app"
+      ]
+    },
+    {
+      "name": "move",
+      "slug": "move",
+      "component": "Move_2",
+      "category": "Interface General",
+      "keywords": [
+        "focus"
+      ]
+    },
+    {
+      "name": "light bulb",
+      "slug": "light-bulb",
+      "component": "LightBulb",
+      "category": "Interface General",
+      "keywords": [
+        "idea",
+        "light"
+      ]
+    },
+    {
+      "name": "list",
+      "slug": "list",
+      "component": "List",
+      "category": "Interface General",
+      "keywords": [
+        "search",
+        "find",
+        "magifier"
+      ]
+    },
+    {
+      "name": "layout",
+      "slug": "layout",
+      "component": "Layout",
+      "category": "Interface General",
+      "keywords": [
+        "grid",
+        "list",
+        "search",
+        "find",
+        "magifier"
+      ]
+    },
+    {
+      "name": "table",
+      "slug": "table",
+      "component": "Table",
+      "category": "Interface General",
+      "keywords": [
+        "spreedsheet",
+        "chart"
+      ]
+    },
+    {
+      "name": "menu 1",
+      "slug": "menu-1",
+      "component": "Menu1_2",
+      "category": "Interface General",
+      "keywords": [
+        "list",
+        "hamburger"
+      ]
+    },
+    {
+      "name": "menu 2",
+      "slug": "menu-2",
+      "component": "Menu2_2",
+      "category": "Interface General",
+      "keywords": [
+        "list",
+        "hamburger"
+      ]
+    },
+    {
+      "name": "menu 3",
+      "slug": "menu-3",
+      "component": "Menu3",
+      "category": "Interface General",
+      "keywords": [
+        "list",
+        "hamburger"
+      ]
+    },
+    {
+      "name": "dot grid",
+      "slug": "dot-grid",
+      "component": "DotGrid",
+      "category": "Interface General",
+      "keywords": [
+        "menu",
+        "grab"
+      ]
+    },
+    {
+      "name": "drag",
+      "slug": "drag",
+      "component": "Drag",
+      "category": "Interface General",
+      "keywords": [
+        "grab"
+      ]
+    },
+    {
+      "name": "dot horizontal",
+      "slug": "dot-horizontal",
+      "component": "DotHorizontal",
+      "category": "Interface General",
+      "keywords": [
+        "menu",
+        "grab"
+      ]
+    },
+    {
+      "name": "dot vertical",
+      "slug": "dot-vertical",
+      "component": "DotVertical",
+      "category": "Interface General",
+      "keywords": [
+        "menu",
+        "grab"
+      ]
+    },
+    {
+      "name": "loader",
+      "slug": "loader",
+      "component": "Loader",
+      "category": "Interface General",
+      "keywords": []
+    },
+    {
+      "name": "scan",
+      "slug": "scan",
+      "component": "Scan_2",
+      "category": "Interface General",
+      "keywords": [
+        "focus"
+      ]
+    },
+    {
+      "name": "barcode",
+      "slug": "barcode",
+      "component": "Barcode",
+      "category": "Interface General",
+      "keywords": [
+        "scan"
+      ]
+    },
+    {
+      "name": "qr code",
+      "slug": "qr-code",
+      "component": "QrCode",
+      "category": "Interface General",
+      "keywords": []
+    },
+    {
+      "name": "crossed large",
+      "slug": "crossed-large",
+      "component": "CrossedLarge",
+      "category": "Interface General",
+      "keywords": [
+        "close"
+      ]
+    },
+    {
+      "name": "crossed small",
+      "slug": "crossed-small",
+      "component": "CrossedSmall",
+      "category": "Interface General",
+      "keywords": [
+        "delete",
+        "remove"
+      ]
+    },
+    {
+      "name": "plus",
+      "slug": "plus",
+      "component": "Plus_2",
+      "category": "Interface General",
+      "keywords": [
+        "add large"
+      ]
+    },
+    {
+      "name": "plus",
+      "slug": "plus",
+      "component": "Plus_3",
+      "category": "Interface General",
+      "keywords": [
+        "add small"
+      ]
+    },
+    {
+      "name": "minus large",
+      "slug": "minus-large",
+      "component": "MinusLarge",
+      "category": "Interface General",
+      "keywords": []
+    },
+    {
+      "name": "minus small",
+      "slug": "minus-small",
+      "component": "MinusSmall",
+      "category": "Interface General",
+      "keywords": []
+    }
+  ]
+}

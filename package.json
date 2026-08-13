@@ -8,11 +8,12 @@
     "build:cli": "pnpm --filter lorre-blocks build",
     "build:www": "pnpm --filter www build",
     "dev:www": "pnpm --filter www dev",
-    "build": "pnpm build:registry && pnpm build:cli && pnpm build:mcp",
+    "build": "pnpm build:registry && pnpm build:cli && pnpm build:mcp && pnpm build:icons",
     "typecheck": "pnpm -r --if-present typecheck",
     "test": "pnpm -r --if-present test",
-    "release": "pnpm build:cli && pnpm build:mcp && changeset publish",
-    "build:mcp": "pnpm --filter lorre-blocks-mcp build"
+    "release": "pnpm build:cli && pnpm build:mcp && pnpm build:icons && changeset publish",
+    "build:mcp": "pnpm --filter lorre-blocks-mcp build",
+    "build:icons": "pnpm --filter lorre-icons build"
   },
   "engines": {
     "node": ">=22.13"
