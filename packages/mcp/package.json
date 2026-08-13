@@ -1,6 +1,6 @@
 {
   "name": "lorre-blocks-mcp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "MCP server for the Lorre Blocks registry: search items, read component source, add components and apply themes via the lorre-blocks CLI.",
   "type": "module",
   "bin": {

@@ -1,5 +1,12 @@
 # lorre-blocks-mcp
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [2ce87fd]
+  - lorre-blocks@0.9.0
+
 ## 0.2.0
 
 ### Minor Changes
